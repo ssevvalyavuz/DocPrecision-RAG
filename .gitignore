@@ -218,3 +218,7 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+mimari.md
+BM25_mantigi.md
+rff.md
