@@ -1,5 +1,5 @@
 import os 
-from llama_index.core import SimpleDirectoryReader, VectorStoreIndex, ServiceContext, Settings
+from llama_index.core import SimpleDirectoryReader, VectorStoreIndex, Settings
 from llama_index.llms.ollama import Ollama
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 
@@ -8,28 +8,31 @@ def main():
     
     #1. LLM yapılandırması
     # request_timeout süresini ilk yüklemeler için geniş tutuyoruz.
-    Settings.llm = Ollama(model="llama3.2", request_timeout=120.0)
+    Settings.llm = Ollama(model="llama3.2", request_timeout=300.0, temperature=0.1 )
     
     #2. Embedding model yapılandırması
-    Settings.embed_model = HuggingFaceEmbedding(model_name="BAAI/bge-small-en-v1.5")
+    Settings.embed_model = HuggingFaceEmbedding(model_name="BAAI/bge-small-en-v1.5", embed_batch_size=10)
     
     
-    print ("Doküman okunuyor...")
-    
-    # data/ klasörğndeki PDF/metin dosyalarını oku
+# 2. Dokümanları Yükleme
+    print("Doküman okunuyor...")
     if not os.path.exists("data"):
-        os.makedirs("data")
-        print("Data klasoru bulunamadi, olusturuldu. Lutfen icine bir PDF ekleyin.")
-        
-        documents = SimpleDirectoryReader("data").load_data() #Verdiğim klasördeki tüm dokümanları bul, metinlerini ve sayfa bilgilerini ayıkla, hafızaya birer nesne olarak al
-        if not documents:
-            print("Data klasoru bos. Lutfen icine bir PDF ekleyin.")
-            return
-    
-    print ("Dokuman sayfası yuklendi.")
-    
+        os.makedirs("data", exist_ok=True)
+        print("❌ 'data' klasörü bulunamadı ve yeni oluşturuldu. Lütfen içine bir PDF koyun.")
+        return
+
+    reader = SimpleDirectoryReader("data")
+    documents = reader.load_data()
+
+    if not documents:
+        print("'data' klasöründe okunabilir doküman bulunamadı! Lütfen bir PDF ekleyin.")
+        return
+
+    print(f" {len(documents)} doküman sayfası yüklendi.")    
     #3.Indexleme (Naive Chunking and Vector DB)
-    
+    # İlk test için CPU'yu yormamak adına ilk 3 sayfa
+    test_docs = documents[:3] if len(documents) > 3 else documents
+    print(f"Toplam {len(documents)} sayfadan test için ilk {len(test_docs)} sayfa seçildi.")
     print("Indexleme başlatılıyor...")
     
     # Ham metin sayfalarını varsayılan token boyutuna (chunk) böler, 
@@ -51,10 +54,28 @@ def main():
         
         response = query_engine.query(user_input) #Soru sorma motoruna soruyu gönderir ve yanıt alır.
         print("\nYanıt: ", response) #Yanıtı ekrana yazdırır.    
+        
+        # --- RESPONSE NESNESİ DETAYLI DENETİMİ ---
+        print("\n" + "=" * 50)
+        print("🔍 RESPONSE İÇERİK ANALİZİ")
+        print("=" * 50)
+        
+        # 1. Genel metadata (varsa model ve sistem bilgileri)
+        print(f"Genel Metadata: {response.metadata}")
+
+        # 2. LLM'e beslenen kaynak parçalar (source_nodes)
+        print(f"\nKullanılan Kaynak Parça Sayısı: {len(response.source_nodes)}")
+        
+        for idx, source in enumerate(response.source_nodes, 1):
+            print(f"\n--- [Parça {idx}] ---")
+            print(f"• Benzerlik Skoru : {source.score:.4f}")
+            print(f"• Node ID         : {source.node.node_id}")
+            print(f"• Dosya Adı       : {source.node.metadata.get('file_name', 'Bilinmiyor')}")
+            print(f"• Sayfa Numarası  : {source.node.metadata.get('page_label', source.node.metadata.get('page_number', 'Bilinmiyor'))}")
+            print("• Metin İçeriği   :")
+            print(f"  \"{source.node.get_text().strip()[:200]}...\"")
+            
+        print("=" * 50 + "\n")
     
-    print("Getirilen kaynak parçalar:")
-    for source in response.source_nodes:
-        print("\nKaynak Parça:\n", source.node.get_text())
-        print("Kaynak Dosya: ", source.node.source_text)
-        print("Sayfa Numarası: ", source.node.extra_info.get("page_number", "Bilinmiyor"))
-    
+if __name__ == "__main__":
+    main()
