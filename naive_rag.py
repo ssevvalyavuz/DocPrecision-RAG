@@ -1,35 +1,55 @@
 import os 
-from llama_index.core import SimpleDirectoryReader, VectorStoreIndex, Settings
+from llama_index.core import VectorStoreIndex, Settings
 from llama_index.llms.ollama import Ollama
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
+from llama_index.readers.file import PyMuPDFReader
+from llama_index.core.node_parser import SentenceSplitter
+
+os.environ["HF_HUB_DISABLE_IMPLICIT_TOKEN"] = "1"  # HuggingFace Hub token kullanımını devre dışı bırakır.
+os.environ["HUGGING_FACE_HUB_TOKEN"] = ""  # Benden token arama, bu halka açık modeli anonim olarak doğrudan indir.
+os.environ["TOKENIZERS_PARALLELISM"] = "false"  # HuggingFace tokenizer paralel çalışmasını devre dışı bırakır.
+
 
 def main():
     print ("Modeller yapılandırılıyor...")
     
-    #1. LLM yapılandırması
+    # LLM yapılandırması
     # request_timeout süresini ilk yüklemeler için geniş tutuyoruz.
     Settings.llm = Ollama(model="llama3.2", request_timeout=300.0, temperature=0.1 )
     
-    #2. Embedding model yapılandırması
+    #. Embedding model yapılandırması
     Settings.embed_model = HuggingFaceEmbedding(model_name="BAAI/bge-small-en-v1.5", embed_batch_size=10)
     
+    # Akıllı parçalayıcı (SentenceSplitter) Tanımlama
+    text_splitter = SentenceSplitter(chunk_size=512, chunk_overlap=50)  # 512 token boyutunda parçalar, 50 token örtüşme ile
+    Settings.text_splitter = text_splitter
     
-# 2. Dokümanları Yükleme
+    
+#  Dokümanları Yükleme
     print("Doküman okunuyor...")
     if not os.path.exists("data"):
         os.makedirs("data", exist_ok=True)
         print("❌ 'data' klasörü bulunamadı ve yeni oluşturuldu. Lütfen içine bir PDF koyun.")
         return
 
-    reader = SimpleDirectoryReader("data")
-    documents = reader.load_data()
+    pdf_path = "data/manual.pdf"  # Örnek PDF dosya yolu
+    if not os.path.isfile(pdf_path):
+        print(f"'{pdf_path}' dosyası bulunamadı. Lütfen 'data' klasörüne bir PDF ekleyin.")
+        return
+    
+    loader = PyMuPDFReader()
+    documents = loader.load_data(pdf_path)
+    
+# Parçalama (Chunking) İşlemini Manuel Olarak da İnceleyelim
+    nodes = text_splitter.get_nodes_from_documents(documents)
+    print(f" Doküman toplam {len(documents)} sayfadan {len(nodes)} adet mantıksal parçaya (Node) ayrıldı.")    
 
     if not documents:
         print("'data' klasöründe okunabilir doküman bulunamadı! Lütfen bir PDF ekleyin.")
         return
 
     print(f" {len(documents)} doküman sayfası yüklendi.")    
-    #3.Indexleme (Naive Chunking and Vector DB)
+    #Indexleme (Naive Chunking and Vector DB)
     # İlk test için CPU'yu yormamak adına ilk 3 sayfa
     test_docs = documents[:3] if len(documents) > 3 else documents
     print(f"Toplam {len(documents)} sayfadan test için ilk {len(test_docs)} sayfa seçildi.")
