@@ -73,12 +73,24 @@ class SemanticChunker:
         embeddings = [self.embed_model.get_text_embedding(s) for s in sentences]
         
         #Ardisik cümleler arasindaki kosinüs mesafesini ölç
+        #len(embeddings)-1 yazmamızın sebebi örn 4 cümle varsa arada 3 mesafe olusur.
         distances = []
         for i in range(len(embeddings)-1):
             dist = self._cosine_distance(embeddings[i], embeddings[i+1])
             distances.append(dist)
             
-        #Istatistiksel anlamsal kopus esigini belirle.
+    # --- DİNAMİK ANLAMSAL KOPUŞ EŞİĞİ (PERCENTILE / YÜZDELİK DİLİM) ---
+        # Neden sabit bir sayı (ör. 0.30) kullanmıyoruz?
+        # Çünkü her dokümanın akıcılığı ve dil sertliği farklıdır. Sabit eşik,
+        # bazı metinleri hiç bölmezken bazılarında her cümleyi tek chunk yapar.
+        #
+        # np.percentile mantığı (Çan eğrisi / Baraj notu gibi):
+        # 1. Dokümandaki tüm ardışık cümle mesafelerini (distances) küçükten büyüğe sıralar.
+        # 2. Belirlenen yüzdeye (varsayılan %85) denk gelen sınır mesafesini bulur.
+        # 3. Yorumu: Dokümandaki geçişlerin %85'i bu sınırın altındadır (aynı konu/akıcı akış).
+        #    Sadece en sert, en uç %15'lik sıçramalar bu çizginin üstüne çıkar (konu kopuşu).
+        # 4. Döngü sırasında iki cümle arası mesafe bu 'threshold' değerini aşarsa
+        #    anlamsal kopuş alarmı verilir ve mevcut chunk paketlenip yeni chunk başlatılır.
         threshold = float(np.percentile(distances, self.threshold_percentile))
         mean_dist = float(np.mean(distances))
         max_dist = float(np.max(distances))
@@ -97,12 +109,14 @@ class SemanticChunker:
             if dist > threshold:
                 #Anlamsal kopus gerceklesti.Mevcut parcayi kaydet
                 chunk_text = " ".join(current_chunk_sentences)
+                # Bu parçayı bir sözlük olarak ana listeye ekle
                 chunks.append({
                     "chunk_id" : chunk_idx,
                     "text" : chunk_text,
                     "sentence_count": len(current_chunk_sentences),
                     "split_distance" : dist
                 }) 
+                
                 
                 chunk_idx +=1
                 current_chunk_sentences = [sentences[i + 1]]
