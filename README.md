@@ -1,580 +1,111 @@
-# 🚀 DocPrecision-RAG: Advanced RAG Architecture
+# 🚀 DocPrecision-RAG: Gelişmiş RAG Mimarisi
 
-> **Comparative RAG Engine:** From Naive RAG baseline to Advanced RAG with Semantic Chunking, Hybrid Search (BM25 + BGE), and Cross-Encoder Reranking.
+> **Karşılaştırmalı RAG Motoru:** Naive RAG temel yaklaşımından; Semantic Chunking, Hybrid Search (BM25 + BGE) ve Cross-Encoder Reranking kullanan gelişmiş RAG mimarisi.
 
-**DocPrecision-RAG**, sabit karakter sayısına dayalı standart (Naive) RAG yaklaşımlarının ötesine geçerek; metni anlamsal mesafe kopuşlarına göre bölen (**Semantic Chunking**), kelime tabanlı ve vektörel aramayı RRF ile birleştiren (**Hybrid Search**), ve bulunan sonuçları Cross-Encoder ile süzen (**Reranking**) uçtan uca modüler bir RAG mimarisidir.
+**DocPrecision-RAG**, sabit karakter sayısına dayalı standart (Naive) RAG yaklaşımlarının ötesine geçerek; metni anlamsal mesafe kopuşlarına göre bölen (**Semantic Chunking**), kelime tabanlı ve vektörel aramayı RRF ile birleştiren (**Hybrid Search**) ve bulunan sonuçları Cross-Encoder ile yeniden sıralayan (**Reranking**) uçtan uca, modüler bir RAG mimarisidir.
 
 ---
 
-## 🏛️ System Architecture
+## 🏛️ Sistem Mimarisi
 
 ```text
-                               [ Raw PDF Document ]
+                               [ Ham PDF Dokümanı ]
                                         │
                                         ▼
-                              [ PyMuPDF Document Reader ]
+                              [ PyMuPDF Doküman Okuyucu ]
                                         │
                                         ▼
-                           [ Custom Semantic Chunker ]
-                  (Dynamic Percentile-based Cosine Distance Thresholding)
+                              [ Özel Semantic Chunker ]
+                  (Dinamik Percentile Tabanlı Cosine Distance Threshold)
                                         │
                                         ▼
-                            [ Hybrid Search Index ]
+                              [ Hibrit Arama İndeksi ]
            ┌────────────────────────────┴────────────────────────────┐
            ▼                                                         ▼
    [ BM25 Retriever ]                                       [ BGE Dense Retriever ]
- (Exact Keyword Matching)                                 (BAAI/bge-small-en-v1.5)
+ (Kesin Kelime Eşleşmesi)                                (BAAI/bge-small-en-v1.5)
            │                                                         │
            └────────────────────────────┬────────────────────────────┘
                                         ▼
                        [ Reciprocal Rank Fusion (RRF) ]
-                            (Fused Candidate Pool)
+                              (Birleşik Aday Havuzu)
                                         │
                                         ▼
                           [ Cross-Encoder Reranker ]
                           (BAAI/bge-reranker-base)
                                         │
                                         ▼
-                           [ Strict Prompt Engineering ]
+                           [ Katı Prompt Mühendisliği ]
                                         │
                                         ▼
-                             [ Local LLM (Ollama) ]
+                             [ Yerel LLM (Ollama) ]
                                (Llama 3.2 / Mistral)
 ```
 
 ---
 
-## 🔑 Key Features & Technical Highlights
+## 🔑 Temel Özellikler ve Teknik Detaylar
 
-- **Semantic Chunking (`semantic_chunker.py`):** Replaces naive fixed-size chunking with an adaptive sentence-distance analyzer using `BAAI/bge-small-en-v1.5`. Breaks text at semantic transition points using dynamic percentile thresholding ($85^{\text{th}}$ percentile).
+- **Semantic Chunking (`semantic_chunker.py`):** Sabit boyutlu Naive Chunking yaklaşımı yerine, `BAAI/bge-small-en-v1.5` kullanarak cümleler arasındaki anlamsal mesafeyi analiz eder. Dinamik eşik belirleme yöntemiyle metni anlamsal geçiş noktalarından böler. Bu projede eşik değeri **%85'lik percentile** üzerinden belirlenmektedir.
 
-- **Hybrid Retrieval Engine (`hybrid_retriever.py`):** Combines lexical search (**BM25**) for exact terms (such as model IDs or error codes) and semantic search (**Dense BGE Embeddings**) for contextual queries. Merges rankings using **Reciprocal Rank Fusion (RRF)** ($k=60$).
+- **Hybrid Retrieval Engine (`hybrid_retriever.py`):** Kesin terimler, model ID'leri ve hata kodları gibi ifadeler için **BM25**, bağlamsal sorgular için ise **Dense BGE Embeddings** kullanır. İki arama sonucunu **Reciprocal Rank Fusion (RRF)** ile birleştirir. RRF parametresi `k=60` olarak kullanılmaktadır.
 
-- **Cross-Encoder Reranking (`reranker.py`):** Employs `BAAI/bge-reranker-base` to evaluate full query-document attention scores, discarding low-relevance noise before feeding context to the LLM.
+- **Cross-Encoder Reranking (`reranker.py`):** `BAAI/bge-reranker-base` modeli ile sorgu ve doküman parçalarını birlikte değerlendirir. Böylece düşük alakalı içerikleri filtreleyerek LLM'e yalnızca daha ilgili bağlamı gönderir.
 
-- **Strict Hallucination Prevention (`advanced_rag.py`):** Uses strict prompt rules to constrain the LLM strictly to retrieved context, returning clean `"information not found"` fallbacks when evidence is missing.
+- **Hallüsinasyon Önleme (`advanced_rag.py`):** LLM'in yalnızca getirilen bağlamı kullanmasını sağlayan katı prompt kuralları uygular. Yeterli bilgi bulunmadığında sistemin açık bir bilgi bulunamadı cevabı üretmesini sağlar.
 
 ---
 
-## 🛠️ Project Structure
+## 🛠️ Proje Yapısı
 
 ```text
 DocPrecision-RAG/
 ├── data/
-│   └── manual.pdf             # Sample technical PDF document
-├── semantic_chunker.py        # Cosine distance percentile chunking engine
-├── hybrid_retriever.py        # BM25 + Dense Vector + RRF Retriever module
-├── reranker.py                # Cross-Encoder Reranking module
-├── advanced_rag.py            # Complete end-to-end RAG Pipeline orchestrator
-├── requirements.txt           # Environment dependencies
-└── README.md                  # Project documentation
+│   └── manual.pdf             # Örnek teknik PDF dokümanı
+├── semantic_chunker.py        # Cosine distance tabanlı semantic chunking
+├── hybrid_retriever.py        # BM25 + Dense Vector + RRF retrieval modülü
+├── reranker.py                # Cross-Encoder reranking modülü
+├── advanced_rag.py            # Uçtan uca RAG pipeline yöneticisi
+├── requirements.txt           # Python bağımlılıkları
+└── README.md                  # Proje dokümantasyonu
 ```
 
 ---
 
-## 🚀 Quickstart Guide
+## 🚀 Hızlı Başlangıç
 
-### 1. Prerequisites
+### 1. Ön Gereksinimler
 
-Ensure you have **Python 3.10+** and **Ollama** installed locally.
-
-```bash
-# Pull your preferred local LLM
-ollama pull llama3.2
-```
-
-### 2. Installation
-
-```bash
-# Clone repository
-git clone https://github.com/ssevvalyavuz/DocPrecision-RAG.git
-cd DocPrecision-RAG
-
-# Create & activate virtual environment
-python3 -m venv .venv
-source .venv/bin/activate
-
-# Install dependencies
-pip install -r requirements.txt
-```
-
-### 3. Running the Advanced RAG Pipeline
-
-```bash
-python advanced_rag.py
-```
-
----
-
-## 📊 RAG Pipeline
-
-The Advanced RAG pipeline consists of the following stages:
-
-### 1. Document Loading
-
-PDF documents are loaded using **PyMuPDF**, allowing the system to extract raw textual content from the source document.
-
-### 2. Semantic Chunking
-
-Instead of splitting documents using a fixed character or token size, the system analyzes the semantic distance between consecutive sentences.
-
-Sentence embeddings are generated using:
-
-```text
-BAAI/bge-small-en-v1.5
-```
-
-Cosine distances are then calculated between neighboring sentence embeddings.
-
-A dynamic percentile-based threshold is used to identify semantic transition points:
-
-```text
-Threshold = 85th Percentile of Sentence Distances
-```
-
-This allows the chunker to adapt to the structure of the document rather than relying on a fixed chunk size.
-
-### 3. Hybrid Retrieval
-
-The retrieval layer combines two complementary approaches:
-
-#### BM25 Retrieval
-
-BM25 provides lexical retrieval and is particularly useful for:
-
-- Exact keywords
-- Model names
-- Error codes
-- Product IDs
-- Technical terminology
-- Specific identifiers
-
-#### Dense Retrieval
-
-Dense retrieval uses BGE embeddings to identify semantically similar content even when the exact query terms are not present.
-
-The embedding model used is:
-
-```text
-BAAI/bge-small-en-v1.5
-```
-
-### 4. Reciprocal Rank Fusion
-
-BM25 and dense retrieval rankings are combined using **Reciprocal Rank Fusion (RRF)**.
-
-The RRF parameter is:
-
-```text
-k = 60
-```
-
-RRF allows the system to combine different retrieval strategies into a unified candidate ranking.
-
-### 5. Cross-Encoder Reranking
-
-The candidates returned by the hybrid retriever are passed through a Cross-Encoder.
-
-The model used is:
-
-```text
-BAAI/bge-reranker-base
-```
-
-Unlike embedding-based retrieval, the Cross-Encoder evaluates the query and document together, allowing more precise relevance scoring.
-
-Low-relevance candidates are removed before the context is passed to the LLM.
-
-### 6. Strict Prompt Engineering
-
-The final prompt instructs the LLM to answer using only the retrieved context.
-
-The system is designed to avoid unsupported answers and hallucinations.
-
-When the retrieved context does not contain enough information, the system returns an explicit fallback such as:
-
-```text
-Information not found in the provided context.
-```
-
-### 7. Local LLM Generation
-
-The final response is generated locally through **Ollama**.
-
-Supported local models can include:
-
-```text
-Llama 3.2
-Mistral
-```
-
----
-
-## 🧠 Why Advanced RAG?
-
-A traditional Naive RAG pipeline commonly follows this structure:
-
-```text
-PDF
- ↓
-Fixed-size Chunking
- ↓
-Vector Embeddings
- ↓
-Vector Search
- ↓
-LLM
-```
-
-Although this architecture is simple, it can suffer from several limitations:
-
-- Fixed-size chunks may split related concepts.
-- Exact keywords may not be retrieved effectively through semantic search alone.
-- Semantically similar but weakly relevant chunks may enter the context.
-- Irrelevant retrieved content can reduce answer quality.
-- Larger context windows can increase noise.
-- The LLM may generate unsupported information when retrieval is insufficient.
-
-DocPrecision-RAG addresses these problems by introducing multiple retrieval and ranking stages:
-
-```text
-PDF
- ↓
-Semantic Chunking
- ↓
- ┌─────────────────┐
- │ BM25 Retrieval  │
- └────────┬────────┘
-          │
-          ├─────── RRF ───────┐
-          │                    │
- ┌────────▼────────┐           │
- │ Dense Retrieval │───────────┘
- └─────────────────┘
-          ↓
- Cross-Encoder Reranking
-          ↓
- Strict Prompt
-          ↓
- Local LLM
-```
-
----
-
-## ⚡ Naive RAG vs Advanced RAG
-
-| Feature | Naive RAG | DocPrecision-RAG |
-|---|---|---|
-| Document Loading | PDF Reader | PyMuPDF |
-| Chunking | Fixed-size | Semantic Chunking |
-| Embeddings | Dense | BGE Dense Embeddings |
-| Keyword Search | ❌ | BM25 |
-| Semantic Search | ✅ | ✅ |
-| Hybrid Retrieval | ❌ | ✅ |
-| Rank Fusion | ❌ | RRF |
-| Reranking | ❌ | Cross-Encoder |
-| Hallucination Control | Basic | Strict Prompting |
-| LLM | Local / API | Local Ollama |
-| Architecture | Simple | Modular Multi-Stage Pipeline |
-
----
-
-## 📈 Retrieval Strategy
-
-The system uses a multi-stage retrieval architecture:
-
-```text
-User Query
-    │
-    ▼
-┌─────────────────────┐
-│   Query Processing  │
-└──────────┬──────────┘
-           │
-           ▼
-     ┌─────────────┐
-     │   BM25      │
-     │   Search    │
-     └──────┬──────┘
-            │
-            │
-     ┌──────▼──────┐
-     │ Dense BGE   │
-     │   Search    │
-     └──────┬──────┘
-            │
-            ▼
-┌────────────────────────┐
-│ Reciprocal Rank Fusion │
-│          RRF           │
-└────────────┬───────────┘
-             │
-             ▼
-┌────────────────────────┐
-│  Cross-Encoder         │
-│  Reranking             │
-└────────────┬───────────┘
-             │
-             ▼
-      Top Relevant Chunks
-             │
-             ▼
-     Strict LLM Prompt
-             │
-             ▼
-        Local LLM
-             │
-             ▼
-      Final Answer
-```
-
----
-
-## 🔬 Semantic Chunking
-
-Semantic Chunking is used to identify meaningful boundaries between different topics or concepts.
-
-Instead of:
-
-```text
-Every 500 characters → New Chunk
-```
-
-the system uses:
-
-```text
-Sentence
-   ↓
-Embedding
-   ↓
-Cosine Distance
-   ↓
-Distance Distribution
-   ↓
-85th Percentile Threshold
-   ↓
-Semantic Boundary
-```
-
-This approach allows chunks to adapt to the semantic structure of the source document.
-
-### Benefits
-
-- Better preservation of contextual relationships
-- Reduced topic fragmentation
-- More meaningful retrieval units
-- Less dependency on arbitrary chunk sizes
-- Improved retrieval precision
-
----
-
-## 🔎 Hybrid Search
-
-Hybrid Search combines lexical and semantic retrieval.
-
-### BM25
-
-BM25 is effective when the query contains exact terms:
-
-```text
-"ERR_CONNECTION_REFUSED"
-"Model X100"
-"API_KEY"
-"SQLSTATE 42P01"
-```
-
-### Dense Retrieval
-
-Dense retrieval is useful for conceptual queries:
-
-```text
-"What causes the application to lose database connectivity?"
-```
-
-Even if the document does not contain the exact wording of the query, the embedding model can identify semantically related content.
-
-### Combined Approach
-
-```text
-                 User Query
-                     │
-          ┌──────────┴──────────┐
-          ▼                     ▼
-      BM25 Search          BGE Search
-          │                     │
-          └──────────┬──────────┘
-                     ▼
-                    RRF
-                     │
-                     ▼
-            Unified Ranking
-```
-
----
-
-## 🔗 Reciprocal Rank Fusion (RRF)
-
-RRF combines rankings from different retrieval systems.
-
-The general scoring formula is:
-
-$$
-RRF(d) = \sum_{r \in R} \frac{1}{k + rank_r(d)}
-$$
-
-Where:
-
-- $d$ = document
-- $R$ = retrieval systems
-- $rank_r(d)$ = rank of document $d$ in retriever $r$
-- $k$ = ranking constant
-
-This project uses:
-
-$$
-k = 60
-$$
-
-The approach allows BM25 and Dense Retrieval to contribute to the final ranking without requiring their raw scores to be directly comparable.
-
----
-
-## 🎯 Cross-Encoder Reranking
-
-Initial retrieval is optimized for speed and recall.
-
-The Cross-Encoder is then used for more precise relevance estimation.
-
-```text
-1000+ Document Chunks
-        │
-        ▼
-  Initial Retrieval
-        │
-        ▼
-   Top Candidates
-        │
-        ▼
- Cross-Encoder
-        │
-        ▼
-High-Quality Context
-        │
-        ▼
-       LLM
-```
-
-The Cross-Encoder model used in this project is:
-
-```text
-BAAI/bge-reranker-base
-```
-
-This second-stage ranking reduces the amount of irrelevant context passed to the language model.
-
----
-
-## 🛡️ Hallucination Prevention
-
-The system uses strict prompt engineering to limit the LLM's answer to retrieved evidence.
-
-The intended behavior is:
-
-```text
-Retrieved Context
-       │
-       ▼
-Does the context contain
-the required information?
-       │
-   ┌───┴───┐
-   │       │
-  YES      NO
-   │       │
-   ▼       ▼
- Answer   Fallback
- from     response
- context
-```
-
-The model should not invent information that is not supported by the retrieved context.
-
-Example fallback:
-
-```text
-Information not found in the provided context.
-```
-
----
-
-## 🧩 Project Structure
-
-```text
-DocPrecision-RAG/
-│
-├── data/
-│   └── manual.pdf
-│
-├── semantic_chunker.py
-│   └── Semantic chunking engine
-│
-├── hybrid_retriever.py
-│   └── BM25 + Dense Retrieval + RRF
-│
-├── reranker.py
-│   └── Cross-Encoder reranking
-│
-├── advanced_rag.py
-│   └── End-to-end RAG pipeline
-│
-├── requirements.txt
-│   └── Python dependencies
-│
-└── README.md
-    └── Project documentation
-```
-
----
-
-## 🛠️ Technologies
-
-| Technology | Purpose |
-|---|---|
-| Python | Core development language |
-| PyMuPDF | PDF document processing |
-| BAAI/bge-small-en-v1.5 | Dense sentence/document embeddings |
-| BM25 | Lexical retrieval |
-| RRF | Retrieval rank fusion |
-| BAAI/bge-reranker-base | Cross-Encoder reranking |
-| Ollama | Local LLM inference |
-| Llama 3.2 | Local language model |
-| Mistral | Alternative local language model |
-
----
-
-## 📦 Installation
-
-### Requirements
+Sistemi çalıştırmak için aşağıdakilerin kurulu olması gerekir:
 
 - Python 3.10+
 - Ollama
 - Git
-- Sufficient RAM/CPU/GPU resources for local embedding and reranking models
 
-### Clone the Repository
+Ollama üzerinden kullanılacak yerel LLM modeli de indirilmelidir.
+
+Örneğin:
+
+```bash
+ollama pull llama3.2
+```
+
+---
+
+### 2. Projeyi Klonlama
 
 ```bash
 git clone https://github.com/ssevvalyavuz/DocPrecision-RAG.git
 cd DocPrecision-RAG
 ```
 
-### Create Virtual Environment
+---
+
+### 3. Sanal Ortam Oluşturma
 
 ```bash
 python3 -m venv .venv
 ```
-
-### Activate Virtual Environment
 
 #### macOS / Linux
 
@@ -588,7 +119,9 @@ source .venv/bin/activate
 .venv\Scripts\activate
 ```
 
-### Install Dependencies
+---
+
+### 4. Bağımlılıkları Yükleme
 
 ```bash
 pip install -r requirements.txt
@@ -596,51 +129,457 @@ pip install -r requirements.txt
 
 ---
 
-## 🤖 Ollama Setup
+### 5. Ollama Modelini Çalıştırma
 
-Install Ollama and pull the desired local model.
-
-For Llama 3.2:
+Llama 3.2 kullanmak için:
 
 ```bash
 ollama pull llama3.2
 ```
 
-Alternatively, another compatible local model such as Mistral can be used:
+Alternatif olarak Mistral kullanılabilir:
 
 ```bash
 ollama pull mistral
 ```
 
-Make sure the Ollama service is running before starting the RAG pipeline.
-
 ---
 
-## ▶️ Running the Project
-
-Run the complete Advanced RAG pipeline with:
+### 6. Gelişmiş RAG Pipeline'ını Çalıştırma
 
 ```bash
 python advanced_rag.py
 ```
 
-The pipeline performs the following operations:
+Pipeline çalıştırıldığında sistem sırasıyla:
 
-1. Loads the PDF document.
-2. Extracts text using PyMuPDF.
-3. Splits the document using Semantic Chunking.
-4. Creates dense embeddings.
-5. Builds BM25 and Dense Retrieval indexes.
-6. Retrieves candidates using both methods.
-7. Combines rankings using RRF.
-8. Reranks candidates using a Cross-Encoder.
-9. Builds a strict context-aware prompt.
-10. Sends the prompt to the local Ollama LLM.
-11. Returns the final answer.
+1. PDF dokümanını okur.
+2. Metni PyMuPDF ile çıkarır.
+3. Metni anlamsal olarak parçalara böler.
+4. BGE embedding'lerini oluşturur.
+5. BM25 ve Dense Retrieval indekslerini oluşturur.
+6. Kullanıcı sorgusunu iki farklı yöntemle arar.
+7. Sonuçları RRF ile birleştirir.
+8. Cross-Encoder ile yeniden sıralar.
+9. En alakalı içerikleri prompt içerisine yerleştirir.
+10. Prompt'u yerel Ollama LLM'ine gönderir.
+11. Nihai cevabı üretir.
 
 ---
 
-## 🔄 End-to-End Workflow
+## 📊 RAG Pipeline'ı
+
+DocPrecision-RAG aşağıdaki çok aşamalı mimariyi kullanır:
+
+```text
+PDF Dokümanı
+     │
+     ▼
+PyMuPDF ile Metin Çıkarma
+     │
+     ▼
+Semantic Chunking
+     │
+     ▼
+┌───────────────────────┐
+│                       │
+│    Hibrit Retrieval   │
+│                       │
+├───────────┬───────────┤
+│           │           │
+▼           ▼           │
+BM25      BGE Dense     │
+│           │           │
+└─────┬─────┘           │
+      ▼                 │
+     RRF ◄──────────────┘
+      │
+      ▼
+Birleşik Aday Havuzu
+      │
+      ▼
+Cross-Encoder Reranking
+      │
+      ▼
+En Alakalı Context
+      │
+      ▼
+Strict Prompt
+      │
+      ▼
+Yerel LLM
+      │
+      ▼
+Nihai Cevap
+```
+
+---
+
+## 🧠 Semantic Chunking
+
+Semantic Chunking, dokümanı sabit karakter veya token sayısına göre bölmek yerine, metindeki anlamsal geçiş noktalarını tespit ederek parçalamayı amaçlar.
+
+### Naive Chunking
+
+Geleneksel yaklaşımda:
+
+```text
+Her 500 karakter → Yeni Chunk
+```
+
+gibi sabit bir bölme yöntemi kullanılabilir.
+
+Bu yaklaşımda aynı konuya ait iki cümlenin farklı chunk'lara ayrılması veya farklı konuların aynı chunk içerisinde bulunması mümkündür.
+
+### DocPrecision-RAG Yaklaşımı
+
+Bu projede cümlelerin embedding'leri oluşturulur ve ardışık cümleler arasındaki cosine distance hesaplanır.
+
+```text
+Cümle
+  │
+  ▼
+Embedding
+  │
+  ▼
+Cosine Distance
+  │
+  ▼
+Mesafe Dağılımı
+  │
+  ▼
+%85 Percentile Eşik Değeri
+  │
+  ▼
+Anlamsal Geçiş Noktası
+  │
+  ▼
+Yeni Chunk
+```
+
+Kullanılan embedding modeli:
+
+```text
+BAAI/bge-small-en-v1.5
+```
+
+Bu sayede chunk sınırları dokümanın anlamsal yapısına daha fazla uyum sağlar.
+
+### Semantic Chunking'in Avantajları
+
+- Konu bütünlüğünü daha iyi korur.
+- İlgili cümlelerin aynı chunk içerisinde kalmasını sağlar.
+- Anlamsal geçişlerde daha doğru sınırlar oluşturur.
+- Sabit chunk boyutuna olan bağımlılığı azaltır.
+- Retrieval kalitesinin artırılmasına yardımcı olur.
+
+---
+
+## 🔎 Hybrid Search
+
+Hybrid Search, iki farklı retrieval yaklaşımını birlikte kullanır:
+
+1. **BM25 — Kelime tabanlı retrieval**
+2. **Dense Retrieval — Anlamsal retrieval**
+
+Bu iki yaklaşımın güçlü yönleri RRF ile birleştirilir.
+
+---
+
+### 🔤 BM25 Retrieval
+
+BM25, sorgudaki kelimelerin dokümanlarda bulunmasına dayalı bir retrieval yöntemidir.
+
+Özellikle aşağıdaki sorgu tiplerinde avantajlıdır:
+
+- Model isimleri
+- Hata kodları
+- Ürün kodları
+- Teknik terimler
+- API isimleri
+- Değişken isimleri
+- Kesin anahtar kelimeler
+
+Örneğin:
+
+```text
+ERR_CONNECTION_REFUSED
+API_KEY
+SQLSTATE 42P01
+Model X100
+```
+
+gibi ifadelerde BM25 güçlü sonuçlar sağlayabilir.
+
+---
+
+### 🧠 Dense Retrieval
+
+Dense Retrieval, metinleri embedding vektörlerine dönüştürerek anlamsal benzerlik üzerinden arama yapar.
+
+Kullanılan model:
+
+```text
+BAAI/bge-small-en-v1.5
+```
+
+Örneğin kullanıcı:
+
+```text
+Uygulama neden veritabanına bağlanamıyor?
+```
+
+diye sorduğunda, dokümanda tam olarak bu cümle bulunmasa bile bağlantı problemiyle ilgili anlamsal olarak benzer içerikler bulunabilir.
+
+---
+
+### 🔗 Hibrit Retrieval Akışı
+
+```text
+                 Kullanıcı Sorgusu
+                        │
+              ┌─────────┴─────────┐
+              ▼                   ▼
+         BM25 Arama          BGE Dense Arama
+              │                   │
+              ▼                   ▼
+        Kelime Sıralaması    Anlamsal Sıralama
+              │                   │
+              └─────────┬─────────┘
+                        ▼
+                       RRF
+                        │
+                        ▼
+              Birleşik Sıralama
+```
+
+---
+
+## 🔗 Reciprocal Rank Fusion (RRF)
+
+BM25 ve Dense Retrieval farklı skor sistemleri kullandığından, sonuçları doğrudan karşılaştırmak yerine sıralamalarını birleştirmek için **Reciprocal Rank Fusion** kullanılır.
+
+Genel formül:
+
+$$
+RRF(d) = \sum_{r \in R} \frac{1}{k + rank_r(d)}
+$$
+
+Burada:
+
+- $d$ = doküman
+- $R$ = retrieval sistemleri
+- $rank_r(d)$ = dokümanın ilgili retrieval sistemindeki sırası
+- $k$ = sıralama sabiti
+
+Bu projede:
+
+$$
+k = 60
+$$
+
+olarak kullanılmaktadır.
+
+RRF sayesinde BM25 ve Dense Retrieval sonuçları ortak bir sıralama altında birleştirilir.
+
+---
+
+## 🎯 Cross-Encoder Reranking
+
+İlk retrieval aşaması yüksek recall elde etmeye odaklanırken, Cross-Encoder ikinci aşamada daha hassas bir relevance değerlendirmesi gerçekleştirir.
+
+Kullanılan model:
+
+```text
+BAAI/bge-reranker-base
+```
+
+Pipeline:
+
+```text
+Çok Sayıda Chunk
+       │
+       ▼
+İlk Retrieval
+       │
+       ▼
+Aday Chunk'lar
+       │
+       ▼
+Cross-Encoder
+       │
+       ▼
+Alaka Skorlaması
+       │
+       ▼
+En İlgili Chunk'lar
+       │
+       ▼
+LLM
+```
+
+Cross-Encoder, sorguyu ve doküman parçasını birlikte değerlendirerek daha hassas bir relevance skoru üretir.
+
+Böylece LLM'e gereksiz veya düşük alakalı içerik gönderilmesinin azaltılması amaçlanır.
+
+---
+
+## 🛡️ Hallüsinasyon Önleme
+
+RAG sistemlerinde yalnızca doğru dokümanı getirmek yeterli değildir. LLM'in getirilen bağlam dışındaki bilgileri kullanarak cevap üretmesi de engellenmelidir.
+
+DocPrecision-RAG bu nedenle **Strict Prompt Engineering** yaklaşımı kullanır.
+
+Temel mantık:
+
+```text
+Retrieved Context
+       │
+       ▼
+Gerekli bilgi context içerisinde var mı?
+       │
+      ┌┴┐
+      │ │
+     EVET HAYIR
+      │ │
+      ▼ ▼
+    Cevap  Fallback
+    üret   üret
+```
+
+Context içerisinde yeterli bilgi bulunmuyorsa sistem açık bir fallback cevabı döndürür.
+
+Örneğin:
+
+```text
+Information not found in the provided context.
+```
+
+Bu yaklaşım, LLM'in desteklenmeyen bilgiler üretmesini azaltmayı amaçlar.
+
+---
+
+## 🧩 Proje Yapısı
+
+```text
+DocPrecision-RAG/
+│
+├── data/
+│   └── manual.pdf
+│
+├── semantic_chunker.py
+│   └── Semantic Chunking motoru
+│
+├── hybrid_retriever.py
+│   └── BM25 + Dense Retrieval + RRF
+│
+├── reranker.py
+│   └── Cross-Encoder Reranking
+│
+├── advanced_rag.py
+│   └── Uçtan uca RAG pipeline
+│
+├── requirements.txt
+│   └── Python bağımlılıkları
+│
+└── README.md
+    └── Proje dokümantasyonu
+```
+
+---
+
+## 🛠️ Kullanılan Teknolojiler
+
+| Teknoloji | Kullanım Amacı |
+|---|---|
+| Python | Ana geliştirme dili |
+| PyMuPDF | PDF metin çıkarma |
+| BAAI/bge-small-en-v1.5 | Dense embedding |
+| BM25 | Kelime tabanlı retrieval |
+| RRF | Retrieval sonuçlarını birleştirme |
+| BAAI/bge-reranker-base | Cross-Encoder reranking |
+| Ollama | Yerel LLM çalıştırma |
+| Llama 3.2 | Yerel LLM |
+| Mistral | Alternatif yerel LLM |
+
+---
+
+## 🆚 Naive RAG ve Advanced RAG Karşılaştırması
+
+| Özellik | Naive RAG | DocPrecision-RAG |
+|---|---|---|
+| Doküman Okuma | PDF Reader | PyMuPDF |
+| Chunking | Sabit boyutlu | Semantic Chunking |
+| Embedding | Dense | BGE Dense Embedding |
+| Keyword Search | ❌ | ✅ BM25 |
+| Semantic Search | ✅ | ✅ |
+| Hybrid Search | ❌ | ✅ |
+| Rank Fusion | ❌ | ✅ RRF |
+| Reranking | ❌ | ✅ Cross-Encoder |
+| Hallüsinasyon Kontrolü | Temel | Strict Prompting |
+| LLM | API / Local | Local Ollama |
+| Mimari | Basit | Çok Aşamalı ve Modüler |
+
+---
+
+## 🔬 Neden Advanced RAG?
+
+Naive RAG genellikle aşağıdaki yapıyı kullanır:
+
+```text
+PDF
+ ↓
+Sabit Boyutlu Chunking
+ ↓
+Vector Embedding
+ ↓
+Vector Search
+ ↓
+LLM
+```
+
+Bu yaklaşım basit ve hızlı olsa da aşağıdaki problemlere sahip olabilir:
+
+- Chunk sınırları anlamsal bütünlüğü bozabilir.
+- Kesin anahtar kelimeler semantic search tarafından kaçırılabilir.
+- Anlamsal olarak benzer ancak alakasız içerikler retrieval sonucuna girebilir.
+- Gereksiz context LLM'in cevap kalitesini düşürebilir.
+- Fazla context gürültü oluşturabilir.
+- Yetersiz retrieval durumunda LLM desteklenmeyen bilgiler üretebilir.
+
+DocPrecision-RAG ise retrieval sürecini birden fazla aşamaya ayırır:
+
+```text
+PDF
+ ↓
+Semantic Chunking
+ ↓
+┌──────────────────────┐
+│                      │
+│   Hybrid Retrieval   │
+│                      │
+├──────────┬───────────┤
+│          │           │
+▼          ▼           │
+BM25    Dense BGE      │
+│          │           │
+└────┬─────┘           │
+     ▼                 │
+    RRF                 │
+     │                  │
+     ▼                  │
+Cross-Encoder Reranker │
+     │                  │
+     ▼                  │
+Strict Prompt           │
+     │                  │
+     ▼                  │
+Local LLM               │
+```
+
+---
+
+## 🔄 Uçtan Uca İş Akışı
 
 ```text
                     PDF
@@ -649,99 +588,148 @@ The pipeline performs the following operations:
               PyMuPDF Reader
                      │
                      ▼
-             Sentence Extraction
+            Cümlelerin Çıkarılması
                      │
                      ▼
-            Semantic Chunking
+             Semantic Chunking
                      │
                      ▼
              ┌───────┴───────┐
              ▼               ▼
-           BM25          BGE Embeddings
+           BM25          BGE Embedding
              │               │
              ▼               ▼
-        Lexical Rank      Dense Rank
+      Kelime Sıralaması  Dense Sıralama
              │               │
              └───────┬───────┘
                      ▼
                     RRF
                      │
                      ▼
-             Candidate Chunks
+             Aday Chunk'lar
                      │
                      ▼
           Cross-Encoder Reranker
                      │
                      ▼
-              Top Context
+              En İlgili Context
                      │
                      ▼
-             Strict Prompt
+              Strict Prompt
                      │
                      ▼
-               Ollama LLM
+                Ollama LLM
                      │
                      ▼
-               Final Answer
+              Nihai Cevap
 ```
 
 ---
 
-## 🧪 Example Query Flow
+## 🧪 Örnek Sorgu Akışı
 
-Suppose the user asks:
+Kullanıcının şu soruyu sorduğunu düşünelim:
 
 ```text
-Why does the application return a database connection error?
+Uygulama neden veritabanı bağlantı hatası veriyor?
 ```
 
-The system processes the query through both retrieval mechanisms.
+### 1. BM25
 
-### BM25
-
-Searches for exact lexical matches such as:
+Sorgudaki anahtar kelimeler üzerinden arama yapılır:
 
 ```text
-database
+veritabanı
+bağlantı
+hata
 connection
-error
-connection refused
+database
 timeout
 ```
 
-### Dense Retrieval
+### 2. Dense Retrieval
 
-Searches for semantically related passages even if the exact phrase is not present.
+Sorgunun anlamsal karşılığı aranır.
 
-### RRF
+Dokümanda tam olarak:
 
-Combines the rankings from both methods.
+```text
+Uygulama neden veritabanı bağlantı hatası veriyor?
+```
 
-### Cross-Encoder
+ifadesi bulunmasa bile aynı problemi açıklayan içerikler bulunabilir.
 
-Re-evaluates the query and candidate chunks together and selects the most relevant evidence.
+### 3. RRF
 
-### LLM
+BM25 ve Dense Retrieval sıralamaları birleştirilir.
 
-Receives only the selected context and generates an answer constrained by the retrieved evidence.
+### 4. Cross-Encoder
+
+Aday chunk'lar sorguyla birlikte değerlendirilir.
+
+En alakalı içerikler üst sıralara taşınır.
+
+### 5. Strict Prompt
+
+Yalnızca seçilen context LLM'e gönderilir.
+
+### 6. LLM
+
+LLM, retrieved context'e dayanarak nihai cevabı oluşturur.
 
 ---
 
-## 📊 Evaluation Strategy
+## 📈 Retrieval Stratejisi
 
-The architecture can be evaluated by comparing retrieval and generation quality at different stages.
+DocPrecision-RAG retrieval sürecini iki aşamalı olarak ele alır:
 
-### Baseline
+### Birinci Aşama — Candidate Retrieval
+
+Amaç mümkün olduğunca ilgili adayları yakalamaktır.
 
 ```text
-Naive Chunking
+BM25
+  +
+Dense Retrieval
+  ↓
+RRF
+  ↓
+Candidate Pool
+```
+
+### İkinci Aşama — Precision Reranking
+
+Amaç adaylar içerisinden gerçekten en alakalı içerikleri seçmektir.
+
+```text
+Candidate Pool
+      ↓
+Cross-Encoder
+      ↓
+Relevance Score
+      ↓
+Top Chunks
+```
+
+Bu yapı, hızlı retrieval ile daha hassas relevance değerlendirmesini bir araya getirir.
+
+---
+
+## 📊 Değerlendirme Stratejisi
+
+Sistemin performansını değerlendirmek için Naive RAG ve Advanced RAG sonuçları karşılaştırılabilir.
+
+### Naive RAG
+
+```text
+Sabit Chunking
       ↓
 Dense Retrieval
       ↓
 LLM
 ```
 
-### Advanced
+### Advanced RAG
 
 ```text
 Semantic Chunking
@@ -757,112 +745,118 @@ Strict Prompt
 LLM
 ```
 
-Potential evaluation metrics include:
+### Kullanılabilecek Metrikler
 
 - Retrieval Precision
 - Retrieval Recall
-- Recall@K
 - Precision@K
+- Recall@K
 - MRR
 - NDCG
-- Answer Faithfulness
 - Context Relevance
 - Answer Relevance
-- Hallucination Rate
+- Answer Faithfulness
+- Hallüsinasyon Oranı
+- Retrieval Süresi
+- Toplam Yanıt Süresi
 
 ---
 
-## 📌 Future Improvements
+## 📌 Gelecek Geliştirmeler
 
-Potential extensions for the project include:
-
-- [ ] Add automated RAG evaluation
-- [ ] Add Recall@K and Precision@K benchmarks
-- [ ] Add MRR / NDCG evaluation
-- [ ] Compare multiple embedding models
-- [ ] Compare multiple reranking models
-- [ ] Add query expansion
-- [ ] Add metadata filtering
-- [ ] Add document-level citations
-- [ ] Add conversational memory
-- [ ] Add multi-document retrieval
-- [ ] Add FastAPI backend
-- [ ] Add web interface
-- [ ] Add Docker support
-- [ ] Add experiment tracking
-- [ ] Add latency and token-cost benchmarking
-- [ ] Add Naive RAG vs Advanced RAG automated comparison
+- [ ] Naive RAG baseline oluşturulması
+- [ ] Naive RAG ve Advanced RAG karşılaştırma script'i
+- [ ] Recall@K ve Precision@K benchmark'ları
+- [ ] MRR / NDCG değerlendirmesi
+- [ ] Farklı embedding modellerinin karşılaştırılması
+- [ ] Farklı reranker modellerinin karşılaştırılması
+- [ ] Query Expansion eklenmesi
+- [ ] Query Rewriting eklenmesi
+- [ ] Metadata filtering eklenmesi
+- [ ] Doküman kaynak/citation gösterimi
+- [ ] Conversational Memory eklenmesi
+- [ ] Multi-document retrieval
+- [ ] FastAPI backend
+- [ ] Web arayüzü
+- [ ] Docker desteği
+- [ ] Logging ve monitoring
+- [ ] Latency benchmark
+- [ ] Token kullanım analizi
+- [ ] Otomatik RAG değerlendirme sistemi
 
 ---
 
-## 🧭 Roadmap
+## 🧭 Geliştirme Yol Haritası
 
-### Phase 1 — Core RAG
+### Faz 1 — Temel RAG
 
 - [x] PDF ingestion
-- [x] Semantic chunking
-- [x] Dense retrieval
-- [x] BM25 retrieval
-- [x] RRF fusion
-- [x] Cross-Encoder reranking
-- [x] Local LLM integration
+- [x] Semantic Chunking
+- [x] Dense Retrieval
+- [x] BM25 Retrieval
+- [x] RRF
+- [x] Cross-Encoder Reranking
+- [x] Local LLM entegrasyonu
 
-### Phase 2 — Evaluation
+### Faz 2 — Değerlendirme
 
 - [ ] Naive RAG baseline
 - [ ] Retrieval benchmark
 - [ ] Reranking benchmark
-- [ ] Hallucination evaluation
-- [ ] Latency comparison
+- [ ] Hallüsinasyon değerlendirmesi
+- [ ] Latency karşılaştırması
+- [ ] Retrieval kalitesi ölçümü
 
-### Phase 3 — Productionization
+### Faz 3 — Production
 
-- [ ] API layer
-- [ ] Web UI
-- [ ] Dockerization
+- [ ] FastAPI API katmanı
+- [ ] Web arayüzü
+- [ ] Docker
 - [ ] Logging
 - [ ] Monitoring
-- [ ] Configuration management
+- [ ] Configuration yönetimi
 
-### Phase 4 — Advanced Retrieval
+### Faz 4 — Gelişmiş Retrieval
 
-- [ ] Query rewriting
-- [ ] Multi-query retrieval
-- [ ] Parent-document retrieval
-- [ ] Metadata-aware retrieval
+- [ ] Query Rewriting
+- [ ] Multi-Query Retrieval
+- [ ] Parent Document Retrieval
+- [ ] Metadata-aware Retrieval
 - [ ] Multi-document reasoning
 
 ---
 
-## 🎓 Key Concepts Demonstrated
+## 🎓 Projede Gösterilen Temel Kavramlar
 
-This project demonstrates practical implementation of several modern RAG concepts:
+Bu proje aşağıdaki modern RAG ve yapay zekâ kavramlarının pratik bir uygulamasını göstermektedir:
 
-- **Retrieval-Augmented Generation**
+- **Retrieval-Augmented Generation (RAG)**
 - **Semantic Chunking**
 - **Dense Vector Retrieval**
 - **Lexical Retrieval**
 - **BM25**
 - **Hybrid Search**
-- **Reciprocal Rank Fusion**
+- **Reciprocal Rank Fusion (RRF)**
 - **Cross-Encoder Reranking**
 - **Prompt Engineering**
-- **Hallucination Mitigation**
-- **Local LLM Inference**
-- **Modular RAG Architecture**
+- **Hallüsinasyon Önleme**
+- **Local LLM**
+- **Ollama**
+- **Çok Aşamalı Retrieval**
+- **Modüler RAG Mimarisi**
 
 ---
 
-## 👩‍💻 Author
+## 👩‍💻 Geliştirici
 
 **Şevval Yavuz**
 
-Computer Engineering
+Bilgisayar Mühendisliği
 
 GitHub: [@ssevvalyavuz](https://github.com/ssevvalyavuz)
 
 ---
 
-## 📄 License
+## 📄 Lisans
 
-This project is intended for educational, research, and portfolio purposes.
+Bu proje eğitim, araştırma ve portföy amaçlı geliştirilmiştir.
