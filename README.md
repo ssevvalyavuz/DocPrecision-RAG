@@ -762,69 +762,7 @@ LLM
 
 ---
 
-## 📌 Gelecek Geliştirmeler
 
-- [ ] Naive RAG baseline oluşturulması
-- [ ] Naive RAG ve Advanced RAG karşılaştırma script'i
-- [ ] Recall@K ve Precision@K benchmark'ları
-- [ ] MRR / NDCG değerlendirmesi
-- [ ] Farklı embedding modellerinin karşılaştırılması
-- [ ] Farklı reranker modellerinin karşılaştırılması
-- [ ] Query Expansion eklenmesi
-- [ ] Query Rewriting eklenmesi
-- [ ] Metadata filtering eklenmesi
-- [ ] Doküman kaynak/citation gösterimi
-- [ ] Conversational Memory eklenmesi
-- [ ] Multi-document retrieval
-- [ ] FastAPI backend
-- [ ] Web arayüzü
-- [ ] Docker desteği
-- [ ] Logging ve monitoring
-- [ ] Latency benchmark
-- [ ] Token kullanım analizi
-- [ ] Otomatik RAG değerlendirme sistemi
-
----
-
-## 🧭 Geliştirme Yol Haritası
-
-### Faz 1 — Temel RAG
-
-- [x] PDF ingestion
-- [x] Semantic Chunking
-- [x] Dense Retrieval
-- [x] BM25 Retrieval
-- [x] RRF
-- [x] Cross-Encoder Reranking
-- [x] Local LLM entegrasyonu
-
-### Faz 2 — Değerlendirme
-
-- [ ] Naive RAG baseline
-- [ ] Retrieval benchmark
-- [ ] Reranking benchmark
-- [ ] Hallüsinasyon değerlendirmesi
-- [ ] Latency karşılaştırması
-- [ ] Retrieval kalitesi ölçümü
-
-### Faz 3 — Production
-
-- [ ] FastAPI API katmanı
-- [ ] Web arayüzü
-- [ ] Docker
-- [ ] Logging
-- [ ] Monitoring
-- [ ] Configuration yönetimi
-
-### Faz 4 — Gelişmiş Retrieval
-
-- [ ] Query Rewriting
-- [ ] Multi-Query Retrieval
-- [ ] Parent Document Retrieval
-- [ ] Metadata-aware Retrieval
-- [ ] Multi-document reasoning
-
----
 
 ## 🎓 Projede Gösterilen Temel Kavramlar
 
