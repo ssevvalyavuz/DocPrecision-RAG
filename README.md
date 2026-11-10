@@ -38,8 +38,8 @@
                            [ Katı Prompt Mühendisliği ]
                                         │
                                         ▼
-                             [ Yerel LLM (Ollama) ]
-                               (Llama 3.2 / Mistral)
+                             [ Groq Cloud LLM ]
+                              (OpenAI-compatible API)
 ```
 
 ---
@@ -76,19 +76,13 @@ DocPrecision-RAG/
 
 ### 1. Ön Gereksinimler
 
-Sistemi çalıştırmak için aşağıdakilerin kurulu olması gerekir:
+Sistemi çalıştırmak için aşağıdakiler gerekir:
 
 - Python 3.10+
-- Ollama
 - Git
+- Groq API key (`GROQ_API_KEY`)
 
-Ollama üzerinden kullanılacak yerel LLM modeli de indirilmelidir.
-
-Örneğin:
-
-```bash
-ollama pull llama3.2
-```
+`naive_rag.py` yerel Ollama modeli kullandığından, temel RAG uygulamasını çalıştırmak için ayrıca Ollama gerekir.
 
 ---
 
@@ -129,18 +123,14 @@ pip install -r requirements.txt
 
 ---
 
-### 5. Ollama Modelini Çalıştırma
+### 5. Groq API yapılandırması
 
-Llama 3.2 kullanmak için:
-
-```bash
-ollama pull llama3.2
-```
-
-Alternatif olarak Mistral kullanılabilir:
+Proje kökünde `.env` dosyası oluşturup Groq API anahtarınızı girin. İsteğe bağlı `GROQ_MODEL`, varsayılan model kimliğini değiştirmek için kullanılabilir.
 
 ```bash
-ollama pull mistral
+GROQ_API_KEY=your_groq_api_key
+# İsteğe bağlı; varsayılan: openai/gpt-oss-20b
+GROQ_MODEL=openai/gpt-oss-20b
 ```
 
 ---
@@ -162,7 +152,7 @@ Pipeline çalıştırıldığında sistem sırasıyla:
 7. Sonuçları RRF ile birleştirir.
 8. Cross-Encoder ile yeniden sıralar.
 9. En alakalı içerikleri prompt içerisine yerleştirir.
-10. Prompt'u yerel Ollama LLM'ine gönderir.
+10. Prompt'u Groq Cloud LLM'ine gönderir.
 11. Nihai cevabı üretir.
 
 ---
@@ -498,9 +488,8 @@ DocPrecision-RAG/
 | BM25 | Kelime tabanlı retrieval |
 | RRF | Retrieval sonuçlarını birleştirme |
 | BAAI/bge-reranker-base | Cross-Encoder reranking |
-| Ollama | Yerel LLM çalıştırma |
-| Llama 3.2 | Yerel LLM |
-| Mistral | Alternatif yerel LLM |
+| Groq Cloud | OpenAI uyumlu API üzerinden LLM çalıştırma |
+| Ollama | Naive RAG baseline için yerel LLM |
 
 ---
 
@@ -517,7 +506,7 @@ DocPrecision-RAG/
 | Rank Fusion | ❌ | ✅ RRF |
 | Reranking | ❌ | ✅ Cross-Encoder |
 | Hallüsinasyon Kontrolü | Temel | Strict Prompting |
-| LLM | API / Local | Local Ollama |
+| LLM | Ollama | Groq Cloud API |
 | Mimari | Basit | Çok Aşamalı ve Modüler |
 
 ---
@@ -618,7 +607,7 @@ Local LLM               │
               Strict Prompt
                      │
                      ▼
-                Ollama LLM
+                Groq Cloud LLM
                      │
                      ▼
               Nihai Cevap
@@ -779,7 +768,7 @@ Bu proje aşağıdaki modern RAG ve yapay zekâ kavramlarının pratik bir uygul
 - **Prompt Engineering**
 - **Hallüsinasyon Önleme**
 - **Local LLM**
-- **Ollama**
+- **Groq Cloud**
 - **Çok Aşamalı Retrieval**
 - **Modüler RAG Mimarisi**
 

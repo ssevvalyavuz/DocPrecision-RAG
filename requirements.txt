@@ -1,5 +1,6 @@
 llama-index-core
 llama-index-llms-ollama
+llama-index-llms-openai-like
 llama-index-embeddings-huggingface
 llama-index-readers-file
 pypdf
