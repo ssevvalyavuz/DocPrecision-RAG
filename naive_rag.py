@@ -1,101 +1,193 @@
-import os 
-from llama_index.core import VectorStoreIndex, Settings
-from llama_index.llms.ollama import Ollama
+import os
+import time
+from typing import List, Dict, Any
+from dotenv import load_dotenv
+
+load_dotenv()
+
+import numpy as np
+import fitz  # PyMuPDF
+from groq import Groq
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
-from llama_index.readers.file import PyMuPDFReader
-from llama_index.core.node_parser import SentenceSplitter
 
-os.environ["HF_HUB_DISABLE_IMPLICIT_TOKEN"] = "1"  # HuggingFace Hub token kullanımını devre dışı bırakır.
-os.environ["HUGGING_FACE_HUB_TOKEN"] = ""  # Benden token arama, bu halka açık modeli anonim olarak doğrudan indir.
-os.environ["TOKENIZERS_PARALLELISM"] = "false"  # HuggingFace tokenizer paralel çalışmasını devre dışı bırakır.
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
-
-def main():
-    print ("Modeller yapılandırılıyor...")
+class NaiveRAGPipeline:
+    """
+    DocPrecision-RAG için Naive RAG Baseline Boru Hattı.
+    Gelişmiş bileşenler (Semantic Chunking, BM25, RRF, Cross-Encoder) çıkarılmıştır.
+    """
     
-    # LLM yapılandırması
-    # request_timeout süresini ilk yüklemeler için geniş tutuyoruz.
-    Settings.llm = Ollama(model="llama3.2", request_timeout=300.0, temperature=0.1 )
-    
-    #. Embedding model yapılandırması
-    Settings.embed_model = HuggingFaceEmbedding(model_name="BAAI/bge-small-en-v1.5", embed_batch_size=10)
-    
-    # Akıllı parçalayıcı (SentenceSplitter) Tanımlama
-    text_splitter = SentenceSplitter(chunk_size=512, chunk_overlap=50)  # 512 token boyutunda parçalar, 50 token örtüşme ile
-    Settings.text_splitter = text_splitter
-    
-    
-#  Dokümanları Yükleme
-    print("Doküman okunuyor...")
-    if not os.path.exists("data"):
-        os.makedirs("data", exist_ok=True)
-        print("❌ 'data' klasörü bulunamadı ve yeni oluşturuldu. Lütfen içine bir PDF koyun.")
-        return
-
-    pdf_path = "data/manual.pdf"  # Örnek PDF dosya yolu
-    if not os.path.isfile(pdf_path):
-        print(f"'{pdf_path}' dosyası bulunamadı. Lütfen 'data' klasörüne bir PDF ekleyin.")
-        return
-    
-    loader = PyMuPDFReader()
-    documents = loader.load_data(pdf_path)
-    
-# Parçalama (Chunking) İşlemini Manuel Olarak da İnceleyelim
-    nodes = text_splitter.get_nodes_from_documents(documents)
-    print(f" Doküman toplam {len(documents)} sayfadan {len(nodes)} adet mantıksal parçaya (Node) ayrıldı.")    
-
-    if not documents:
-        print("'data' klasöründe okunabilir doküman bulunamadı! Lütfen bir PDF ekleyin.")
-        return
-
-    print(f" {len(documents)} doküman sayfası yüklendi.")    
-    #Indexleme (Naive Chunking and Vector DB)
-    # İlk test için CPU'yu yormamak adına ilk 3 sayfa
-    test_docs = documents[:3] if len(documents) > 3 else documents
-    print(f"Toplam {len(documents)} sayfadan test için ilk {len(test_docs)} sayfa seçildi.")
-    print("Indexleme başlatılıyor...")
-    
-    # Ham metin sayfalarını varsayılan token boyutuna (chunk) böler, 
-    # BGE embedding modeliyle vektörlere (sayısal koordinatlara) dönüştürür 
-    # ve arama yapılabilir bir vektör veritabanı (Vector DB) fihristi oluşturur.
-    index = VectorStoreIndex.from_documents(documents)
-    
-    # Kullanıcı sorusunu vektöre çeviren, en benzer 2 metin parçasını (top-k=2) 
-    # depodan çekip Ollama LLM'e bağlam (context) olarak ileten sorgu boru hattını kurar.
-    query_engine = index.as_query_engine(similarity_top_k=2)    
-    print("\n" + "="*50)
-    print("Soru sorma motoru hazır. Sorularınızı sorabilirsiniz. Çıkmak için 'exit' yazın.")    
-    
-    while True:
-        user_input = input("\nSoru: ")
-        if user_input.lower() == "exit":
-            print("Çıkış yapılıyor...")
-            break
+    def __init__(
+        self, 
+        embed_model_name: str = "BAAI/bge-small-en-v1.5",
+        model_name: str = "openai/gpt-oss-20b",
+        chunk_size: int = 500,
+        chunk_overlap: int = 50
+    ):
+        print("🚀 Naive RAG Baseline Boru Hattı Başlatılıyor...")
         
-        response = query_engine.query(user_input) #Soru sorma motoruna soruyu gönderir ve yanıt alır.
-        print("\nYanıt: ", response) #Yanıtı ekrana yazdırır.    
-        
-        # --- RESPONSE NESNESİ DETAYLI DENETİMİ ---
-        print("\n" + "=" * 50)
-        print("🔍 RESPONSE İÇERİK ANALİZİ")
-        print("=" * 50)
-        
-        # 1. Genel metadata (varsa model ve sistem bilgileri)
-        print(f"Genel Metadata: {response.metadata}")
+        groq_api_key = os.getenv("GROQ_API_KEY")
+        if not groq_api_key:
+            raise ValueError(".env dosyasında GROQ_API_KEY bulunamadı!")
 
-        # 2. LLM'e beslenen kaynak parçalar (source_nodes)
-        print(f"\nKullanılan Kaynak Parça Sayısı: {len(response.source_nodes)}")
+        self.chunk_size = chunk_size
+        self.chunk_overlap = chunk_overlap
+        self.model_name = model_name
         
-        for idx, source in enumerate(response.source_nodes, 1):
-            print(f"\n--- [Parça {idx}] ---")
-            print(f"• Benzerlik Skoru : {source.score:.4f}")
-            print(f"• Node ID         : {source.node.node_id}")
-            print(f"• Dosya Adı       : {source.node.metadata.get('file_name', 'Bilinmiyor')}")
-            print(f"• Sayfa Numarası  : {source.node.metadata.get('page_label', source.node.metadata.get('page_number', 'Bilinmiyor'))}")
-            print("• Metin İçeriği   :")
-            print(f"  \"{source.node.get_text().strip()[:200]}...\"")
+        print(f"📦 Embedding modeli yükleniyor: {embed_model_name}")
+        self.embed_model = HuggingFaceEmbedding(model_name=embed_model_name, embed_batch_size=4)
+        
+        print("⚡ Groq API İstemcisi Başlatılıyor...")
+        self.client = Groq(api_key=groq_api_key)
+        
+        self.chunks: List[Dict[str, Any]] = []
+        self.chunk_embeddings: List[List[float]] = []
+
+    def _fixed_size_chunking(self, text: str) -> List[str]:
+        """Metni sabit karakter boyutunda ve örtüşmeli (overlap) parçalara böler."""
+        chunks = []
+        start = 0
+        text_length = len(text)
+
+        while start < text_length:
+            end = start + self.chunk_size
+            chunk = text[start:end]
+            if chunk.strip():
+                chunks.append(chunk.strip())
+            start += (self.chunk_size - self.chunk_overlap)
+        
+        return chunks
+
+    def _cosine_similarity(self, query_vector: List[float], doc_vectors: List[List[float]]) -> np.ndarray:
+        """Sorgu ile doküman vektörleri arasındaki Cosine Similarity değerlerini hesaplar."""
+        q_vec = np.array(query_vector)
+        d_vecs = np.array(doc_vectors)
+        
+        norm_q = np.linalg.norm(q_vec)
+        norm_d = np.linalg.norm(d_vecs, axis=1)
+        
+        # Sıfıra bölünme koruması
+        norm_d[norm_d == 0] = 1e-10
+        if norm_q == 0:
+            norm_q = 1e-10
+
+        sims = np.dot(d_vecs, q_vec) / (norm_d * norm_q)
+        return sims
+
+    def ingest_document(self, pdf_path: str) -> None:
+        """Dokümanı okur, fixed-size chunk'lar üretir ve vektör indeksini oluşturur."""
+        if not os.path.exists(pdf_path):
+            raise FileNotFoundError(f"Dosya bulunamadı: {pdf_path}")
             
-        print("=" * 50 + "\n")
-    
+        print(f"📄 Naive PDF Okuma başlatılıyor: {pdf_path}")
+        doc = fitz.open(pdf_path)
+        full_text = "\n".join([page.get_text("text") for page in doc])
+        doc.close()
+
+        raw_chunks = self._fixed_size_chunking(full_text)
+        
+        self.chunks = []
+        self.chunk_embeddings = []
+        
+        print(f"✂️ {len(raw_chunks)} adet sabit boyutlu (Size: {self.chunk_size}, Overlap: {self.chunk_overlap}) chunk oluşturuldu.")
+        
+        for idx, text_block in enumerate(raw_chunks):
+            emb = self.embed_model.get_text_embedding(text_block)
+            self.chunks.append({
+                "chunk_id": idx,
+                "text": text_block
+            })
+            self.chunk_embeddings.append(emb)
+
+        print("✅ Naive Vektör İndeksi Tamamlandı.")
+
+    def query(self, user_query: str, top_k: int = 5) -> Dict[str, Any]:
+        """Naive RAG sorgusunu çalıştırır ve detaylı metrik çıktısı üretir."""
+        if not self.chunks or not self.chunk_embeddings:
+            raise ValueError("Lütfen önce bir doküman indeksleyin!")
+
+        start_total = time.time()
+        
+        # 1. Retrieval Aşaması
+        start_retrieval = time.time()
+        query_embedding = self.embed_model.get_query_embedding(user_query)
+        similarities = self._cosine_similarity(query_embedding, self.chunk_embeddings)
+        
+        # Top-K İndeks Seçimi
+        top_indices = np.argsort(similarities)[::-1][:top_k]
+        
+        retrieved_chunks_output = []
+        context_blocks = []
+        
+        for rank, idx in enumerate(top_indices):
+            chunk_data = self.chunks[idx]
+            score = float(similarities[idx])
+            
+            context_blocks.append(f"--- BAĞLAM PARÇASI #{rank+1} ---\n{chunk_data['text']}")
+            retrieved_chunks_output.append({
+                "chunk_id": chunk_data["chunk_id"],
+                "text": chunk_data["text"],
+                "similarity_score": score
+            })
+            
+        retrieval_latency = time.time() - start_retrieval
+        
+        # 2. Generation Aşaması (Advanced RAG ile Birebir Aynı Prompt)
+        start_gen = time.time()
+        formatted_context = "\n\n".join(context_blocks)
+        
+        prompt = f"""Aşağıdaki bağlam bilgisini dikkatlice oku ve soruyu bu bilgilere dayanarak Türkçe yanıtla. 
+Cevabı 2-3 cümlede kısa ve öz ver.
+
+BAĞLAM:
+{formatted_context}
+
+SORU:
+{user_query}
+
+CEVAP:"""
+
+        chat_completion = self.client.chat.completions.create(
+            messages=[{"role": "user", "content": prompt}],
+            model=self.model_name,
+        )
+        
+        answer_text = chat_completion.choices[0].message.content
+        generation_latency = time.time() - start_gen
+        total_latency = time.time() - start_total
+        
+        return {
+            "question": user_query,
+            "retrieved_chunks": retrieved_chunks_output,
+            "answer": answer_text,
+            "retrieval_latency": round(retrieval_latency, 4),
+            "generation_latency": round(generation_latency, 4),
+            "total_latency": round(total_latency, 4)
+        }
+
 if __name__ == "__main__":
-    main()
+    # data/ klasörü altındaki PDF dosya yolunu belirtiyoruz
+    test_pdf = os.path.join("data", "X200_Kapsamli_Teknik_Kilavuz.pdf") 
+    
+    if os.path.exists(test_pdf):
+        # 1. Pipeline'ı başlat
+        pipeline = NaiveRAGPipeline()
+        
+        # 2. PDF'i oku ve fixed-size chunking yap
+        pipeline.ingest_document(test_pdf)
+        
+        # 3. Test sorusu sor
+        soru = "Kazan taş ve tortu temizliği (Descaling) hangi periyotta ve kimin sorumluluğunda yapılmalıdır?"
+        res = pipeline.query(soru, top_k=3)
+        
+        # 4. Programatik çıktıyı kontrol et
+        print("\n--- NAIVE RAG ÇIKTI KONTROLÜ ---")
+        print(f"Soru: {res['question']}")
+        print(f"Cevap: {res['answer']}\n")
+        print(f"Getirilen Chunk Sayısı: {len(res['retrieved_chunks'])}")
+        print(f"Retrieval Süresi: {res['retrieval_latency']} saniye")
+        print(f"Generation Süresi: {res['generation_latency']} saniye")
+        print(f"Toplam Süre: {res['total_latency']} saniye")
+    else:
+        print(f"❌ Test için '{test_pdf}' bulunamadı. Lütfen data/ altındaki dosya adını kontrol et.")

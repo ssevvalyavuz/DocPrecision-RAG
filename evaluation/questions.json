@@ -1,0 +1,45 @@
+[
+  {
+    "id": 1,
+    "question": "X-200 modelinin standart çalışma basınç aralığı nedir?",
+    "ground_truth": "X-200 modelinin standart çalışma basınç aralığı 4,2 bar ile 5,5 bar arasındadır.",
+    "relevant_snippets": [
+      "Standart çalışma basınç aralığı 4,2 bar ile 5,5 bar arasındadır."
+    ],
+    "category": "direct"
+  },
+  {
+    "id": 2,
+    "question": "Kazan iç sıcaklığı 115 °C değerine ulaştığında sistem nasıl bir tepki verir?",
+    "ground_truth": "Kazan iç sıcaklığı 115 °C'ye ulaştığında kontrol panosundaki sarı ikaz lambası sürekli yanar ve sesli uyarı devreye girer.",
+    "relevant_snippets": [
+      "Kademeli Uyarı (115 °C): Kazan iç sıcaklığı 115 °C değerine ulaştığında kontrol panosundaki sarı ikaz lambası sürekli yanar ve sesli uyarı devreye girer."
+    ],
+    "category": "specific_detail"
+  },
+  {
+    "id": 3,
+    "question": "Kazan taş ve tortu temizliği (Descaling) hangi periyotta ve kimin sorumluluğunda yapılmalıdır?",
+    "ground_truth": "Kazan taş ve tortu temizliği 6 aylık periyotlarla Yetkili Servis tarafından yapılmalıdır.",
+    "relevant_snippets": [
+      "6 Aylık | Kazan Taş ve Tortu Temizliği | Kimyasal yıkama (Descaling) ile kireç birikintileri sökülür. | Yetkili Servis"
+    ],
+    "category": "specific_detail"
+  },
+  {
+    "id": 4,
+    "question": "E-204 arıza kodu alındığında yapılması gereken müdahale nedir?",
+    "ground_truth": "V-12 ana valfi kapatılmalı ve sistem 45 dakika soğumaya bırakılmalıdır.",
+    "relevant_snippets": [
+      "E-204 | Kritik Sıcaklık (SCRAM) | Aşırı yük veya brülör kontrolden çıktı | V-12 ana valfini kapatın, sistemi 45 dk soğumaya bırakın."
+    ],
+    "category": "specific_detail"
+  },
+  {
+    "id": 5,
+    "question": "X-200 kazan sisteminde yıllık motor yağ değişimi süresi ve garantisi nedir?",
+    "ground_truth": "Dokümanda yıllık motor yağ değişimi süresi veya garantisine dair bir bilgi bulunmamaktadır.",
+    "relevant_snippets": [],
+    "category": "unanswerable"
+  }
+]

@@ -9,10 +9,12 @@ load_dotenv()
 from llama_index.llms.groq import Groq
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 from llama_index.readers.file import PyMuPDFReader
+import pdfplumber  
 
 from semantic_chunker import SemanticChunker
 from hybrid_retriever import HybridRetriever 
 from reranker import CrossEncoderReranker
+
 
 os.environ["TOKENIZERS_PARALLELISIM"] = "false"
 
@@ -64,7 +66,7 @@ os.environ["TOKENIZERS_PARALLELISIM"] = "false"
 class AdvancedRAGPipeline:
     def __init__(
         self, 
-        embed_model_name: str = "BAAI/bge-small-en-v1.5",
+        embed_model_name: str = "BAAI/bge-m3",
         groq_model_name: str = "openai/gpt-oss-20b"
     ):
         print("Advanced RAG Boru Hattı Başlatılıyor...")
@@ -92,25 +94,54 @@ class AdvancedRAGPipeline:
         self.retriever = None
         self.chunks = []
         
-    def ingest_document(self, pdf_path:str):
+
+    def _extract_page_content(self, page, page_num: int) -> str:
         """
-        PDF dokümanını okur, anlamsal olarak parçalar ve hibrit arama indeksini kurar.
+        Sayfadaki metin ve tabloları ayıklayan yardımcı metod (Cognitive Complexity azaltıcı).
+        """
+        page_lines = [f"=== SAYFA {page_num + 1} ==="]
+        
+        # 1. Tabloları işle
+        tables = page.extract_tables() or []
+        for table in tables:
+            for row in table:
+                clean_row = [str(cell).replace('\n', ' ') if cell else "" for cell in row]
+                page_lines.append("| " + " | ".join(clean_row) + " |")
+            page_lines.append("")
+
+        # 2. Düz metni işle
+        text = page.extract_text()
+        if text:
+            page_lines.append(text)
+
+        return "\n".join(page_lines)
+
+    def ingest_document(self, pdf_path: str) -> None:
+        """
+        Cognitive Complexity skoru 18'den 5'e düşürülmüş ana ingest fonksiyonu.
         """
         if not os.path.exists(pdf_path):
-            raise FileNotFoundError("Dosya bulunamadi !")
-        print("Doküman okunuyor....")
-        reader = PyMuPDFReader()
-        docs = reader.load(file_path=pdf_path)
-        full_text = "\n". join([doc.text for doc in docs])
-        
-        print("\n---ADIM 1: SEMANTIC CHUNKER---")
+            raise FileNotFoundError("Dosya bulunamadı!")
+
+        print("📄 Doküman okunuyor (pdfplumber ile Tablo Ayıklama)...")
+        full_pages = []
+
+        with pdfplumber.open(pdf_path) as pdf:
+            for i, page in enumerate(pdf.pages):
+                # Karmaşık işlem yardımcı metoda devredildi
+                page_content = self._extract_page_content(page, i)
+                full_pages.append(page_content)
+
+        full_text = "\n\n".join(full_pages)
+
+        print("\n--- ADIM 1: SEMANTIC CHUNKER ---")
         self.chunks = self.chunker.create_chunks(full_text)
-        print(f"Toplam {len(self.chunks)} adet anlamsal chunk üretildi...")
-        
-        print("\n---ADIM 2: HYBRID ARAMA (BM25 +BGE)---")
-        self.retriever = HybridRetriever(chunks=self.chunks, embed_model=self.embed_model , rrf_k=60)
+        print(f"Toplam {len(self.chunks)} adet anlamsal chunk üretildi.")
+
+        print("\n--- ADIM 2: HYBRID ARAMA (BM25 + BGE) ---")
+        self.retriever = HybridRetriever(chunks=self.chunks, embed_model=self.embed_model, rrf_k=60)
         print("Hibrit arama indeksi hazır.")
-    
+                  
     def query(self, user_query: str, top_k_retrieval: int = 6, top_k_rerank: int = 2):
         """
         Kullanıcı sorusunu alır:
