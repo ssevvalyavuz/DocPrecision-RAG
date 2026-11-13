@@ -123,7 +123,7 @@ class AdvancedRAGPipeline:
         if not os.path.exists(pdf_path):
             raise FileNotFoundError("Dosya bulunamadı!")
 
-        print("📄 Doküman okunuyor (pdfplumber ile Tablo Ayıklama)...")
+        print(" Doküman okunuyor (pdfplumber ile Tablo Ayıklama)...")
         full_pages = []
 
         with pdfplumber.open(pdf_path) as pdf:

@@ -1,34 +1,116 @@
 [
   {
     "id": 1,
-    "question": "X-200 modelinin standart çalışma basınç aralığı nedir?",
-    "ground_truth": "X-200 modelinin standart çalışma basınç aralığı 4,2 bar ile 5,5 bar arasındadır.",
+    "question": "X-200 sistemi hangi amaçla tasarlanmış ve hangi tür bir kazan sistemidir?",
+    "ground_truth": "X-200, yüksek basınçlı endüstriyel buhar üretimi için tasarlanmış modüler bir kazan sistemidir.",
+    "relevant_snippets": [
+      "X-200 modeli, yüksek basınçlı endüstriyel buhar üretimi için özel olarak tasarlanmış modüler bir kazan sistemidir."
+    ],
+    "category": "direct"
+  },
+  {
+    "id": 2,
+    "question": "X-200 kazanının gövdesinde ve eşanjör plaka borularında hangi malzemeler kullanılmıştır?",
+    "ground_truth": "Gövde yüksek sıcaklık dayanımlı 316L paslanmaz çelikten, eşanjör plaka boruları ise titanyum kaplamalıdır.",
+    "relevant_snippets": [
+      "yüksek sıcaklık dayanımına sahip 316L paslanmaz çelik gövde yapısı ve titanyum kaplamalı eşanjör plaka boruları"
+    ],
+    "category": "direct"
+  },
+  {
+    "id": 3,
+    "question": "X-200'ün standart çalışma basınç aralığı nedir?",
+    "ground_truth": "Standart çalışma basınç aralığı 4,2 bar ile 5,5 bar arasındadır.",
     "relevant_snippets": [
       "Standart çalışma basınç aralığı 4,2 bar ile 5,5 bar arasındadır."
     ],
     "category": "direct"
   },
   {
-    "id": 2,
-    "question": "Kazan iç sıcaklığı 115 °C değerine ulaştığında sistem nasıl bir tepki verir?",
-    "ground_truth": "Kazan iç sıcaklığı 115 °C'ye ulaştığında kontrol panosundaki sarı ikaz lambası sürekli yanar ve sesli uyarı devreye girer.",
+    "id": 4,
+    "question": "Çalışma basıncı standart aralığın dışına çıktığında kılavuza göre ne olur?",
+    "ground_truth": "Standart aralığın dışındaki işletim şartları güvenlik mimarisi tarafından otomatik olarak engellenir.",
+    "relevant_snippets": [
+      "Bu aralığın dışındaki işletim şartları, güvenlik mimarisi tarafından otomatik olarak engellenir."
+    ],
+    "category": "direct"
+  },
+  {
+    "id": 5,
+    "question": "Kazan içindeki su seviyesi hangi araçlarla izlenir?",
+    "ground_truth": "Su seviyesi ultrasonik debimetreler ve elektrotlu seviye sensörleriyle sürekli izlenir.",
+    "relevant_snippets": [
+      "Kazan içi su seviyesi sürekli olarak ultrasonik debimetreler ve elektrotlu seviye sensörleri ile izlenmektedir."
+    ],
+    "category": "direct"
+  },
+  {
+    "id": 6,
+    "question": "Optimum çalışma koşullarında kazan besleme suyu sıcaklığı kaç derece olmalıdır?",
+    "ground_truth": "Kazan besleme suyu sıcaklığı 85 °C seviyesinde tutulmalıdır.",
+    "relevant_snippets": [
+      "Optimum çalışma koşullarında kazan besleme suyu sıcaklığı 85 °C seviyesinde tutulmalıdır."
+    ],
+    "category": "direct"
+  },
+  {
+    "id": 7,
+    "question": "Kazan kontrol panosu hangi şebeke beslemesiyle çalışır?",
+    "ground_truth": "Kontrol panosu 380 V AC, 50 Hz trifaze şebeke gerilimiyle beslenir.",
+    "relevant_snippets": [
+      "Kazan kontrol panosu 380V AC 50Hz trifaze şebeke gerilimi ile beslenmektedir."
+    ],
+    "category": "direct"
+  },
+  {
+    "id": 8,
+    "question": "Kazan iç sıcaklığı 115 °C'ye ulaştığında hangi uyarılar devreye girer?",
+    "ground_truth": "Kontrol panosundaki sarı ikaz lambası sürekli yanar ve sesli uyarı devreye girer.",
     "relevant_snippets": [
       "Kademeli Uyarı (115 °C): Kazan iç sıcaklığı 115 °C değerine ulaştığında kontrol panosundaki sarı ikaz lambası sürekli yanar ve sesli uyarı devreye girer."
     ],
     "category": "specific_detail"
   },
   {
-    "id": 3,
-    "question": "Kazan taş ve tortu temizliği (Descaling) hangi periyotta ve kimin sorumluluğunda yapılmalıdır?",
-    "ground_truth": "Kazan taş ve tortu temizliği 6 aylık periyotlarla Yetkili Servis tarafından yapılmalıdır.",
+    "id": 9,
+    "question": "Basınç 5,8 bar sınırına ulaştığında otomatik tahliye nasıl gerçekleşir?",
+    "ground_truth": "Solenoid V-10 tahliye valfi otomatik açılır ve fazla basıncı atmosfere salar.",
     "relevant_snippets": [
-      "6 Aylık | Kazan Taş ve Tortu Temizliği | Kimyasal yıkama (Descaling) ile kireç birikintileri sökülür. | Yetkili Servis"
+      "Basınç 5,8 bar sınırına ulaştığında Solenoid V-10 tahliye valfi otomatik açılarak fazla basıncı atmosfere salar."
     ],
     "category": "specific_detail"
   },
   {
-    "id": 4,
-    "question": "E-204 arıza kodu alındığında yapılması gereken müdahale nedir?",
+    "id": 10,
+    "question": "SCRAM hangi sıcaklık veya basınç eşiğinde tetiklenir ve operatör hangi işlemi yapmalıdır?",
+    "ground_truth": "Sıcaklık 135 °C'yi veya basınç 6,2 barı aştığında SCRAM tetiklenir; operatör V-12 ana valfini manuel olarak kapatmalıdır.",
+    "relevant_snippets": [
+      "Kritik eşik olan 135 °C sıcaklık veya 6.2 bar basınç aşıldığında acil kapatma sistemi (SCRAM) tetiklenir.",
+      "Bu aşamada operatör V-12 ana valfini manuel olarak kapatmalıdır."
+    ],
+    "category": "specific_detail"
+  },
+  {
+    "id": 11,
+    "question": "E-101 arızasının olası nedeni ve kılavuzda önerilen müdahale nedir?",
+    "ground_truth": "Olası neden V-10 valfinin tıkalı olması veya duyarga arızasıdır. V-10 manuel açılmalı ve duyarga kalibrasyonu kontrol edilmelidir.",
+    "relevant_snippets": [
+      "E-101 | Aşırı Basınç Yükselmesi | V-10 Valfi tıkalı veya duyarga arızalı | V-10 valfini manuel açın, duyarga kalibrasyonunu kontrol edin."
+    ],
+    "category": "specific_detail"
+  },
+  {
+    "id": 12,
+    "question": "E-102 düşük su seviyesi arızasında hangi olası neden belirtilir ve ne yapılmalıdır?",
+    "ground_truth": "Olası neden besleme pompası P-04'ün devre dışı kalmasıdır. P-04 sigortası kontrol edilmeli ve emiş hattı vanası açılmalıdır.",
+    "relevant_snippets": [
+      "E-102 | Düşük Su Seviyesi | Besleme pompası P-04 devre dışı | P-04 sigortasını kontrol edin, emiş hattı vanasını açın."
+    ],
+    "category": "specific_detail"
+  },
+  {
+    "id": 13,
+    "question": "E-204 kritik sıcaklık (SCRAM) kodu için belirtilen soğutma müdahalesi nedir?",
     "ground_truth": "V-12 ana valfi kapatılmalı ve sistem 45 dakika soğumaya bırakılmalıdır.",
     "relevant_snippets": [
       "E-204 | Kritik Sıcaklık (SCRAM) | Aşırı yük veya brülör kontrolden çıktı | V-12 ana valfini kapatın, sistemi 45 dk soğumaya bırakın."
@@ -36,10 +118,166 @@
     "category": "specific_detail"
   },
   {
-    "id": 5,
-    "question": "X-200 kazan sisteminde yıllık motor yağ değişimi süresi ve garantisi nedir?",
-    "ground_truth": "Dokümanda yıllık motor yağ değişimi süresi veya garantisine dair bir bilgi bulunmamaktadır.",
-    "relevant_snippets": [],
-    "category": "unanswerable"
+    "id": 14,
+    "question": "E-309 alev duyarga arızasında sensöre nasıl müdahale edilmelidir?",
+    "ground_truth": "Fotosel sensör yüzeyi kirlenmiş olabilir; sensör lensi izopropil alkol ile temizlenmelidir.",
+    "relevant_snippets": [
+      "E-309 | Alev Duyarga Arızası | Fotosel sensör yüzeyi kirlenmiş | Sensör lensini izopropil alkol ile temizleyin."
+    ],
+    "category": "specific_detail"
+  },
+  {
+    "id": 15,
+    "question": "E-412 PLC iletişim kopukluğu için hangi bağlantı sorunu ve çözüm adımları belirtilmiştir?",
+    "ground_truth": "RS485 Modbus kablosu gevşek olabilir. Pano klemens bağlantıları ve sonlandırma direnci sıkılmalıdır.",
+    "relevant_snippets": [
+      "E-412 | İletişim Kopukluğu (PLC) | RS485 Modbus kablosu gevşek | Pano klemens bağlantılarını ve sonlandırma direncini sıkın."
+    ],
+    "category": "specific_detail"
+  },
+  {
+    "id": 16,
+    "question": "115 °C uyarı kademesi ile 5,8 bar otomatik tahliye kademesi hangi açıdan farklıdır?",
+    "ground_truth": "115 °C'de sarı ikaz lambası sürekli yanar ve sesli uyarı verilir; basınç 5,8 bar olduğunda ise V-10 otomatik açılarak fazla basıncı atmosfere salar.",
+    "relevant_snippets": [
+      "Kazan iç sıcaklığı 115 °C değerine ulaştığında kontrol panosundaki sarı ikaz lambası sürekli yanar ve sesli uyarı devreye girer.",
+      "Basınç 5,8 bar sınırına ulaştığında Solenoid V-10 tahliye valfi otomatik açılarak fazla basıncı atmosfere salar."
+    ],
+    "category": "comparison"
+  },
+  {
+    "id": 17,
+    "question": "5,8 bar tahliye eşiği ile 6,2 bar SCRAM eşiğini tetiklenen işlem ve valf kullanımı bakımından karşılaştırın.",
+    "ground_truth": "5,8 barda V-10 otomatik açılarak basıncı tahliye eder. 6,2 bar basınç aşıldığında SCRAM tetiklenir ve operatör V-12'yi manuel kapatmalıdır.",
+    "relevant_snippets": [
+      "Basınç 5,8 bar sınırına ulaştığında Solenoid V-10 tahliye valfi otomatik açılarak fazla basıncı atmosfere salar.",
+      "6.2 bar basınç aşıldığında acil kapatma sistemi (SCRAM) tetiklenir. Bu aşamada operatör V-12 ana valfini manuel olarak kapatmalıdır."
+    ],
+    "category": "comparison"
+  },
+  {
+    "id": 18,
+    "question": "Kazan gövdesi ile eşanjör plaka borularının malzemeleri nasıl farklıdır?",
+    "ground_truth": "Gövde 316L paslanmaz çeliktir; eşanjör plaka boruları titanyum kaplamalıdır.",
+    "relevant_snippets": [
+      "316L paslanmaz çelik gövde yapısı ve titanyum kaplamalı eşanjör plaka boruları"
+    ],
+    "category": "comparison"
+  },
+  {
+    "id": 19,
+    "question": "Günlük su seviyesi-basınç kontrolü ile haftalık emniyet valfi kontrolünü yapılacak iş ve sorumlu açısından karşılaştırın.",
+    "ground_truth": "Günlük kontrolde gösterge değerlerinin nominal aralıkta olduğu doğrulanır ve sorumlu vardiya operatörüdür. Haftalık kontrolde V-10 ve V-12 valfleri manuel test koluyla blöf ettirilir; sorumlu bakım teknisyenidir.",
+    "relevant_snippets": [
+      "Günlük | Su Seviyesi ve Basınç | Gösterge değerlerinin nominal aralıkta olduğu teyit edilir. | Vardiya Operatörü",
+      "Haftalık | Emniyet Valfleri | V-10 ve V-12 valfleri manuel test kolu ile blöf ettirilir. | Bakım Teknisyeni"
+    ],
+    "category": "comparison"
+  },
+  {
+    "id": 20,
+    "question": "Haftalık emniyet valfi bakımı ile aylık brülör-elektrot bakımının işleri ve sorumluları nelerdir?",
+    "ground_truth": "Haftalık bakımda bakım teknisyeni V-10 ve V-12 valflerini manuel test koluyla blöf ettirir. Aylık bakımda bakım teknisyeni ateşleme elektrot aralığını 3,5 mm'ye ayarlar ve kurumu temizler.",
+    "relevant_snippets": [
+      "Haftalık | Emniyet Valfleri | V-10 ve V-12 valfleri manuel test kolu ile blöf ettirilir. | Bakım Teknisyeni",
+      "Aylık | Brülör ve Elektrotlar | Ateşleme elektrot aralığı (3.5 mm) ayarlanır ve kurum temizlenir. | Bakım Teknisyeni"
+    ],
+    "category": "comparison"
+  },
+  {
+    "id": 21,
+    "question": "Altı aylık kazan temizliği ile yıllık NDT kontrolü hangi işlem ve sorumlular bakımından ayrılır?",
+    "ground_truth": "Altı ayda bir yetkili servis kimyasal yıkamayla kireci temizler. Yılda bir sertifikalı mühendis kaynak dikişlerine ultrasonik çatlak testi uygular.",
+    "relevant_snippets": [
+      "6 Aylık | Kazan Taş ve Tortu Temizliği | Kimyasal yıkama (Descaling) ile kireç birikintileri sökülür. | Yetkili Servis",
+      "Yıllık | Tahribatsız Test (NDT) | Kaynak dikişlerine ultrasonik çatlak testi uygulanır. | Sertifikalı Mühendis"
+    ],
+    "category": "comparison"
+  },
+  {
+    "id": 22,
+    "question": "Kontrol panosunun beslemesi ile PLC giriş/çıkış modüllerinin beslemesi arasındaki fark nedir?",
+    "ground_truth": "Kontrol panosu 380 V AC, 50 Hz trifaze şebekeden beslenir; PLC giriş/çıkış modülleri ise izole güç kaynağı üzerinden 24 V DC ile beslenmelidir.",
+    "relevant_snippets": [
+      "Kazan kontrol panosu 380V AC 50Hz trifaze şebeke gerilimi ile beslenmektedir.",
+      "PLC giriş/çıkış modülleri 24V DC izole güç kaynağı üzerinden beslenmelidir."
+    ],
+    "category": "comparison"
+  },
+  {
+    "id": 23,
+    "question": "E-101 ve E-102 kodlarında sırasıyla hangi bileşen sorunları olası görülür ve her biri için hangi müdahale belirtilir?",
+    "ground_truth": "E-101'de V-10 valfinin tıkalı olması veya duyarga arızası olasıdır; valf manuel açılıp duyarga kalibrasyonu kontrol edilir. E-102'de P-04 besleme pompasının devre dışı kalması olasıdır; sigorta kontrol edilir ve emiş hattı vanası açılır.",
+    "relevant_snippets": [
+      "E-101 | Aşırı Basınç Yükselmesi | V-10 Valfi tıkalı veya duyarga arızalı | V-10 valfini manuel açın, duyarga kalibrasyonunu kontrol edin.",
+      "E-102 | Düşük Su Seviyesi | Besleme pompası P-04 devre dışı | P-04 sigortasını kontrol edin, emiş hattı vanasını açın."
+    ],
+    "category": "multi_hop"
+  },
+  {
+    "id": 24,
+    "question": "Su seviyesinin izlenmesinde kullanılan araçlar nelerdir ve optimum koşullarda besleme suyu kaç derece tutulur?",
+    "ground_truth": "Su seviyesi ultrasonik debimetreler ve elektrotlu seviye sensörleriyle izlenir; besleme suyu 85 °C seviyesinde tutulmalıdır.",
+    "relevant_snippets": [
+      "Kazan içi su seviyesi sürekli olarak ultrasonik debimetreler ve elektrotlu seviye sensörleri ile izlenmektedir.",
+      "Optimum çalışma koşullarında kazan besleme suyu sıcaklığı 85 °C seviyesinde tutulmalıdır."
+    ],
+    "category": "multi_hop"
+  },
+  {
+    "id": 25,
+    "question": "Haftalık bakımda hangi valfler, hangi yöntemle test edilir ve bu işin sorumlusu kimdir?",
+    "ground_truth": "V-10 ve V-12 valfleri manuel test koluyla blöf ettirilir; sorumlu bakım teknisyenidir.",
+    "relevant_snippets": [
+      "Haftalık | Emniyet Valfleri | V-10 ve V-12 valfleri manuel test kolu ile blöf ettirilir. | Bakım Teknisyeni"
+    ],
+    "category": "multi_hop"
+  },
+  {
+    "id": 26,
+    "question": "Aylık brülör ve elektrot bakımında hangi ayarlar ve temizlik yapılır, elektrot aralığı kaç milimetre olmalıdır?",
+    "ground_truth": "Ateşleme elektrot aralığı 3,5 mm'ye ayarlanır ve kurum temizlenir; bakım teknisyeni bu işi yapar.",
+    "relevant_snippets": [
+      "Aylık | Brülör ve Elektrotlar | Ateşleme elektrot aralığı (3.5 mm) ayarlanır ve kurum temizlenir. | Bakım Teknisyeni"
+    ],
+    "category": "multi_hop"
+  },
+  {
+    "id": 27,
+    "question": "Kireç birikintilerinin giderilmesi için hangi bakım işlemi ne sıklıkta yapılır ve kim tarafından üstlenilir?",
+    "ground_truth": "Kazan taş ve tortu temizliği altı ayda bir kimyasal yıkama (descaling) ile yapılır ve sorumlusu yetkili servistir.",
+    "relevant_snippets": [
+      "6 Aylık | Kazan Taş ve Tortu Temizliği | Kimyasal yıkama (Descaling) ile kireç birikintileri sökülür. | Yetkili Servis"
+    ],
+    "category": "multi_hop"
+  },
+  {
+    "id": 28,
+    "question": "Yıllık tahribatsız testte hangi bölgeye hangi test uygulanır ve testten kim sorumludur?",
+    "ground_truth": "Kaynak dikişlerine ultrasonik çatlak testi uygulanır; sorumlu sertifikalı mühendistir.",
+    "relevant_snippets": [
+      "Yıllık | Tahribatsız Test (NDT) | Kaynak dikişlerine ultrasonik çatlak testi uygulanır. | Sertifikalı Mühendis"
+    ],
+    "category": "multi_hop"
+  },
+  {
+    "id": 29,
+    "question": "Topraklama direnci ve nötr-toprak bağlantısı için kılavuzdaki iki elektriksel koşul nedir?",
+    "ground_truth": "Topraklama direnci en fazla 2 Ohm olmalı ve nötr ile toprak hatları kesinlikle birleştirilmemelidir.",
+    "relevant_snippets": [
+      "Topraklama direnci maksimum 2 Ohm seviyesinde olmalı, nötr ve toprak hatları kesinlikle birleştirilmemelidir (TN-S sistemi)."
+    ],
+    "category": "multi_hop"
+  },
+  {
+    "id": 30,
+    "question": "Kılavuzdaki üç kademeli koruma protokolünü, her kademenin eşiği ve sistem tepkisiyle birlikte sıralayın.",
+    "ground_truth": "115 °C'de sarı ikaz lambası sürekli yanar ve sesli uyarı verilir. Basınç 5,8 bar sınırına ulaştığında V-10 otomatik açılarak fazla basıncı atmosfere salar. Sıcaklık 135 °C'yi veya basınç 6,2 barı aştığında SCRAM tetiklenir ve operatör V-12 ana valfini manuel kapatır.",
+    "relevant_snippets": [
+      "Kademeli Uyarı (115 °C): Kazan iç sıcaklığı 115 °C değerine ulaştığında kontrol panosundaki sarı ikaz lambası sürekli yanar ve sesli uyarı devreye girer.",
+      "Basınç 5,8 bar sınırına ulaştığında Solenoid V-10 tahliye valfi otomatik açılarak fazla basıncı atmosfere salar.",
+      "Kritik eşik olan 135 °C sıcaklık veya 6.2 bar basınç aşıldığında acil kapatma sistemi (SCRAM) tetiklenir. Bu aşamada operatör V-12 ana valfini manuel olarak kapatmalıdır."
+    ],
+    "category": "multi_hop"
   }
 ]

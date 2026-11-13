@@ -1,0 +1,77 @@
+{
+  "metadata": {
+    "evaluation_framework": "ragas_0.4.3_collections",
+    "evaluation_mode": "retrieval_only",
+    "pdf_path": "data/X200_Kapsamli_Teknik_Kilavuz.pdf",
+    "top_k": 3,
+    "total_questions": 30,
+    "completed_questions": 1
+  },
+  "results": [
+    {
+      "id": 1,
+      "category": "direct",
+      "user_input": "X-200 sistemi hangi amaçla tasarlanmış ve hangi tür bir kazan sistemidir?",
+      "reference": "X-200, yüksek basınçlı endüstriyel buhar üretimi için tasarlanmış modüler bir kazan sistemidir.",
+      "naive_rag": {
+        "retrieved_chunks": [
+          {
+            "chunk_id": 0,
+            "text": "ENDÜSTRİYEL KAZAN SİSTEMLERİ X-200\nKAPSAMLI TEKNİK İŞLETİM VE BAKIM KILAVUZU (V4.2)\n1. Genel Çalışma Prensipleri ve Yapısal Özellikler\nX-200 modeli, yüksek basınçlı endüstriyel buhar üretimi için özel olarak tasarlanmış modüler bir kazan sistemidir.\nSistem, yüksek sıcaklık dayanımına sahip 316L paslanmaz çelik gövde yapısı ve titanyum kaplamalı eşanjör plaka\nboruları ile donatılmıştır. Standart çalışma basınç aralığı 4,2 bar ile 5,5 bar arasındadır. Bu aralığın dışındaki işletim\nşartları, güvenl",
+            "similarity_score": 0.8529
+          },
+          {
+            "chunk_id": 1,
+            "text": "ır. Bu aralığın dışındaki işletim\nşartları, güvenlik mimarisi tarafından otomatik olarak engellenir.\nKazan içi su seviyesi sürekli olarak ultrasonik debimetreler ve elektrotlu seviye sensörleri ile izlenmektedir. Optimum\nçalışma koşullarında kazan besleme suyu sıcaklığı 85 °C seviyesinde tutulmalıdır.\n2. Güvenlik Protokolleri ve Kritik Limitler\nSistemin güvenli işletimi için 3 kademeli koruma protokolü tanımlanmıştır:\n• Kademeli Uyarı (115 °C): Kazan iç sıcaklığı 115 °C değerine ulaştığında kont",
+            "similarity_score": 0.7433
+          },
+          {
+            "chunk_id": 6,
+            "text": "ç birikintileri\nsökülür.\nYetkili Servis\nYıllık\nTahribatsız Test (NDT)\nKaynak dikişlerine ultrasonik çatlak testi uygulanır.\nSertifikalı Mühendis\n5. Elektrik ve Otomasyon Bağlantı Kuralları\nKazan kontrol panosu 380V AC 50Hz trifaze şebeke gerilimi ile beslenmektedir. PLC giriş/çıkış modülleri 24V DC izole\ngüç kaynağı üzerinden beslenmelidir. Topraklama direnci maksimum 2 Ohm seviyesinde olmalı, nötr ve toprak\nhatları kesinlikle birleştirilmemelidir (TN-S sistemi).",
+            "similarity_score": 0.7044
+          }
+        ],
+        "retrieval_latency": 0.0334,
+        "context_precision": 1.0,
+        "context_recall": 0.8
+      },
+      "advanced_rag": {
+        "retrieved_chunks": [
+          {
+            "chunk_id": 0,
+            "text": "=== SAYFA 1 ===\n| Arıza Kodu | Arıza Tanımı | Olası Neden | Çözüm / Müdahale |\n| E-101 | Aşırı Basınç Yükselmesi | V-10 Valfi tıkalı veya duyarga arızalı | V-10 valfini manuel açın, duyarga kalibrasyonunu kontrol edin. |\n| E-102 | Düşük Su Seviyesi | Besleme pompası P-04 devre dışı | P-04 sigortasını kontrol edin, emiş hattı vanasını açın. |\n| E-204 | Kritik Sıcaklık (SCRAM) | Aşırı yük veya brülör kontrolden çıktı | V-12 ana valfini kapatın, sistemi 45 dk soğumaya bırakın. |\n| E-309 | Alev Duyarga Arızası | Fotosel sensör yüzeyi kirlenmiş | Sensör lensini izopropil alkol ile temizleyin. |\n| E-412 | İletişim Kopukluğu (PLC) | RS485 Modbus kablosu gevşek | Pano klemens bağlantılarını ve sonlandırma direncini sıkın. ENDÜSTRİYEL KAZAN SİSTEMLERİ X-200\nKAPSAMLI TEKNİK İŞLETİM VE BAKIM KILAVUZU (V4.2)\n1. Genel Çalışma Prensipleri ve Yapısal Özellikler\nX-200 modeli, yüksek basınçlı endüstriyel buhar üretimi için özel olarak tasarlanmış modüler bir kazan sistemidir. Sistem, yüksek sıcaklık dayanımına sahip 316L paslanmaz çelik gövde yapısı ve titanyum kaplamalı eşanjör plaka\nboruları ile donatılmıştır. Standart çalışma basınç aralığı 4,2 bar ile 5,5 bar arasındadır. Bu aralığın dışındaki işletim\nşartları, güvenlik mimarisi tarafından otomatik olarak engellenir.",
+            "rrf_score": 0.0328,
+            "dense_rank": 1,
+            "sparse_rank": 1,
+            "dense_score": 0.5184,
+            "sparse_score": 5.5252,
+            "rerank_score": 0.0
+          },
+          {
+            "chunk_id": 1,
+            "text": "Kazan içi su seviyesi sürekli olarak ultrasonik debimetreler ve elektrotlu seviye sensörleri ile izlenmektedir. Optimum\nçalışma koşullarında kazan besleme suyu sıcaklığı 85 °C seviyesinde tutulmalıdır. Güvenlik Protokolleri ve Kritik Limitler\nSistemin güvenli işletimi için 3 kademeli koruma protokolü tanımlanmıştır:\n• Kademeli Uyarı (115 °C): Kazan iç sıcaklığı 115 °C değerine ulaştığında kontrol panosundaki sarı ikaz lambası sürekli\nyanar ve sesli uyarı devreye girer. • Otomatik Tahliye (125 °C / 5.8 bar): Basınç 5,8 bar sınırına ulaştığında Solenoid V-10 tahliye valfi otomatik açılarak\nfazla basıncı atmosfere salar. • Acil Kapatma - SCRAM (135 °C / 6.2 bar): Kritik eşik olan 135 °C sıcaklık veya 6.2 bar basınç aşıldığında acil kapatma\nsistemi (SCRAM) tetiklenir. Bu aşamada operatör V-12 ana valfini manuel olarak kapatmalıdır. Arıza Kodları (Error Codes) ve Müdahale Adımları\nArıza Kodu Arıza Tanımı Olası Neden Çözüm / Müdahale\nV-10 Valfi tıkalı veya duyarga V-10 valfini manuel açın, duyarga\nE-101 Aşırı Basınç Yükselmesi\narızalı kalibrasyonunu kontrol edin. P-04 sigortasını kontrol edin, emiş hattı\nE-102 Düşük Su Seviyesi Besleme pompası P-04 devre dışı\nvanasını açın. Aşırı yük veya brülör kontrolden V-12 ana valfini kapatın, sistemi 45 dk\nE-204 Kritik Sıcaklık (SCRAM)\nçıktı soğumaya bırakın. E-309 Alev Duyarga Arızası Fotosel sensör yüzeyi kirlenmiş Sensör lensini izopropil alkol ile temizleyin. Pano klemens bağlantılarını ve sonlandırma\nE-412 İletişim Kopukluğu (PLC) RS485 Modbus kablosu gevşek\ndirencini sıkın.",
+            "rrf_score": 0.032,
+            "dense_rank": 2,
+            "sparse_rank": 3,
+            "dense_score": 0.4597,
+            "sparse_score": 0.9795,
+            "rerank_score": 0.0
+          },
+          {
+            "chunk_id": 6,
+            "text": "Elektrik ve Otomasyon Bağlantı Kuralları\nKazan kontrol panosu 380V AC 50Hz trifaze şebeke gerilimi ile beslenmektedir. PLC giriş/çıkış modülleri 24V DC izole\ngüç kaynağı üzerinden beslenmelidir. Topraklama direnci maksimum 2 Ohm seviyesinde olmalı, nötr ve toprak\nhatları kesinlikle birleştirilmemelidir (TN-S sistemi).",
+            "rrf_score": 0.0318,
+            "dense_rank": 4,
+            "sparse_rank": 2,
+            "dense_score": 0.4135,
+            "sparse_score": 1.1383,
+            "rerank_score": 0.0
+          }
+        ],
+        "retrieval_latency": 9.1661,
+        "context_precision": 1.0,
+        "context_recall": 1.0
+      }
+    }
+  ]
+}

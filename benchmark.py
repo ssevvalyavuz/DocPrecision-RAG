@@ -1,265 +1,562 @@
 import os
-import re
+import sys
+import ast
 import json
-import math
 import time
-from typing import List, Dict, Any
+import types
+import asyncio
+from typing import List, Dict, Any, Tuple
+from dotenv import load_dotenv
 
-# Mevcut pipeline modülleri (Dosyalarına dokunulmaz)
+load_dotenv()
+
+# Ragas 0.4.3 içindeki kullanılmayan VertexAI import hatasını engeller
+_mock_vertex = types.ModuleType("langchain_community.chat_models.vertexai")
+_mock_vertex.ChatVertexAI = object
+sys.modules["langchain_community.chat_models.vertexai"] = _mock_vertex
+
+from openai import AsyncOpenAI
+from ragas.llms import llm_factory
+from ragas.metrics.collections import ContextPrecision, ContextRecall
+
 from naive_rag import NaiveRAGPipeline
 from advanced_rag import AdvancedRAGPipeline
 
 DATASET_PATH = os.path.join("evaluation", "questions.json")
+CHECKPOINT_PATH = os.path.join("evaluation", "ragas_collections_checkpoint.json")
+OUTPUT_PATH = os.path.join("evaluation", "ragas_collections_results.json")
 PDF_PATH = os.path.join("data", "X200_Kapsamli_Teknik_Kilavuz.pdf")
 TOP_K = 3
 
-TURKISH_MAP = str.maketrans("çğıöşüİÇĞIÖŞ", "cgiosuicgios")
-STOPWORDS = {"ve", "ile", "bir", "bu", "icin", "de", "da", "den", "dan", "kat", "veya", "ise", "olarak"}
+# Önce tek bir soru üzerinde doğrulama yapmak için True; başarılı olursa False yapın
+TEST_SINGLE_QUESTION = False 
 
-# --- 1. TOKEN BAZLI METİN VE KELİME KORUMA YARDIMCILARI ---
 
-def normalize_to_tokens(text: str) -> List[str]:
-    """Metni küçük harfe ve İngilizce/TR karaktere normalize eder, noktalama işaretlerinden ayırıp token listesi döner."""
-    text = text.lower().translate(TURKISH_MAP)
-    text = re.sub(r'[^\w\s]', ' ', text)
-    tokens = [w for w in text.split() if w not in STOPWORDS]
-    return tokens
+# --- 1. RAGAS 0.4.3 EVALUATOR LLM VE COLLECTIONS METRİKLERİ ---
 
-def extract_critical_tokens(text: str) -> List[str]:
-    """\b sınırı kullanarak kritik terimleri ve sayısal değerleri tam eşleşme için ayıklar."""
-    text_lower = text.lower().translate(TURKISH_MAP)
-    patterns = [
-        r'\b\d+(?:[\.,]\d+)?\b',  # Tam sayılar ve ondalıklar (Örn: 4,2, 115, 6)
-        r'\be-\d+\b',               # Arıza kodları (Örn: e-204)
-        r'\bscram\b',               # Özel terimler
-        r'\bv-\d+\b',               # Valf kodları (Örn: v-10, v-12)
-        r'\bp-\d+\b'                # Pompa kodları (Örn: p-04)
-    ]
-    tokens = []
-    for pat in patterns:
-        matches = re.findall(pat, text_lower)
-        tokens.extend(matches)
-    return list(set(tokens))
+def _create_ragas_metrics() -> Tuple[ContextPrecision, ContextRecall]:
+    """Groq OpenAI-uyumlu istemci üzerinden Ragas 0.4.3 Collections metriklerini başlatır."""
+    groq_api_key = os.getenv("GROQ_API_KEY")
+    if not groq_api_key:
+        raise ValueError(".env dosyasında GROQ_API_KEY bulunamadı!")
 
-# --- 2. GELİŞMİŞ EŞLEŞTİRME VE PARÇALI KONTROL MOTORU ---
+    groq_model = os.getenv("GROQ_MODEL", "openai/gpt-oss-20b")
 
-def is_chunk_relevant(target_chunk: str, all_k_chunks: List[str], snippet_text: str) -> bool:
-    """
-    1. Exact Token Eşleşmesi ile tam kelime arar (Sub-string hatası önlenir).
-    2. Tam Kelime Sınırı (\b) ile V-1 ve V-12 veya 4 ve 45 ayrımı yapılır.
-    3. Parçalı Eşleşme: Chunk %40+ kapsıyorsa VE kalan parça diğer Top-K chunk'larda varsa Relevant=1 sayılır.
-    """
-    target_tokens = set(normalize_to_tokens(target_chunk))
-    snippet_tokens = normalize_to_tokens(snippet_text)
+    async_client = AsyncOpenAI(
+        api_key=groq_api_key,
+        base_url="https://api.groq.com/openai/v1",
+        max_retries=3
+    )
 
-    if not snippet_tokens:
-        return False
+    evaluator_llm = llm_factory(groq_model, client=async_client)
+    precision_metric = ContextPrecision(llm=evaluator_llm)
+    recall_metric = ContextRecall(llm=evaluator_llm)
 
-    snippet_set = set(snippet_tokens)
-    matched_tokens = target_tokens.intersection(snippet_set)
-    match_ratio = len(matched_tokens) / len(snippet_set)
+    return precision_metric, recall_metric
 
-    # 1. Kritik Terim Kontrolü (Exact Word Boundaries)
-    critical_tokens = extract_critical_tokens(snippet_text)
-    if critical_tokens:
-        chunk_lower = target_chunk.lower().translate(TURKISH_MAP)
-        has_all_critical = True
-        for ct in critical_tokens:
-            pattern = r'\b' + re.escape(ct) + r'\b'
-            if not re.search(pattern, chunk_lower):
-                has_all_critical = False
-                break
 
-        if not has_all_critical:
-            return False  # Kritik sayı/kod eksikse direkt elenir (False Positive Engeli)
+async def _score_with_ragas_async(
+    precision_metric: ContextPrecision,
+    recall_metric: ContextRecall,
+    user_input: str,
+    reference: str,
+    retrieved_contexts: List[str]
+) -> Dict[str, Any]:
+    """Ragas 0.4.3 Collections API (ascore) ile ContextPrecision ve ContextRecall hesaplar."""
+    precision_res = await precision_metric.ascore(
+        user_input=user_input,
+        reference=reference,
+        retrieved_contexts=retrieved_contexts
+    )
+    recall_res = await recall_metric.ascore(
+        user_input=user_input,
+        reference=reference,
+        retrieved_contexts=retrieved_contexts
+    )
 
-    # 2. Tek Başına Yeterli Eşleşme (%75+ Token Kapsama)
-    if match_ratio >= 0.75:
-        return True
-
-    # 3. Context-Aware Parçalı Eşleşme (%40+ Kapsama + Komşu Chunk Tamamlaması)
-    if match_ratio >= 0.40:
-        other_chunks_combined = " ".join([c for c in all_k_chunks if c != target_chunk])
-        other_tokens = set(normalize_to_tokens(other_chunks_combined))
-        
-        # Snippet'in hedef chunk'ta OLMAYAN eksik kelimeleri
-        missing_tokens = snippet_set - target_tokens
-        other_matched = other_tokens.intersection(missing_tokens)
-        
-        # Eksik kalan kelimelerin en az %70'i diğer chunk'larda tamamlanıyorsa geçerli sayılır
-        if missing_tokens and (len(other_matched) / len(missing_tokens)) >= 0.70:
-            return True
-
-    return False
-
-def check_snippet_covered_in_context(all_k_chunks: List[str], snippet_text: str) -> bool:
-    """Recall@K için: Top-K bağlamının tamamı snippet'i kapsıyor mu?"""
-    combined_context = " ".join(all_k_chunks)
-    combined_tokens = set(normalize_to_tokens(combined_context))
-    snippet_tokens = normalize_to_tokens(snippet_text)
-
-    if not snippet_tokens:
-        return False
-
-    snippet_set = set(snippet_tokens)
-    matched = combined_tokens.intersection(snippet_set)
-    match_ratio = len(matched) / len(snippet_set)
-
-    # Kritik terim kontrolü
-    critical_tokens = extract_critical_tokens(snippet_text)
-    if critical_tokens:
-        combined_lower = combined_context.lower().translate(TURKISH_MAP)
-        for ct in critical_tokens:
-            pattern = r'\b' + re.escape(ct) + r'\b'
-            if not re.search(pattern, combined_lower):
-                return False
-
-    return match_ratio >= 0.75
-
-# --- 3. METRİK HESAPLAMA MOTORU (DÜZELTİLMİŞ NDCG) ---
-
-def calculate_ndcg(binary_relevance: List[int], total_ideal_snippets: int, k: int) -> float:
-    """Ground Truth'taki ideal snippet sayısını temel alan gerçek NDCG@K hesabı."""
-    if total_ideal_snippets == 0:
-        return 0.0
-
-    # 1. Actual DCG@K
-    dcg = 0.0
-    for i, rel in enumerate(binary_relevance[:k]):
-        if rel > 0:
-            dcg += rel / math.log2(i + 2)
-
-    # 2. Ideal DCG@K (Ground Truth'taki ideal relevante göre I vector)
-    ideal_ones = min(total_ideal_snippets, k)
-    idcg = 0.0
-    for i in range(ideal_ones):
-        idcg += 1.0 / math.log2(i + 2)
-
-    return (dcg / idcg) if idcg > 0 else 0.0
-
-def evaluate_retrieval(retrieved_chunks: List[str], relevant_snippets: List[str], k: int) -> Dict[str, Any]:
-    """Tek Tip Standart Değerlendirme Motoru."""
-    if not relevant_snippets:
-        return {
-            "precision": None,
-            "recall": None,
-            "mrr": None,
-            "ndcg": None,
-            "is_na": True
-        }
-
-    k_chunks = retrieved_chunks[:k]
-    binary_rel = []
-
-    # Chunk Düzeyinde İlgililik (Precision, MRR, NDCG)
-    for chunk in k_chunks:
-        is_rel = 1 if any(is_chunk_relevant(chunk, k_chunks, snip) for snip in relevant_snippets) else 0
-        binary_rel.append(is_rel)
-
-    # Precision@K
-    precision = sum(binary_rel) / k if k > 0 else 0.0
-
-    # Recall@K (Snippet Düzeyinde Çift Sayımsız)
-    covered_snippets = sum(1 for snip in relevant_snippets if check_snippet_covered_in_context(k_chunks, snip))
-    recall = covered_snippets / len(relevant_snippets)
-
-    # MRR (Mean Reciprocal Rank)
-    mrr = 0.0
-    for rank, rel in enumerate(binary_rel):
-        if rel == 1:
-            mrr = 1.0 / (rank + 1)
-            break
-
-    # NDCG@K (Doğru IDCG Mantığıyla)
-    ndcg = calculate_ndcg(binary_rel, total_ideal_snippets=len(relevant_snippets), k=k)
+    p_val = float(precision_res.value) if getattr(precision_res, "value", None) is not None else None
+    r_val = float(recall_res.value) if getattr(recall_res, "value", None) is not None else None
 
     return {
-        "precision": precision,
-        "recall": recall,
-        "mrr": mrr,
-        "ndcg": ndcg,
-        "is_na": False
+        "context_precision": p_val,
+        "context_recall": r_val
     }
 
-# --- 4. BENCHMARK ÇALIŞTIRICI ---
 
-def run_benchmark():
-    if not os.path.exists(DATASET_PATH):
-        raise FileNotFoundError(f"Evaluation verisi bulunamadı: {DATASET_PATH}")
-    if not os.path.exists(PDF_PATH):
-        raise FileNotFoundError(f"PDF dosyası bulunamadı: {PDF_PATH}")
+def evaluate_retrieval_ragas(
+    precision_metric: ContextPrecision,
+    recall_metric: ContextRecall,
+    user_input: str,
+    reference: str,
+    retrieved_contexts: List[str],
+    k: int
+) -> Dict[str, Any]:
+    """Top-K bağlam parçalarını Ragas Collections API ile senkron olarak değerlendirir."""
+    k_contexts = retrieved_contexts[:k]
+    return asyncio.run(
+        _score_with_ragas_async(
+            precision_metric=precision_metric,
+            recall_metric=recall_metric,
+            user_input=user_input,
+            reference=reference,
+            retrieved_contexts=k_contexts
+        )
+    )
 
-    with open(DATASET_PATH, "r", encoding="utf-8") as f:
-        questions = json.load(f)
 
-    print("==================================================")
-    print("🚀 DocPrecision-RAG Benchmark Başlatılıyor")
-    print(f"📄 PDF: {PDF_PATH}")
-    print(f"❓ Soru Sayısı: {len(questions)}")
-    print(f"🎯 Top-K: {TOP_K}")
-    print("==================================================\n")
+# --- 2. JSON KAYIT FORMATLAYICILAR VE METİN ÇIKARICILAR ---
 
+def _extract_advanced_clean_text(item: Any) -> str:
+    """Advanced RAG chunk nesnesinden saf metni (string dict içinden ayrıştırarak) çıkarır."""
+    if not isinstance(item, dict):
+        return str(item)
+
+    chunk_wrapper = item.get("chunk")
+    raw_text_str = chunk_wrapper.get("text", "") if isinstance(chunk_wrapper, dict) else str(chunk_wrapper or "")
+
+    if isinstance(raw_text_str, str) and raw_text_str.strip().startswith("{"):
+        try:
+            candidate = ast.literal_eval(raw_text_str.strip())
+            if isinstance(candidate, dict):
+                inner_chunk = candidate.get("chunk") if isinstance(candidate.get("chunk"), dict) else {}
+                return str(inner_chunk.get("text", candidate.get("text", "")))
+        except (ValueError, SyntaxError, TypeError):
+            pass
+
+    return raw_text_str
+
+
+def _format_naive_chunks(raw_chunks: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    formatted = []
+    for item in raw_chunks:
+        if isinstance(item, dict):
+            formatted.append({
+                "chunk_id": item.get("chunk_id"),
+                "text": item.get("text", ""),
+                "similarity_score": round(float(item["similarity_score"]), 4) if item.get("similarity_score") is not None else None
+            })
+        else:
+            formatted.append({
+                "chunk_id": None,
+                "text": str(item),
+                "similarity_score": None
+            })
+    return formatted
+
+
+def _format_advanced_chunks(raw_chunks: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    formatted = []
+    for item in raw_chunks:
+        if not isinstance(item, dict):
+            formatted.append({
+                "chunk_id": None,
+                "text": str(item),
+                "rrf_score": None,
+                "dense_rank": None,
+                "sparse_rank": None,
+                "dense_score": None,
+                "sparse_score": None,
+                "rerank_score": None
+            })
+            continue
+
+        raw_rerank = item.get("rerank_score")
+        rerank_score = round(float(raw_rerank), 4) if raw_rerank is not None else None
+
+        chunk_wrapper = item.get("chunk")
+        raw_text_str = chunk_wrapper.get("text", "") if isinstance(chunk_wrapper, dict) else str(chunk_wrapper or "")
+
+        parsed_outer = None
+        if isinstance(raw_text_str, str) and raw_text_str.strip().startswith("{"):
+            try:
+                candidate = ast.literal_eval(raw_text_str.strip())
+                if isinstance(candidate, dict):
+                    parsed_outer = candidate
+            except (ValueError, SyntaxError, TypeError):
+                parsed_outer = None
+
+        if parsed_outer is not None:
+            inner_chunk = parsed_outer.get("chunk") if isinstance(parsed_outer.get("chunk"), dict) else {}
+            chunk_id = inner_chunk.get("chunk_id", parsed_outer.get("chunk_id"))
+            clean_text = inner_chunk.get("text", parsed_outer.get("text", ""))
+
+            rrf_val = parsed_outer.get("rrf_score")
+            dense_s_val = parsed_outer.get("dense_score")
+            sparse_s_val = parsed_outer.get("sparse_score")
+
+            formatted.append({
+                "chunk_id": chunk_id,
+                "text": clean_text,
+                "rrf_score": round(float(rrf_val), 4) if rrf_val is not None else None,
+                "dense_rank": parsed_outer.get("dense_rank"),
+                "sparse_rank": parsed_outer.get("sparse_rank"),
+                "dense_score": round(float(dense_s_val), 4) if dense_s_val is not None else None,
+                "sparse_score": round(float(sparse_s_val), 4) if sparse_s_val is not None else None,
+                "rerank_score": rerank_score
+            })
+        else:
+            fallback_id = chunk_wrapper.get("chunk_id") if isinstance(chunk_wrapper, dict) else item.get("chunk_id")
+            formatted.append({
+                "chunk_id": fallback_id,
+                "text": raw_text_str,
+                "rrf_score": None,
+                "dense_rank": None,
+                "sparse_rank": None,
+                "dense_score": None,
+                "sparse_score": None,
+                "rerank_score": rerank_score
+            })
+
+    return formatted
+
+
+# --- 3. CHECKPOINT VE ÖZET HESAPLAMA ---
+
+def _is_record_complete(record: Dict[str, Any]) -> bool:
+    if not isinstance(record, dict) or "id" not in record:
+        return False
+
+    naive_block = record.get("naive_rag")
+    adv_block = record.get("advanced_rag")
+    if not isinstance(naive_block, dict) or not isinstance(adv_block, dict):
+        return False
+
+    required_keys = {"retrieved_chunks", "retrieval_latency", "context_precision", "context_recall"}
+    has_naive = required_keys.issubset(naive_block.keys()) and naive_block.get("context_precision") is not None
+    has_adv = required_keys.issubset(adv_block.keys()) and adv_block.get("context_precision") is not None
+
+    return has_naive and has_adv
+
+
+def _load_checkpoint(checkpoint_path: str) -> Dict[Any, Dict[str, Any]]:
+    if not os.path.exists(checkpoint_path):
+        return {}
+
+    try:
+        with open(checkpoint_path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        records = data.get("results", []) if isinstance(data, dict) else data
+        if not isinstance(records, list):
+            return {}
+        return {rec["id"]: rec for rec in records if _is_record_complete(rec)}
+    except (json.JSONDecodeError, OSError):
+        return {}
+
+
+def _save_checkpoint(
+    checkpoint_path: str,
+    pdf_path: str,
+    top_k: int,
+    total_questions: int,
+    records: List[Dict[str, Any]]
+) -> None:
+    os.makedirs(os.path.dirname(checkpoint_path), exist_ok=True)
+    payload = {
+        "metadata": {
+            "evaluation_framework": "ragas_0.4.3_collections",
+            "evaluation_mode": "retrieval_only",
+            "pdf_path": pdf_path,
+            "top_k": top_k,
+            "total_questions": total_questions,
+            "completed_questions": len(records)
+        },
+        "results": records
+    }
+    tmp_path = f"{checkpoint_path}.tmp"
+    with open(tmp_path, "w", encoding="utf-8") as out_f:
+        json.dump(payload, out_f, ensure_ascii=False, indent=2)
+    os.replace(tmp_path, checkpoint_path)
+
+
+def _calculate_summary_from_records(records: List[Dict[str, Any]]) -> Dict[str, Dict[str, Any]]:
+    def _avg_for_system(sys_key: str) -> Dict[str, Any]:
+        valid = []
+        latencies = []
+        for rec in records:
+            sys_data = rec.get(sys_key, {})
+            if sys_data.get("retrieval_latency") is not None:
+                latencies.append(sys_data["retrieval_latency"])
+            if sys_data.get("context_precision") is not None and sys_data.get("context_recall") is not None:
+                valid.append(sys_data)
+
+        avg_latency = (sum(latencies) / len(latencies)) if latencies else None
+
+        if not valid:
+            return {
+                "context_precision": None,
+                "context_recall": None,
+                "avg_retrieval_latency": avg_latency
+            }
+
+        return {
+            "context_precision": sum(r["context_precision"] for r in valid) / len(valid),
+            "context_recall": sum(r["context_recall"] for r in valid) / len(valid),
+            "avg_retrieval_latency": avg_latency
+        }
+
+    return {
+        "naive_rag": _avg_for_system("naive_rag"),
+        "advanced_rag": _avg_for_system("advanced_rag")
+    }
+
+
+# --- 4. SAF RETRIEVAL VE BENCHMARK YARDIMCI FONKSİYONLARI ---
+
+def _initialize_pipelines(pdf_path: str) -> Tuple[NaiveRAGPipeline, AdvancedRAGPipeline]:
     print("--- [1/2] Naive RAG İndeksleniyor ---")
     naive_pipe = NaiveRAGPipeline()
-    naive_pipe.ingest_document(PDF_PATH)
+    naive_pipe.ingest_document(pdf_path)
 
     print("\n--- [2/2] Advanced RAG İndeksleniyor ---")
     adv_pipe = AdvancedRAGPipeline()
-    adv_pipe.ingest_document(PDF_PATH)
+    adv_pipe.ingest_document(pdf_path)
 
-    naive_results = []
-    adv_results = []
+    return naive_pipe, adv_pipe
 
-    print("\n⚡ BENCHMARK EVALUATION ÇALIŞIYOR...\n")
 
-    for q in questions:
-        q_id = q["id"]
-        q_text = q["question"]
-        snippets = q.get("relevant_snippets", [])
+def _retrieve_naive_safe(
+    naive_pipe: NaiveRAGPipeline,
+    query_text: str,
+    top_k: int
+) -> Tuple[List[Dict[str, Any]], float]:
+    """naive_rag.py dosyasına dokunmadan Groq API çağırmadan Naive retrieval yapar."""
+    if hasattr(naive_pipe, "retrieve_only"):
+        t0 = time.perf_counter()
+        res = naive_pipe.retrieve_only(query_text, top_k=top_k)
+        latency = res.get("retrieval_latency", round(time.perf_counter() - t0, 4))
+        return res.get("retrieved_chunks", []), float(latency)
 
-        print(f"❓ [Soru #{q_id}] {q_text}")
+    if not naive_pipe.chunks or not naive_pipe.chunk_embeddings:
+        raise ValueError("Lütfen önce bir doküman indeksleyin!")
 
-        # Naive RAG Çalıştır
-        n_res = naive_pipe.query(q_text, top_k=TOP_K)
-        n_chunks = [c["text"] for c in n_res["retrieved_chunks"]]
-        n_metrics = evaluate_retrieval(n_chunks, snippets, k=TOP_K)
-        n_metrics["total_latency"] = n_res["total_latency"]
-        naive_results.append(n_metrics)
+    t0 = time.perf_counter()
+    query_embedding = naive_pipe.embed_model.get_query_embedding(query_text)
+    similarities = naive_pipe._cosine_similarity(query_embedding, naive_pipe.chunk_embeddings)
+    top_indices = similarities.argsort()[::-1][:top_k]
 
-        # Advanced RAG Çalıştır
-        a_res = adv_pipe.query(q_text, top_k_retrieval=6, top_k_rerank=TOP_K)
-        a_chunks = [c["chunk"]["text"] for c in a_res["retrieved_chunks"]]
-        a_metrics = evaluate_retrieval(a_chunks, snippets, k=TOP_K)
-        a_metrics["total_latency"] = a_res.get("total_latency", 0.0)
-        adv_results.append(a_metrics)
+    retrieved = []
+    for idx in top_indices:
+        chunk_data = naive_pipe.chunks[idx]
+        retrieved.append({
+            "chunk_id": chunk_data["chunk_id"],
+            "text": chunk_data["text"],
+            "similarity_score": float(similarities[idx])
+        })
+    return retrieved, round(time.perf_counter() - t0, 4)
 
-    # --- ÖZET METRİKLER ---
-    def calculate_averages(results: List[Dict[str, Any]]) -> Dict[str, float]:
-        valid = [r for r in results if not r["is_na"]]
-        if not valid:
-            return {}
-        return {
-            "precision": sum(r["precision"] for r in valid) / len(valid),
-            "recall": sum(r["recall"] for r in valid) / len(valid),
-            "mrr": sum(r["mrr"] for r in valid) / len(valid),
-            "ndcg": sum(r["ndcg"] for r in valid) / len(valid),
-            "avg_latency": sum(r["total_latency"] for r in results) / len(results)
-        }
 
-    n_avg = calculate_averages(naive_results)
-    a_avg = calculate_averages(adv_results)
+def _retrieve_advanced_safe(
+    adv_pipe: AdvancedRAGPipeline,
+    query_text: str,
+    top_k_retrieval: int,
+    top_k_rerank: int
+) -> Tuple[List[Dict[str, Any]], float]:
+    """advanced_rag.py dosyasına dokunmadan Groq API çağırmadan Advanced retrieval yapar."""
+    if hasattr(adv_pipe, "retrieve_only"):
+        t0 = time.perf_counter()
+        res = adv_pipe.retrieve_only(query_text, top_k_retrieval=top_k_retrieval, top_k_rerank=top_k_rerank)
+        latency = res.get("retrieval_latency", round(time.perf_counter() - t0, 4))
+        return res.get("retrieved_chunks", []), float(latency)
 
-    print("\n==================================================")
-    print("📊 ADİL BENCHMARK DEĞERLENDİRME SONUÇLARI")
+    if not adv_pipe.retriever:
+        raise ValueError("Lütfen önce doküman yükleyin")
+
+    t0 = time.perf_counter()
+    candidate_results = adv_pipe.retriever.retrieve(query_text, top_k=top_k_retrieval)
+    selected_results = candidate_results[:top_k_rerank]
+
+    retrieved = []
+    for res in selected_results:
+        chunk_text = res.node.get_content() if hasattr(res, "node") else str(res)
+        score = getattr(res, "score", 0.0)
+        retrieved.append({
+            "chunk": {"text": chunk_text},
+            "rerank_score": score
+        })
+    return retrieved, round(time.perf_counter() - t0, 4)
+
+
+def _build_system_result_entry(
+    formatted_chunks: List[Dict[str, Any]],
+    latency: float,
+    metrics: Dict[str, Any]
+) -> Dict[str, Any]:
+    return {
+        "retrieved_chunks": formatted_chunks,
+        "retrieval_latency": round(float(latency), 4),
+        "context_precision": round(metrics["context_precision"], 4) if metrics["context_precision"] is not None else None,
+        "context_recall": round(metrics["context_recall"], 4) if metrics["context_recall"] is not None else None
+    }
+
+
+def _evaluate_single_question(
+    q: Dict[str, Any],
+    naive_pipe: NaiveRAGPipeline,
+    adv_pipe: AdvancedRAGPipeline,
+    precision_metric: ContextPrecision,
+    recall_metric: ContextRecall,
+    top_k: int
+) -> Dict[str, Any]:
+    q_id = q["id"]
+    q_text = q["question"]
+    reference = q.get("ground_truth", "")
+
+    print(f"❓ [Soru #{q_id}] {q_text}")
+
+    # 1. Naive RAG Retrieval-Only (RAG generate() çalışmaz)
+    n_raw_chunks, n_latency = _retrieve_naive_safe(naive_pipe, q_text, top_k=top_k)
+    n_contexts = [c["text"] if isinstance(c, dict) else str(c) for c in n_raw_chunks]
+    n_metrics = evaluate_retrieval_ragas(
+        precision_metric, recall_metric, q_text, reference, n_contexts, k=top_k
+    )
+
+    # 2. Advanced RAG Retrieval-Only (RAG generate() çalışmaz)
+    a_raw_chunks, a_latency = _retrieve_advanced_safe(
+        adv_pipe, q_text, top_k_retrieval=6, top_k_rerank=top_k
+    )
+    a_contexts = [_extract_advanced_clean_text(c) for c in a_raw_chunks]
+    a_metrics = evaluate_retrieval_ragas(
+        precision_metric, recall_metric, q_text, reference, a_contexts, k=top_k
+    )
+
+    print(
+        f"   📊 Naive    -> Precision: {n_metrics['context_precision']:.4f} | Recall: {n_metrics['context_recall']:.4f}\n"
+        f"   📊 Advanced -> Precision: {a_metrics['context_precision']:.4f} | Recall: {a_metrics['context_recall']:.4f}"
+    )
+
+    return {
+        "id": q_id,
+        "category": q.get("category", "unknown"),
+        "user_input": q_text,
+        "reference": reference,
+        "naive_rag": _build_system_result_entry(_format_naive_chunks(n_raw_chunks), n_latency, n_metrics),
+        "advanced_rag": _build_system_result_entry(_format_advanced_chunks(a_raw_chunks), a_latency, a_metrics)
+    }
+
+
+def _run_evaluation_loop(
+    target_questions: List[Dict[str, Any]],
+    all_questions: List[Dict[str, Any]],
+    completed_map: Dict[Any, Dict[str, Any]],
+    naive_pipe: NaiveRAGPipeline,
+    adv_pipe: AdvancedRAGPipeline,
+    precision_metric: ContextPrecision,
+    recall_metric: ContextRecall
+) -> Tuple[List[Dict[str, Any]], bool]:
+    print("\n⚡ RAGAS 0.4.3 COLLECTIONS RETRIEVAL EVALUATION ÇALIŞIYOR...\n")
+    detailed_records = [completed_map[q["id"]] for q in all_questions if q["id"] in completed_map]
+
+    try:
+        for q in target_questions:
+            q_id = q["id"]
+            if q_id in completed_map:
+                print(f"⏭️ [Soru #{q_id}] Checkpoint'te mevcut, atlanıyor...")
+                continue
+
+            record = _evaluate_single_question(
+                q, naive_pipe, adv_pipe, precision_metric, recall_metric, TOP_K
+            )
+            completed_map[q_id] = record
+            detailed_records = [completed_map[item["id"]] for item in all_questions if item["id"] in completed_map]
+            _save_checkpoint(CHECKPOINT_PATH, PDF_PATH, TOP_K, len(all_questions), detailed_records)
+            print(f"💾 [Soru #{q_id}] Checkpoint kaydedildi ({len(detailed_records)}/{len(all_questions)}).")
+
+        return detailed_records, True
+    except Exception as exc:
+        print(f"\n⚠️ Ragas Collections değerlendirmesi hata nedeniyle durduruldu: {exc}")
+        print(f"💾 Tamamlanan {len(detailed_records)} soru '{CHECKPOINT_PATH}' dosyasında güvenle korundu.")
+        return detailed_records, False
+
+
+def _print_retrieval_summary(summary: Dict[str, Dict[str, Any]], top_k: int) -> None:
+    n_avg = summary.get("naive_rag", {})
+    a_avg = summary.get("advanced_rag", {})
+
+    def _fmt(val: Any) -> str:
+        return f"{val:.4f}" if val is not None else "N/A"
+
+    print("\n==========================================================")
+    print(f"📊 RAGAS 0.4.3 (COLLECTIONS) RETRIEVAL SONUÇLARI (Top-{top_k})")
+    print("==========================================================")
+    print(f"{'Metrik':<26} | {'Naive RAG Baseline':<20} | {'Advanced RAG':<20}")
+    print("-" * 72)
+    print(f"{'Context Precision':<26} | {_fmt(n_avg.get('context_precision')):<20} | {_fmt(a_avg.get('context_precision')):<20}")
+    print(f"{'Context Recall':<26} | {_fmt(n_avg.get('context_recall')):<20} | {_fmt(a_avg.get('context_recall')):<20}")
+    print(f"{'Ort. Retrieval Süre (sn)':<26} | {_fmt(n_avg.get('avg_retrieval_latency')):<20} | {_fmt(a_avg.get('avg_retrieval_latency')):<20}")
+    print("==========================================================")
+
+
+def _save_final_results(
+    output_path: str,
+    pdf_path: str,
+    top_k: int,
+    total_questions: int,
+    summary: Dict[str, Dict[str, Any]],
+    records: List[Dict[str, Any]]
+) -> None:
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+    export_payload = {
+        "metadata": {
+            "evaluation_framework": "ragas_0.4.3_collections",
+            "metrics": ["ContextPrecision", "ContextRecall"],
+            "pdf_path": pdf_path,
+            "top_k": top_k,
+            "total_questions": total_questions,
+            "evaluated_questions": len(records)
+        },
+        "summary": {
+            "naive_rag": {k: (round(v, 4) if v is not None else None) for k, v in summary.get("naive_rag", {}).items()},
+            "advanced_rag": {k: (round(v, 4) if v is not None else None) for k, v in summary.get("advanced_rag", {}).items()}
+        },
+        "results": records
+    }
+
+    with open(output_path, "w", encoding="utf-8") as out_f:
+        json.dump(export_payload, out_f, ensure_ascii=False, indent=2)
+
+    print(f"\n💾 Ragas Collections sonuçları kaydedildi: {output_path}")
+    print(f"📌 Ragas Collections checkpoint korundu: {CHECKPOINT_PATH}")
+
+
+# --- 5. ANA ÇALIŞTIRICI ---
+
+def run_benchmark() -> None:
+    if not os.path.exists(DATASET_PATH) or not os.path.exists(PDF_PATH):
+        raise FileNotFoundError("Gerekli veri veya PDF dosyası bulunamadı!")
+
+    with open(DATASET_PATH, "r", encoding="utf-8") as f:
+        all_questions = json.load(f)
+
+    target_questions = all_questions[:1] if TEST_SINGLE_QUESTION else all_questions
+
+    completed_map = _load_checkpoint(CHECKPOINT_PATH)
+    detailed_records = [completed_map[q["id"]] for q in all_questions if q["id"] in completed_map]
+
     print("==================================================")
-    print(f"{'Metrik':<20} | {'Naive RAG Baseline':<20} | {'Advanced RAG':<20}")
-    print("-" * 66)
-    print(f"{'Precision@' + str(TOP_K):<20} | {n_avg.get('precision', 0):<20.4f} | {a_avg.get('precision', 0):<20.4f}")
-    print(f"{'Recall@' + str(TOP_K):<20} | {n_avg.get('recall', 0):<20.4f} | {a_avg.get('recall', 0):<20.4f}")
-    print(f"{'MRR':<20} | {n_avg.get('mrr', 0):<20.4f} | {a_avg.get('mrr', 0):<20.4f}")
-    print(f"{'NDCG@' + str(TOP_K):<20} | {n_avg.get('ndcg', 0):<20.4f} | {a_avg.get('ndcg', 0):<20.4f}")
-    print(f"{'Ort. Süre (sn)':<20} | {n_avg.get('avg_latency', 0):<20.4f} | {a_avg.get('avg_latency', 0):<20.4f}")
-    print("==================================================")
+    print("🚀 DocPrecision-RAG | Ragas 0.4.3 Collections Benchmark")
+    print(f"📄 PDF: {PDF_PATH}")
+    print(f"🧪 Mod: {'TEK SORU DOĞRULAMA' if TEST_SINGLE_QUESTION else 'TÜM VERİ SETİ'}")
+    print(f"❓ Hedef Soru: {len(target_questions)} / {len(all_questions)} | ✅ Checkpoint: {len(detailed_records)}")
+    print(f"🎯 Top-K: {TOP_K} | 🚫 RAG generate(): KAPALI")
+    print("==================================================\n")
+
+    pending = [q for q in target_questions if q["id"] not in completed_map]
+    if pending:
+        precision_metric, recall_metric = _create_ragas_metrics()
+        naive_pipe, adv_pipe = _initialize_pipelines(PDF_PATH)
+        detailed_records, completed = _run_evaluation_loop(
+            target_questions, all_questions, completed_map,
+            naive_pipe, adv_pipe, precision_metric, recall_metric
+        )
+        if not completed:
+            return
+    else:
+        print("✅ Hedef sorular zaten checkpoint dosyasında tamamlanmış görünüyor.\n")
+
+    summary = _calculate_summary_from_records(detailed_records)
+    _print_retrieval_summary(summary, TOP_K)
+    _save_final_results(OUTPUT_PATH, PDF_PATH, TOP_K, len(all_questions), summary, detailed_records)
+
 
 if __name__ == "__main__":
     run_benchmark()
