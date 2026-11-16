@@ -35,7 +35,6 @@ TEST_SINGLE_QUESTION = False
 # --- 1. RAGAS 0.4.3 EVALUATOR LLM VE COLLECTIONS METRİKLERİ ---
 
 def _create_ragas_metrics() -> Tuple[ContextPrecision, ContextRecall]:
-    """Groq OpenAI-uyumlu istemci üzerinden Ragas 0.4.3 Collections metriklerini başlatır."""
     groq_api_key = os.getenv("GROQ_API_KEY")
     if not groq_api_key:
         raise ValueError(".env dosyasında GROQ_API_KEY bulunamadı!")
@@ -45,15 +44,17 @@ def _create_ragas_metrics() -> Tuple[ContextPrecision, ContextRecall]:
     async_client = AsyncOpenAI(
         api_key=groq_api_key,
         base_url="https://api.groq.com/openai/v1",
+        timeout=120.0,
         max_retries=3
     )
 
-    evaluator_llm = llm_factory(groq_model, client=async_client)
-    precision_metric = ContextPrecision(llm=evaluator_llm)
-    recall_metric = ContextRecall(llm=evaluator_llm)
-
-    return precision_metric, recall_metric
-
+    evaluator_llm = llm_factory(
+        groq_model,
+        client=async_client,
+        max_tokens=4096,
+        temperature=0.0
+    )
+    return ContextPrecision(llm=evaluator_llm), ContextRecall(llm=evaluator_llm)
 
 async def _score_with_ragas_async(
     precision_metric: ContextPrecision,

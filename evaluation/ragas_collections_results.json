@@ -7,46 +7,46 @@
     ],
     "pdf_path": "data/X200_Kapsamli_Teknik_Kilavuz.pdf",
     "top_k": 3,
-    "total_questions": 5,
-    "evaluated_questions": 5
+    "total_questions": 30,
+    "evaluated_questions": 30
   },
   "summary": {
     "naive_rag": {
-      "context_precision": 0.6667,
-      "context_recall": 0.8,
-      "avg_retrieval_latency": 0.2405
+      "context_precision": 0.8222,
+      "context_recall": 0.95,
+      "avg_retrieval_latency": 0.4075
     },
     "advanced_rag": {
-      "context_precision": 1.0,
-      "context_recall": 1.0,
-      "avg_retrieval_latency": 0.7987
+      "context_precision": 0.9667,
+      "context_recall": 0.9667,
+      "avg_retrieval_latency": 1.2354
     }
   },
   "results": [
     {
       "id": 1,
       "category": "direct",
-      "user_input": "X-200 modelinin standart çalışma basınç aralığı nedir?",
-      "reference": "X-200 modelinin standart çalışma basınç aralığı 4,2 bar ile 5,5 bar arasındadır.",
+      "user_input": "X-200 sistemi hangi amaçla tasarlanmış ve hangi tür bir kazan sistemidir?",
+      "reference": "X-200, yüksek basınçlı endüstriyel buhar üretimi için tasarlanmış modüler bir kazan sistemidir.",
       "naive_rag": {
         "retrieved_chunks": [
           {
             "chunk_id": 0,
             "text": "ENDÜSTRİYEL KAZAN SİSTEMLERİ X-200\nKAPSAMLI TEKNİK İŞLETİM VE BAKIM KILAVUZU (V4.2)\n1. Genel Çalışma Prensipleri ve Yapısal Özellikler\nX-200 modeli, yüksek basınçlı endüstriyel buhar üretimi için özel olarak tasarlanmış modüler bir kazan sistemidir.\nSistem, yüksek sıcaklık dayanımına sahip 316L paslanmaz çelik gövde yapısı ve titanyum kaplamalı eşanjör plaka\nboruları ile donatılmıştır. Standart çalışma basınç aralığı 4,2 bar ile 5,5 bar arasındadır. Bu aralığın dışındaki işletim\nşartları, güvenl",
-            "similarity_score": 0.831
+            "similarity_score": 0.8529
           },
           {
-            "chunk_id": 5,
-            "text": "unludur.\nPeriyot\nKontrol Noktası\nYapılacak İşlem\nSorumlu\nGünlük\nSu Seviyesi ve Basınç\nGösterge değerlerinin nominal aralıkta olduğu teyit\nedilir.\nVardiya Operatörü\nHaftalık\nEmniyet Valfleri\nV-10 ve V-12 valfleri manuel test kolu ile blöf ettirilir.\nBakım Teknisyeni\nAylık\nBrülör ve Elektrotlar\nAteşleme elektrot aralığı (3.5 mm) ayarlanır ve\nkurum temizlenir.\nBakım Teknisyeni\n6 Aylık\nKazan Taş ve Tortu Temizliği\nKimyasal yıkama (Descaling) ile kireç birikintileri\nsökülür.\nYetkili Servis\nYıllık\nTah",
-            "similarity_score": 0.7312
+            "chunk_id": 1,
+            "text": "ır. Bu aralığın dışındaki işletim\nşartları, güvenlik mimarisi tarafından otomatik olarak engellenir.\nKazan içi su seviyesi sürekli olarak ultrasonik debimetreler ve elektrotlu seviye sensörleri ile izlenmektedir. Optimum\nçalışma koşullarında kazan besleme suyu sıcaklığı 85 °C seviyesinde tutulmalıdır.\n2. Güvenlik Protokolleri ve Kritik Limitler\nSistemin güvenli işletimi için 3 kademeli koruma protokolü tanımlanmıştır:\n• Kademeli Uyarı (115 °C): Kazan iç sıcaklığı 115 °C değerine ulaştığında kont",
+            "similarity_score": 0.7433
           },
           {
             "chunk_id": 6,
             "text": "ç birikintileri\nsökülür.\nYetkili Servis\nYıllık\nTahribatsız Test (NDT)\nKaynak dikişlerine ultrasonik çatlak testi uygulanır.\nSertifikalı Mühendis\n5. Elektrik ve Otomasyon Bağlantı Kuralları\nKazan kontrol panosu 380V AC 50Hz trifaze şebeke gerilimi ile beslenmektedir. PLC giriş/çıkış modülleri 24V DC izole\ngüç kaynağı üzerinden beslenmelidir. Topraklama direnci maksimum 2 Ohm seviyesinde olmalı, nötr ve toprak\nhatları kesinlikle birleştirilmemelidir (TN-S sistemi).",
-            "similarity_score": 0.7222
+            "similarity_score": 0.7044
           }
         ],
-        "retrieval_latency": 0.0332,
+        "retrieval_latency": 0.0345,
         "context_precision": 1.0,
         "context_recall": 1.0
       },
@@ -58,7 +58,137 @@
             "rrf_score": 0.0328,
             "dense_rank": 1,
             "sparse_rank": 1,
-            "dense_score": 0.5816,
+            "dense_score": 0.5184,
+            "sparse_score": 5.5252,
+            "rerank_score": 0.0
+          },
+          {
+            "chunk_id": 1,
+            "text": "Kazan içi su seviyesi sürekli olarak ultrasonik debimetreler ve elektrotlu seviye sensörleri ile izlenmektedir. Optimum\nçalışma koşullarında kazan besleme suyu sıcaklığı 85 °C seviyesinde tutulmalıdır. Güvenlik Protokolleri ve Kritik Limitler\nSistemin güvenli işletimi için 3 kademeli koruma protokolü tanımlanmıştır:\n• Kademeli Uyarı (115 °C): Kazan iç sıcaklığı 115 °C değerine ulaştığında kontrol panosundaki sarı ikaz lambası sürekli\nyanar ve sesli uyarı devreye girer. • Otomatik Tahliye (125 °C / 5.8 bar): Basınç 5,8 bar sınırına ulaştığında Solenoid V-10 tahliye valfi otomatik açılarak\nfazla basıncı atmosfere salar. • Acil Kapatma - SCRAM (135 °C / 6.2 bar): Kritik eşik olan 135 °C sıcaklık veya 6.2 bar basınç aşıldığında acil kapatma\nsistemi (SCRAM) tetiklenir. Bu aşamada operatör V-12 ana valfini manuel olarak kapatmalıdır. Arıza Kodları (Error Codes) ve Müdahale Adımları\nArıza Kodu Arıza Tanımı Olası Neden Çözüm / Müdahale\nV-10 Valfi tıkalı veya duyarga V-10 valfini manuel açın, duyarga\nE-101 Aşırı Basınç Yükselmesi\narızalı kalibrasyonunu kontrol edin. P-04 sigortasını kontrol edin, emiş hattı\nE-102 Düşük Su Seviyesi Besleme pompası P-04 devre dışı\nvanasını açın. Aşırı yük veya brülör kontrolden V-12 ana valfini kapatın, sistemi 45 dk\nE-204 Kritik Sıcaklık (SCRAM)\nçıktı soğumaya bırakın. E-309 Alev Duyarga Arızası Fotosel sensör yüzeyi kirlenmiş Sensör lensini izopropil alkol ile temizleyin. Pano klemens bağlantılarını ve sonlandırma\nE-412 İletişim Kopukluğu (PLC) RS485 Modbus kablosu gevşek\ndirencini sıkın.",
+            "rrf_score": 0.032,
+            "dense_rank": 2,
+            "sparse_rank": 3,
+            "dense_score": 0.4597,
+            "sparse_score": 0.9795,
+            "rerank_score": 0.0
+          },
+          {
+            "chunk_id": 6,
+            "text": "Elektrik ve Otomasyon Bağlantı Kuralları\nKazan kontrol panosu 380V AC 50Hz trifaze şebeke gerilimi ile beslenmektedir. PLC giriş/çıkış modülleri 24V DC izole\ngüç kaynağı üzerinden beslenmelidir. Topraklama direnci maksimum 2 Ohm seviyesinde olmalı, nötr ve toprak\nhatları kesinlikle birleştirilmemelidir (TN-S sistemi).",
+            "rrf_score": 0.0318,
+            "dense_rank": 4,
+            "sparse_rank": 2,
+            "dense_score": 0.4135,
+            "sparse_score": 1.1383,
+            "rerank_score": 0.0
+          }
+        ],
+        "retrieval_latency": 0.136,
+        "context_precision": 1.0,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "id": 2,
+      "category": "direct",
+      "user_input": "X-200 kazanının gövdesinde ve eşanjör plaka borularında hangi malzemeler kullanılmıştır?",
+      "reference": "Gövde yüksek sıcaklık dayanımlı 316L paslanmaz çelikten, eşanjör plaka boruları ise titanyum kaplamalıdır.",
+      "naive_rag": {
+        "retrieved_chunks": [
+          {
+            "chunk_id": 0,
+            "text": "ENDÜSTRİYEL KAZAN SİSTEMLERİ X-200\nKAPSAMLI TEKNİK İŞLETİM VE BAKIM KILAVUZU (V4.2)\n1. Genel Çalışma Prensipleri ve Yapısal Özellikler\nX-200 modeli, yüksek basınçlı endüstriyel buhar üretimi için özel olarak tasarlanmış modüler bir kazan sistemidir.\nSistem, yüksek sıcaklık dayanımına sahip 316L paslanmaz çelik gövde yapısı ve titanyum kaplamalı eşanjör plaka\nboruları ile donatılmıştır. Standart çalışma basınç aralığı 4,2 bar ile 5,5 bar arasındadır. Bu aralığın dışındaki işletim\nşartları, güvenl",
+            "similarity_score": 0.8083
+          },
+          {
+            "chunk_id": 1,
+            "text": "ır. Bu aralığın dışındaki işletim\nşartları, güvenlik mimarisi tarafından otomatik olarak engellenir.\nKazan içi su seviyesi sürekli olarak ultrasonik debimetreler ve elektrotlu seviye sensörleri ile izlenmektedir. Optimum\nçalışma koşullarında kazan besleme suyu sıcaklığı 85 °C seviyesinde tutulmalıdır.\n2. Güvenlik Protokolleri ve Kritik Limitler\nSistemin güvenli işletimi için 3 kademeli koruma protokolü tanımlanmıştır:\n• Kademeli Uyarı (115 °C): Kazan iç sıcaklığı 115 °C değerine ulaştığında kont",
+            "similarity_score": 0.7011
+          },
+          {
+            "chunk_id": 6,
+            "text": "ç birikintileri\nsökülür.\nYetkili Servis\nYıllık\nTahribatsız Test (NDT)\nKaynak dikişlerine ultrasonik çatlak testi uygulanır.\nSertifikalı Mühendis\n5. Elektrik ve Otomasyon Bağlantı Kuralları\nKazan kontrol panosu 380V AC 50Hz trifaze şebeke gerilimi ile beslenmektedir. PLC giriş/çıkış modülleri 24V DC izole\ngüç kaynağı üzerinden beslenmelidir. Topraklama direnci maksimum 2 Ohm seviyesinde olmalı, nötr ve toprak\nhatları kesinlikle birleştirilmemelidir (TN-S sistemi).",
+            "similarity_score": 0.6929
+          }
+        ],
+        "retrieval_latency": 0.4199,
+        "context_precision": 1.0,
+        "context_recall": 1.0
+      },
+      "advanced_rag": {
+        "retrieved_chunks": [
+          {
+            "chunk_id": 0,
+            "text": "=== SAYFA 1 ===\n| Arıza Kodu | Arıza Tanımı | Olası Neden | Çözüm / Müdahale |\n| E-101 | Aşırı Basınç Yükselmesi | V-10 Valfi tıkalı veya duyarga arızalı | V-10 valfini manuel açın, duyarga kalibrasyonunu kontrol edin. |\n| E-102 | Düşük Su Seviyesi | Besleme pompası P-04 devre dışı | P-04 sigortasını kontrol edin, emiş hattı vanasını açın. |\n| E-204 | Kritik Sıcaklık (SCRAM) | Aşırı yük veya brülör kontrolden çıktı | V-12 ana valfini kapatın, sistemi 45 dk soğumaya bırakın. |\n| E-309 | Alev Duyarga Arızası | Fotosel sensör yüzeyi kirlenmiş | Sensör lensini izopropil alkol ile temizleyin. |\n| E-412 | İletişim Kopukluğu (PLC) | RS485 Modbus kablosu gevşek | Pano klemens bağlantılarını ve sonlandırma direncini sıkın. ENDÜSTRİYEL KAZAN SİSTEMLERİ X-200\nKAPSAMLI TEKNİK İŞLETİM VE BAKIM KILAVUZU (V4.2)\n1. Genel Çalışma Prensipleri ve Yapısal Özellikler\nX-200 modeli, yüksek basınçlı endüstriyel buhar üretimi için özel olarak tasarlanmış modüler bir kazan sistemidir. Sistem, yüksek sıcaklık dayanımına sahip 316L paslanmaz çelik gövde yapısı ve titanyum kaplamalı eşanjör plaka\nboruları ile donatılmıştır. Standart çalışma basınç aralığı 4,2 bar ile 5,5 bar arasındadır. Bu aralığın dışındaki işletim\nşartları, güvenlik mimarisi tarafından otomatik olarak engellenir.",
+            "rrf_score": 0.0328,
+            "dense_rank": 1,
+            "sparse_rank": 1,
+            "dense_score": 0.5151,
+            "sparse_score": 4.0399,
+            "rerank_score": 0.0
+          },
+          {
+            "chunk_id": 2,
+            "text": "=== SAYFA 2 ===\n| Periyot | Kontrol Noktası | Yapılacak İşlem | Sorumlu |\n| Günlük | Su Seviyesi ve Basınç | Gösterge değerlerinin nominal aralıkta olduğu teyit edilir. | Vardiya Operatörü |\n| Haftalık | Emniyet Valfleri | V-10 ve V-12 valfleri manuel test kolu ile blöf ettirilir. | Bakım Teknisyeni |\n| Aylık | Brülör ve Elektrotlar | Ateşleme elektrot aralığı (3.5 mm) ayarlanır ve kurum temizlenir. | Bakım Teknisyeni |\n| 6 Aylık | Kazan Taş ve Tortu Temizliği | Kimyasal yıkama (Descaling) ile kireç birikintileri sökülür. | Yetkili Servis |\n| Yıllık | Tahribatsız Test (NDT) | Kaynak dikişlerine ultrasonik çatlak testi uygulanır.",
+            "rrf_score": 0.032,
+            "dense_rank": 2,
+            "sparse_rank": 3,
+            "dense_score": 0.4307,
+            "sparse_score": 0.5229,
+            "rerank_score": 0.0
+          },
+          {
+            "chunk_id": 4,
+            "text": "Periyodik Bakım ve Kontrol Çizelgesi\nKazan sisteminin kullanım ömrünü uzatmak ve garanti kapsamını korumak için aşağıdaki bakım takvimine uyulması\nzorunludur. Periyot Kontrol Noktası Yapılacak İşlem Sorumlu\nGösterge değerlerinin nominal aralıkta olduğu teyit\nGünlük Su Seviyesi ve Basınç Vardiya Operatörü\nedilir. Haftalık Emniyet Valfleri V-10 ve V-12 valfleri manuel test kolu ile blöf ettirilir. Bakım Teknisyeni\nAteşleme elektrot aralığı (3.5 mm) ayarlanır ve\nAylık Brülör ve Elektrotlar Bakım Teknisyeni\nkurum temizlenir. Kimyasal yıkama (Descaling) ile kireç birikintileri\n6 Aylık Kazan Taş ve Tortu Temizliği Yetkili Servis\nsökülür. Yıllık Tahribatsız Test (NDT) Kaynak dikişlerine ultrasonik çatlak testi uygulanır.",
+            "rrf_score": 0.0318,
+            "dense_rank": 4,
+            "sparse_rank": 2,
+            "dense_score": 0.3989,
+            "sparse_score": 0.5428,
+            "rerank_score": 0.0
+          }
+        ],
+        "retrieval_latency": 1.0791,
+        "context_precision": 1.0,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "id": 3,
+      "category": "direct",
+      "user_input": "X-200'ün standart çalışma basınç aralığı nedir?",
+      "reference": "Standart çalışma basınç aralığı 4,2 bar ile 5,5 bar arasındadır.",
+      "naive_rag": {
+        "retrieved_chunks": [
+          {
+            "chunk_id": 0,
+            "text": "ENDÜSTRİYEL KAZAN SİSTEMLERİ X-200\nKAPSAMLI TEKNİK İŞLETİM VE BAKIM KILAVUZU (V4.2)\n1. Genel Çalışma Prensipleri ve Yapısal Özellikler\nX-200 modeli, yüksek basınçlı endüstriyel buhar üretimi için özel olarak tasarlanmış modüler bir kazan sistemidir.\nSistem, yüksek sıcaklık dayanımına sahip 316L paslanmaz çelik gövde yapısı ve titanyum kaplamalı eşanjör plaka\nboruları ile donatılmıştır. Standart çalışma basınç aralığı 4,2 bar ile 5,5 bar arasındadır. Bu aralığın dışındaki işletim\nşartları, güvenl",
+            "similarity_score": 0.7797
+          },
+          {
+            "chunk_id": 1,
+            "text": "ır. Bu aralığın dışındaki işletim\nşartları, güvenlik mimarisi tarafından otomatik olarak engellenir.\nKazan içi su seviyesi sürekli olarak ultrasonik debimetreler ve elektrotlu seviye sensörleri ile izlenmektedir. Optimum\nçalışma koşullarında kazan besleme suyu sıcaklığı 85 °C seviyesinde tutulmalıdır.\n2. Güvenlik Protokolleri ve Kritik Limitler\nSistemin güvenli işletimi için 3 kademeli koruma protokolü tanımlanmıştır:\n• Kademeli Uyarı (115 °C): Kazan iç sıcaklığı 115 °C değerine ulaştığında kont",
+            "similarity_score": 0.7119
+          },
+          {
+            "chunk_id": 6,
+            "text": "ç birikintileri\nsökülür.\nYetkili Servis\nYıllık\nTahribatsız Test (NDT)\nKaynak dikişlerine ultrasonik çatlak testi uygulanır.\nSertifikalı Mühendis\n5. Elektrik ve Otomasyon Bağlantı Kuralları\nKazan kontrol panosu 380V AC 50Hz trifaze şebeke gerilimi ile beslenmektedir. PLC giriş/çıkış modülleri 24V DC izole\ngüç kaynağı üzerinden beslenmelidir. Topraklama direnci maksimum 2 Ohm seviyesinde olmalı, nötr ve toprak\nhatları kesinlikle birleştirilmemelidir (TN-S sistemi).",
+            "similarity_score": 0.7108
+          }
+        ],
+        "retrieval_latency": 0.5402,
+        "context_precision": 1.0,
+        "context_recall": 1.0
+      },
+      "advanced_rag": {
+        "retrieved_chunks": [
+          {
+            "chunk_id": 0,
+            "text": "=== SAYFA 1 ===\n| Arıza Kodu | Arıza Tanımı | Olası Neden | Çözüm / Müdahale |\n| E-101 | Aşırı Basınç Yükselmesi | V-10 Valfi tıkalı veya duyarga arızalı | V-10 valfini manuel açın, duyarga kalibrasyonunu kontrol edin. |\n| E-102 | Düşük Su Seviyesi | Besleme pompası P-04 devre dışı | P-04 sigortasını kontrol edin, emiş hattı vanasını açın. |\n| E-204 | Kritik Sıcaklık (SCRAM) | Aşırı yük veya brülör kontrolden çıktı | V-12 ana valfini kapatın, sistemi 45 dk soğumaya bırakın. |\n| E-309 | Alev Duyarga Arızası | Fotosel sensör yüzeyi kirlenmiş | Sensör lensini izopropil alkol ile temizleyin. |\n| E-412 | İletişim Kopukluğu (PLC) | RS485 Modbus kablosu gevşek | Pano klemens bağlantılarını ve sonlandırma direncini sıkın. ENDÜSTRİYEL KAZAN SİSTEMLERİ X-200\nKAPSAMLI TEKNİK İŞLETİM VE BAKIM KILAVUZU (V4.2)\n1. Genel Çalışma Prensipleri ve Yapısal Özellikler\nX-200 modeli, yüksek basınçlı endüstriyel buhar üretimi için özel olarak tasarlanmış modüler bir kazan sistemidir. Sistem, yüksek sıcaklık dayanımına sahip 316L paslanmaz çelik gövde yapısı ve titanyum kaplamalı eşanjör plaka\nboruları ile donatılmıştır. Standart çalışma basınç aralığı 4,2 bar ile 5,5 bar arasındadır. Bu aralığın dışındaki işletim\nşartları, güvenlik mimarisi tarafından otomatik olarak engellenir.",
+            "rrf_score": 0.0328,
+            "dense_rank": 1,
+            "sparse_rank": 1,
+            "dense_score": 0.5821,
             "sparse_score": 3.9384,
             "rerank_score": 0.0
           },
@@ -68,7 +198,7 @@
             "rrf_score": 0.0323,
             "dense_rank": 2,
             "sparse_rank": 2,
-            "dense_score": 0.4901,
+            "dense_score": 0.4991,
             "sparse_score": 0.8,
             "rerank_score": 0.0
           },
@@ -78,40 +208,170 @@
             "rrf_score": 0.0317,
             "dense_rank": 3,
             "sparse_rank": 3,
-            "dense_score": 0.4737,
+            "dense_score": 0.478,
             "sparse_score": 0.5414,
             "rerank_score": 0.0
           }
         ],
-        "retrieval_latency": 0.1266,
+        "retrieval_latency": 1.2224,
         "context_precision": 1.0,
         "context_recall": 1.0
       }
     },
     {
-      "id": 2,
-      "category": "specific_detail",
-      "user_input": "Kazan iç sıcaklığı 115 °C değerine ulaştığında sistem nasıl bir tepki verir?",
-      "reference": "Kazan iç sıcaklığı 115 °C'ye ulaştığında kontrol panosundaki sarı ikaz lambası sürekli yanar ve sesli uyarı devreye girer.",
+      "id": 4,
+      "category": "direct",
+      "user_input": "Çalışma basıncı standart aralığın dışına çıktığında kılavuza göre ne olur?",
+      "reference": "Standart aralığın dışındaki işletim şartları güvenlik mimarisi tarafından otomatik olarak engellenir.",
+      "naive_rag": {
+        "retrieved_chunks": [
+          {
+            "chunk_id": 5,
+            "text": "unludur.\nPeriyot\nKontrol Noktası\nYapılacak İşlem\nSorumlu\nGünlük\nSu Seviyesi ve Basınç\nGösterge değerlerinin nominal aralıkta olduğu teyit\nedilir.\nVardiya Operatörü\nHaftalık\nEmniyet Valfleri\nV-10 ve V-12 valfleri manuel test kolu ile blöf ettirilir.\nBakım Teknisyeni\nAylık\nBrülör ve Elektrotlar\nAteşleme elektrot aralığı (3.5 mm) ayarlanır ve\nkurum temizlenir.\nBakım Teknisyeni\n6 Aylık\nKazan Taş ve Tortu Temizliği\nKimyasal yıkama (Descaling) ile kireç birikintileri\nsökülür.\nYetkili Servis\nYıllık\nTah",
+            "similarity_score": 0.6925
+          },
+          {
+            "chunk_id": 1,
+            "text": "ır. Bu aralığın dışındaki işletim\nşartları, güvenlik mimarisi tarafından otomatik olarak engellenir.\nKazan içi su seviyesi sürekli olarak ultrasonik debimetreler ve elektrotlu seviye sensörleri ile izlenmektedir. Optimum\nçalışma koşullarında kazan besleme suyu sıcaklığı 85 °C seviyesinde tutulmalıdır.\n2. Güvenlik Protokolleri ve Kritik Limitler\nSistemin güvenli işletimi için 3 kademeli koruma protokolü tanımlanmıştır:\n• Kademeli Uyarı (115 °C): Kazan iç sıcaklığı 115 °C değerine ulaştığında kont",
+            "similarity_score": 0.6786
+          },
+          {
+            "chunk_id": 6,
+            "text": "ç birikintileri\nsökülür.\nYetkili Servis\nYıllık\nTahribatsız Test (NDT)\nKaynak dikişlerine ultrasonik çatlak testi uygulanır.\nSertifikalı Mühendis\n5. Elektrik ve Otomasyon Bağlantı Kuralları\nKazan kontrol panosu 380V AC 50Hz trifaze şebeke gerilimi ile beslenmektedir. PLC giriş/çıkış modülleri 24V DC izole\ngüç kaynağı üzerinden beslenmelidir. Topraklama direnci maksimum 2 Ohm seviyesinde olmalı, nötr ve toprak\nhatları kesinlikle birleştirilmemelidir (TN-S sistemi).",
+            "similarity_score": 0.668
+          }
+        ],
+        "retrieval_latency": 0.4622,
+        "context_precision": 0.5,
+        "context_recall": 1.0
+      },
+      "advanced_rag": {
+        "retrieved_chunks": [
+          {
+            "chunk_id": 0,
+            "text": "=== SAYFA 1 ===\n| Arıza Kodu | Arıza Tanımı | Olası Neden | Çözüm / Müdahale |\n| E-101 | Aşırı Basınç Yükselmesi | V-10 Valfi tıkalı veya duyarga arızalı | V-10 valfini manuel açın, duyarga kalibrasyonunu kontrol edin. |\n| E-102 | Düşük Su Seviyesi | Besleme pompası P-04 devre dışı | P-04 sigortasını kontrol edin, emiş hattı vanasını açın. |\n| E-204 | Kritik Sıcaklık (SCRAM) | Aşırı yük veya brülör kontrolden çıktı | V-12 ana valfini kapatın, sistemi 45 dk soğumaya bırakın. |\n| E-309 | Alev Duyarga Arızası | Fotosel sensör yüzeyi kirlenmiş | Sensör lensini izopropil alkol ile temizleyin. |\n| E-412 | İletişim Kopukluğu (PLC) | RS485 Modbus kablosu gevşek | Pano klemens bağlantılarını ve sonlandırma direncini sıkın. ENDÜSTRİYEL KAZAN SİSTEMLERİ X-200\nKAPSAMLI TEKNİK İŞLETİM VE BAKIM KILAVUZU (V4.2)\n1. Genel Çalışma Prensipleri ve Yapısal Özellikler\nX-200 modeli, yüksek basınçlı endüstriyel buhar üretimi için özel olarak tasarlanmış modüler bir kazan sistemidir. Sistem, yüksek sıcaklık dayanımına sahip 316L paslanmaz çelik gövde yapısı ve titanyum kaplamalı eşanjör plaka\nboruları ile donatılmıştır. Standart çalışma basınç aralığı 4,2 bar ile 5,5 bar arasındadır. Bu aralığın dışındaki işletim\nşartları, güvenlik mimarisi tarafından otomatik olarak engellenir.",
+            "rrf_score": 0.0328,
+            "dense_rank": 1,
+            "sparse_rank": 1,
+            "dense_score": 0.6059,
+            "sparse_score": 2.8967,
+            "rerank_score": 0.0
+          },
+          {
+            "chunk_id": 1,
+            "text": "Kazan içi su seviyesi sürekli olarak ultrasonik debimetreler ve elektrotlu seviye sensörleri ile izlenmektedir. Optimum\nçalışma koşullarında kazan besleme suyu sıcaklığı 85 °C seviyesinde tutulmalıdır. Güvenlik Protokolleri ve Kritik Limitler\nSistemin güvenli işletimi için 3 kademeli koruma protokolü tanımlanmıştır:\n• Kademeli Uyarı (115 °C): Kazan iç sıcaklığı 115 °C değerine ulaştığında kontrol panosundaki sarı ikaz lambası sürekli\nyanar ve sesli uyarı devreye girer. • Otomatik Tahliye (125 °C / 5.8 bar): Basınç 5,8 bar sınırına ulaştığında Solenoid V-10 tahliye valfi otomatik açılarak\nfazla basıncı atmosfere salar. • Acil Kapatma - SCRAM (135 °C / 6.2 bar): Kritik eşik olan 135 °C sıcaklık veya 6.2 bar basınç aşıldığında acil kapatma\nsistemi (SCRAM) tetiklenir. Bu aşamada operatör V-12 ana valfini manuel olarak kapatmalıdır. Arıza Kodları (Error Codes) ve Müdahale Adımları\nArıza Kodu Arıza Tanımı Olası Neden Çözüm / Müdahale\nV-10 Valfi tıkalı veya duyarga V-10 valfini manuel açın, duyarga\nE-101 Aşırı Basınç Yükselmesi\narızalı kalibrasyonunu kontrol edin. P-04 sigortasını kontrol edin, emiş hattı\nE-102 Düşük Su Seviyesi Besleme pompası P-04 devre dışı\nvanasını açın. Aşırı yük veya brülör kontrolden V-12 ana valfini kapatın, sistemi 45 dk\nE-204 Kritik Sıcaklık (SCRAM)\nçıktı soğumaya bırakın. E-309 Alev Duyarga Arızası Fotosel sensör yüzeyi kirlenmiş Sensör lensini izopropil alkol ile temizleyin. Pano klemens bağlantılarını ve sonlandırma\nE-412 İletişim Kopukluğu (PLC) RS485 Modbus kablosu gevşek\ndirencini sıkın.",
+            "rrf_score": 0.0323,
+            "dense_rank": 2,
+            "sparse_rank": 2,
+            "dense_score": 0.5623,
+            "sparse_score": 1.3559,
+            "rerank_score": 0.0
+          },
+          {
+            "chunk_id": 2,
+            "text": "=== SAYFA 2 ===\n| Periyot | Kontrol Noktası | Yapılacak İşlem | Sorumlu |\n| Günlük | Su Seviyesi ve Basınç | Gösterge değerlerinin nominal aralıkta olduğu teyit edilir. | Vardiya Operatörü |\n| Haftalık | Emniyet Valfleri | V-10 ve V-12 valfleri manuel test kolu ile blöf ettirilir. | Bakım Teknisyeni |\n| Aylık | Brülör ve Elektrotlar | Ateşleme elektrot aralığı (3.5 mm) ayarlanır ve kurum temizlenir. | Bakım Teknisyeni |\n| 6 Aylık | Kazan Taş ve Tortu Temizliği | Kimyasal yıkama (Descaling) ile kireç birikintileri sökülür. | Yetkili Servis |\n| Yıllık | Tahribatsız Test (NDT) | Kaynak dikişlerine ultrasonik çatlak testi uygulanır.",
+            "rrf_score": 0.0317,
+            "dense_rank": 3,
+            "sparse_rank": 3,
+            "dense_score": 0.5206,
+            "sparse_score": 0.0,
+            "rerank_score": 0.0
+          }
+        ],
+        "retrieval_latency": 1.0967,
+        "context_precision": 1.0,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "id": 5,
+      "category": "direct",
+      "user_input": "Kazan içindeki su seviyesi hangi araçlarla izlenir?",
+      "reference": "Su seviyesi ultrasonik debimetreler ve elektrotlu seviye sensörleriyle sürekli izlenir.",
       "naive_rag": {
         "retrieved_chunks": [
           {
             "chunk_id": 1,
             "text": "ır. Bu aralığın dışındaki işletim\nşartları, güvenlik mimarisi tarafından otomatik olarak engellenir.\nKazan içi su seviyesi sürekli olarak ultrasonik debimetreler ve elektrotlu seviye sensörleri ile izlenmektedir. Optimum\nçalışma koşullarında kazan besleme suyu sıcaklığı 85 °C seviyesinde tutulmalıdır.\n2. Güvenlik Protokolleri ve Kritik Limitler\nSistemin güvenli işletimi için 3 kademeli koruma protokolü tanımlanmıştır:\n• Kademeli Uyarı (115 °C): Kazan iç sıcaklığı 115 °C değerine ulaştığında kont",
-            "similarity_score": 0.8392
-          },
-          {
-            "chunk_id": 2,
-            "text": "azan iç sıcaklığı 115 °C değerine ulaştığında kontrol panosundaki sarı ikaz lambası sürekli\nyanar ve sesli uyarı devreye girer.\n• Otomatik Tahliye (125 °C / 5.8 bar): Basınç 5,8 bar sınırına ulaştığında Solenoid V-10 tahliye valfi otomatik açılarak\nfazla basıncı atmosfere salar.\n• Acil Kapatma - SCRAM (135 °C / 6.2 bar): Kritik eşik olan 135 °C sıcaklık veya 6.2 bar basınç aşıldığında acil kapatma\nsistemi (SCRAM) tetiklenir. Bu aşamada operatör V-12 ana valfini manuel olarak kapatmalıdır.\n3. Arı",
-            "similarity_score": 0.7625
+            "similarity_score": 0.6929
           },
           {
             "chunk_id": 0,
             "text": "ENDÜSTRİYEL KAZAN SİSTEMLERİ X-200\nKAPSAMLI TEKNİK İŞLETİM VE BAKIM KILAVUZU (V4.2)\n1. Genel Çalışma Prensipleri ve Yapısal Özellikler\nX-200 modeli, yüksek basınçlı endüstriyel buhar üretimi için özel olarak tasarlanmış modüler bir kazan sistemidir.\nSistem, yüksek sıcaklık dayanımına sahip 316L paslanmaz çelik gövde yapısı ve titanyum kaplamalı eşanjör plaka\nboruları ile donatılmıştır. Standart çalışma basınç aralığı 4,2 bar ile 5,5 bar arasındadır. Bu aralığın dışındaki işletim\nşartları, güvenl",
-            "similarity_score": 0.7534
+            "similarity_score": 0.6318
+          },
+          {
+            "chunk_id": 6,
+            "text": "ç birikintileri\nsökülür.\nYetkili Servis\nYıllık\nTahribatsız Test (NDT)\nKaynak dikişlerine ultrasonik çatlak testi uygulanır.\nSertifikalı Mühendis\n5. Elektrik ve Otomasyon Bağlantı Kuralları\nKazan kontrol panosu 380V AC 50Hz trifaze şebeke gerilimi ile beslenmektedir. PLC giriş/çıkış modülleri 24V DC izole\ngüç kaynağı üzerinden beslenmelidir. Topraklama direnci maksimum 2 Ohm seviyesinde olmalı, nötr ve toprak\nhatları kesinlikle birleştirilmemelidir (TN-S sistemi).",
+            "similarity_score": 0.6004
           }
         ],
-        "retrieval_latency": 0.031,
+        "retrieval_latency": 0.4924,
+        "context_precision": 1.0,
+        "context_recall": 1.0
+      },
+      "advanced_rag": {
+        "retrieved_chunks": [
+          {
+            "chunk_id": 1,
+            "text": "Kazan içi su seviyesi sürekli olarak ultrasonik debimetreler ve elektrotlu seviye sensörleri ile izlenmektedir. Optimum\nçalışma koşullarında kazan besleme suyu sıcaklığı 85 °C seviyesinde tutulmalıdır. Güvenlik Protokolleri ve Kritik Limitler\nSistemin güvenli işletimi için 3 kademeli koruma protokolü tanımlanmıştır:\n• Kademeli Uyarı (115 °C): Kazan iç sıcaklığı 115 °C değerine ulaştığında kontrol panosundaki sarı ikaz lambası sürekli\nyanar ve sesli uyarı devreye girer. • Otomatik Tahliye (125 °C / 5.8 bar): Basınç 5,8 bar sınırına ulaştığında Solenoid V-10 tahliye valfi otomatik açılarak\nfazla basıncı atmosfere salar. • Acil Kapatma - SCRAM (135 °C / 6.2 bar): Kritik eşik olan 135 °C sıcaklık veya 6.2 bar basınç aşıldığında acil kapatma\nsistemi (SCRAM) tetiklenir. Bu aşamada operatör V-12 ana valfini manuel olarak kapatmalıdır. Arıza Kodları (Error Codes) ve Müdahale Adımları\nArıza Kodu Arıza Tanımı Olası Neden Çözüm / Müdahale\nV-10 Valfi tıkalı veya duyarga V-10 valfini manuel açın, duyarga\nE-101 Aşırı Basınç Yükselmesi\narızalı kalibrasyonunu kontrol edin. P-04 sigortasını kontrol edin, emiş hattı\nE-102 Düşük Su Seviyesi Besleme pompası P-04 devre dışı\nvanasını açın. Aşırı yük veya brülör kontrolden V-12 ana valfini kapatın, sistemi 45 dk\nE-204 Kritik Sıcaklık (SCRAM)\nçıktı soğumaya bırakın. E-309 Alev Duyarga Arızası Fotosel sensör yüzeyi kirlenmiş Sensör lensini izopropil alkol ile temizleyin. Pano klemens bağlantılarını ve sonlandırma\nE-412 İletişim Kopukluğu (PLC) RS485 Modbus kablosu gevşek\ndirencini sıkın.",
+            "rrf_score": 0.0325,
+            "dense_rank": 1,
+            "sparse_rank": 2,
+            "dense_score": 0.648,
+            "sparse_score": 0.8447,
+            "rerank_score": 0.0
+          },
+          {
+            "chunk_id": 4,
+            "text": "Periyodik Bakım ve Kontrol Çizelgesi\nKazan sisteminin kullanım ömrünü uzatmak ve garanti kapsamını korumak için aşağıdaki bakım takvimine uyulması\nzorunludur. Periyot Kontrol Noktası Yapılacak İşlem Sorumlu\nGösterge değerlerinin nominal aralıkta olduğu teyit\nGünlük Su Seviyesi ve Basınç Vardiya Operatörü\nedilir. Haftalık Emniyet Valfleri V-10 ve V-12 valfleri manuel test kolu ile blöf ettirilir. Bakım Teknisyeni\nAteşleme elektrot aralığı (3.5 mm) ayarlanır ve\nAylık Brülör ve Elektrotlar Bakım Teknisyeni\nkurum temizlenir. Kimyasal yıkama (Descaling) ile kireç birikintileri\n6 Aylık Kazan Taş ve Tortu Temizliği Yetkili Servis\nsökülür. Yıllık Tahribatsız Test (NDT) Kaynak dikişlerine ultrasonik çatlak testi uygulanır.",
+            "rrf_score": 0.0325,
+            "dense_rank": 2,
+            "sparse_rank": 1,
+            "dense_score": 0.5967,
+            "sparse_score": 0.8784,
+            "rerank_score": 0.0
+          },
+          {
+            "chunk_id": 6,
+            "text": "Elektrik ve Otomasyon Bağlantı Kuralları\nKazan kontrol panosu 380V AC 50Hz trifaze şebeke gerilimi ile beslenmektedir. PLC giriş/çıkış modülleri 24V DC izole\ngüç kaynağı üzerinden beslenmelidir. Topraklama direnci maksimum 2 Ohm seviyesinde olmalı, nötr ve toprak\nhatları kesinlikle birleştirilmemelidir (TN-S sistemi).",
+            "rrf_score": 0.0313,
+            "dense_rank": 3,
+            "sparse_rank": 5,
+            "dense_score": 0.555,
+            "sparse_score": 0.35,
+            "rerank_score": 0.0
+          }
+        ],
+        "retrieval_latency": 0.9197,
+        "context_precision": 1.0,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "id": 6,
+      "category": "direct",
+      "user_input": "Optimum çalışma koşullarında kazan besleme suyu sıcaklığı kaç derece olmalıdır?",
+      "reference": "Kazan besleme suyu sıcaklığı 85 °C seviyesinde tutulmalıdır.",
+      "naive_rag": {
+        "retrieved_chunks": [
+          {
+            "chunk_id": 1,
+            "text": "ır. Bu aralığın dışındaki işletim\nşartları, güvenlik mimarisi tarafından otomatik olarak engellenir.\nKazan içi su seviyesi sürekli olarak ultrasonik debimetreler ve elektrotlu seviye sensörleri ile izlenmektedir. Optimum\nçalışma koşullarında kazan besleme suyu sıcaklığı 85 °C seviyesinde tutulmalıdır.\n2. Güvenlik Protokolleri ve Kritik Limitler\nSistemin güvenli işletimi için 3 kademeli koruma protokolü tanımlanmıştır:\n• Kademeli Uyarı (115 °C): Kazan iç sıcaklığı 115 °C değerine ulaştığında kont",
+            "similarity_score": 0.7738
+          },
+          {
+            "chunk_id": 0,
+            "text": "ENDÜSTRİYEL KAZAN SİSTEMLERİ X-200\nKAPSAMLI TEKNİK İŞLETİM VE BAKIM KILAVUZU (V4.2)\n1. Genel Çalışma Prensipleri ve Yapısal Özellikler\nX-200 modeli, yüksek basınçlı endüstriyel buhar üretimi için özel olarak tasarlanmış modüler bir kazan sistemidir.\nSistem, yüksek sıcaklık dayanımına sahip 316L paslanmaz çelik gövde yapısı ve titanyum kaplamalı eşanjör plaka\nboruları ile donatılmıştır. Standart çalışma basınç aralığı 4,2 bar ile 5,5 bar arasındadır. Bu aralığın dışındaki işletim\nşartları, güvenl",
+            "similarity_score": 0.7067
+          },
+          {
+            "chunk_id": 6,
+            "text": "ç birikintileri\nsökülür.\nYetkili Servis\nYıllık\nTahribatsız Test (NDT)\nKaynak dikişlerine ultrasonik çatlak testi uygulanır.\nSertifikalı Mühendis\n5. Elektrik ve Otomasyon Bağlantı Kuralları\nKazan kontrol panosu 380V AC 50Hz trifaze şebeke gerilimi ile beslenmektedir. PLC giriş/çıkış modülleri 24V DC izole\ngüç kaynağı üzerinden beslenmelidir. Topraklama direnci maksimum 2 Ohm seviyesinde olmalı, nötr ve toprak\nhatları kesinlikle birleştirilmemelidir (TN-S sistemi).",
+            "similarity_score": 0.6774
+          }
+        ],
+        "retrieval_latency": 0.6344,
         "context_precision": 1.0,
         "context_recall": 1.0
       },
@@ -123,8 +383,8 @@
             "rrf_score": 0.0328,
             "dense_rank": 1,
             "sparse_rank": 1,
-            "dense_score": 0.675,
-            "sparse_score": 8.756,
+            "dense_score": 0.7141,
+            "sparse_score": 5.6313,
             "rerank_score": 0.0
           },
           {
@@ -133,8 +393,8 @@
             "rrf_score": 0.032,
             "dense_rank": 3,
             "sparse_rank": 2,
-            "dense_score": 0.5206,
-            "sparse_score": 2.33,
+            "dense_score": 0.5384,
+            "sparse_score": 1.6971,
             "rerank_score": 0.0
           },
           {
@@ -143,105 +403,300 @@
             "rrf_score": 0.0318,
             "dense_rank": 2,
             "sparse_rank": 4,
-            "dense_score": 0.5585,
+            "dense_score": 0.5782,
             "sparse_score": 0.35,
             "rerank_score": 0.0
           }
         ],
-        "retrieval_latency": 0.7884,
+        "retrieval_latency": 1.0254,
         "context_precision": 1.0,
         "context_recall": 1.0
       }
     },
     {
-      "id": 3,
-      "category": "specific_detail",
-      "user_input": "Kazan taş ve tortu temizliği (Descaling) hangi periyotta ve kimin sorumluluğunda yapılmalıdır?",
-      "reference": "Kazan taş ve tortu temizliği 6 aylık periyotlarla Yetkili Servis tarafından yapılmalıdır.",
+      "id": 7,
+      "category": "direct",
+      "user_input": "Kazan kontrol panosu hangi şebeke beslemesiyle çalışır?",
+      "reference": "Kontrol panosu 380 V AC, 50 Hz trifaze şebeke gerilimiyle beslenir.",
       "naive_rag": {
         "retrieved_chunks": [
           {
             "chunk_id": 1,
             "text": "ır. Bu aralığın dışındaki işletim\nşartları, güvenlik mimarisi tarafından otomatik olarak engellenir.\nKazan içi su seviyesi sürekli olarak ultrasonik debimetreler ve elektrotlu seviye sensörleri ile izlenmektedir. Optimum\nçalışma koşullarında kazan besleme suyu sıcaklığı 85 °C seviyesinde tutulmalıdır.\n2. Güvenlik Protokolleri ve Kritik Limitler\nSistemin güvenli işletimi için 3 kademeli koruma protokolü tanımlanmıştır:\n• Kademeli Uyarı (115 °C): Kazan iç sıcaklığı 115 °C değerine ulaştığında kont",
-            "similarity_score": 0.726
+            "similarity_score": 0.7088
+          },
+          {
+            "chunk_id": 6,
+            "text": "ç birikintileri\nsökülür.\nYetkili Servis\nYıllık\nTahribatsız Test (NDT)\nKaynak dikişlerine ultrasonik çatlak testi uygulanır.\nSertifikalı Mühendis\n5. Elektrik ve Otomasyon Bağlantı Kuralları\nKazan kontrol panosu 380V AC 50Hz trifaze şebeke gerilimi ile beslenmektedir. PLC giriş/çıkış modülleri 24V DC izole\ngüç kaynağı üzerinden beslenmelidir. Topraklama direnci maksimum 2 Ohm seviyesinde olmalı, nötr ve toprak\nhatları kesinlikle birleştirilmemelidir (TN-S sistemi).",
+            "similarity_score": 0.6761
           },
           {
             "chunk_id": 0,
             "text": "ENDÜSTRİYEL KAZAN SİSTEMLERİ X-200\nKAPSAMLI TEKNİK İŞLETİM VE BAKIM KILAVUZU (V4.2)\n1. Genel Çalışma Prensipleri ve Yapısal Özellikler\nX-200 modeli, yüksek basınçlı endüstriyel buhar üretimi için özel olarak tasarlanmış modüler bir kazan sistemidir.\nSistem, yüksek sıcaklık dayanımına sahip 316L paslanmaz çelik gövde yapısı ve titanyum kaplamalı eşanjör plaka\nboruları ile donatılmıştır. Standart çalışma basınç aralığı 4,2 bar ile 5,5 bar arasındadır. Bu aralığın dışındaki işletim\nşartları, güvenl",
-            "similarity_score": 0.6893
-          },
-          {
-            "chunk_id": 5,
-            "text": "unludur.\nPeriyot\nKontrol Noktası\nYapılacak İşlem\nSorumlu\nGünlük\nSu Seviyesi ve Basınç\nGösterge değerlerinin nominal aralıkta olduğu teyit\nedilir.\nVardiya Operatörü\nHaftalık\nEmniyet Valfleri\nV-10 ve V-12 valfleri manuel test kolu ile blöf ettirilir.\nBakım Teknisyeni\nAylık\nBrülör ve Elektrotlar\nAteşleme elektrot aralığı (3.5 mm) ayarlanır ve\nkurum temizlenir.\nBakım Teknisyeni\n6 Aylık\nKazan Taş ve Tortu Temizliği\nKimyasal yıkama (Descaling) ile kireç birikintileri\nsökülür.\nYetkili Servis\nYıllık\nTah",
-            "similarity_score": 0.6884
+            "similarity_score": 0.6694
           }
         ],
-        "retrieval_latency": 0.3881,
-        "context_precision": 0.3333,
+        "retrieval_latency": 0.4574,
+        "context_precision": 0.5,
         "context_recall": 1.0
       },
       "advanced_rag": {
         "retrieved_chunks": [
           {
-            "chunk_id": 4,
-            "text": "Periyodik Bakım ve Kontrol Çizelgesi\nKazan sisteminin kullanım ömrünü uzatmak ve garanti kapsamını korumak için aşağıdaki bakım takvimine uyulması\nzorunludur. Periyot Kontrol Noktası Yapılacak İşlem Sorumlu\nGösterge değerlerinin nominal aralıkta olduğu teyit\nGünlük Su Seviyesi ve Basınç Vardiya Operatörü\nedilir. Haftalık Emniyet Valfleri V-10 ve V-12 valfleri manuel test kolu ile blöf ettirilir. Bakım Teknisyeni\nAteşleme elektrot aralığı (3.5 mm) ayarlanır ve\nAylık Brülör ve Elektrotlar Bakım Teknisyeni\nkurum temizlenir. Kimyasal yıkama (Descaling) ile kireç birikintileri\n6 Aylık Kazan Taş ve Tortu Temizliği Yetkili Servis\nsökülür. Yıllık Tahribatsız Test (NDT) Kaynak dikişlerine ultrasonik çatlak testi uygulanır.",
-            "rrf_score": 0.0325,
+            "chunk_id": 6,
+            "text": "Elektrik ve Otomasyon Bağlantı Kuralları\nKazan kontrol panosu 380V AC 50Hz trifaze şebeke gerilimi ile beslenmektedir. PLC giriş/çıkış modülleri 24V DC izole\ngüç kaynağı üzerinden beslenmelidir. Topraklama direnci maksimum 2 Ohm seviyesinde olmalı, nötr ve toprak\nhatları kesinlikle birleştirilmemelidir (TN-S sistemi).",
+            "rrf_score": 0.0328,
             "dense_rank": 1,
-            "sparse_rank": 2,
-            "dense_score": 0.6113,
-            "sparse_score": 4.4573,
-            "rerank_score": 0.0
-          },
-          {
-            "chunk_id": 2,
-            "text": "=== SAYFA 2 ===\n| Periyot | Kontrol Noktası | Yapılacak İşlem | Sorumlu |\n| Günlük | Su Seviyesi ve Basınç | Gösterge değerlerinin nominal aralıkta olduğu teyit edilir. | Vardiya Operatörü |\n| Haftalık | Emniyet Valfleri | V-10 ve V-12 valfleri manuel test kolu ile blöf ettirilir. | Bakım Teknisyeni |\n| Aylık | Brülör ve Elektrotlar | Ateşleme elektrot aralığı (3.5 mm) ayarlanır ve kurum temizlenir. | Bakım Teknisyeni |\n| 6 Aylık | Kazan Taş ve Tortu Temizliği | Kimyasal yıkama (Descaling) ile kireç birikintileri sökülür. | Yetkili Servis |\n| Yıllık | Tahribatsız Test (NDT) | Kaynak dikişlerine ultrasonik çatlak testi uygulanır.",
-            "rrf_score": 0.0323,
-            "dense_rank": 3,
             "sparse_rank": 1,
-            "dense_score": 0.5112,
-            "sparse_score": 4.6156,
+            "dense_score": 0.7283,
+            "sparse_score": 4.5365,
             "rerank_score": 0.0
           },
           {
             "chunk_id": 1,
             "text": "Kazan içi su seviyesi sürekli olarak ultrasonik debimetreler ve elektrotlu seviye sensörleri ile izlenmektedir. Optimum\nçalışma koşullarında kazan besleme suyu sıcaklığı 85 °C seviyesinde tutulmalıdır. Güvenlik Protokolleri ve Kritik Limitler\nSistemin güvenli işletimi için 3 kademeli koruma protokolü tanımlanmıştır:\n• Kademeli Uyarı (115 °C): Kazan iç sıcaklığı 115 °C değerine ulaştığında kontrol panosundaki sarı ikaz lambası sürekli\nyanar ve sesli uyarı devreye girer. • Otomatik Tahliye (125 °C / 5.8 bar): Basınç 5,8 bar sınırına ulaştığında Solenoid V-10 tahliye valfi otomatik açılarak\nfazla basıncı atmosfere salar. • Acil Kapatma - SCRAM (135 °C / 6.2 bar): Kritik eşik olan 135 °C sıcaklık veya 6.2 bar basınç aşıldığında acil kapatma\nsistemi (SCRAM) tetiklenir. Bu aşamada operatör V-12 ana valfini manuel olarak kapatmalıdır. Arıza Kodları (Error Codes) ve Müdahale Adımları\nArıza Kodu Arıza Tanımı Olası Neden Çözüm / Müdahale\nV-10 Valfi tıkalı veya duyarga V-10 valfini manuel açın, duyarga\nE-101 Aşırı Basınç Yükselmesi\narızalı kalibrasyonunu kontrol edin. P-04 sigortasını kontrol edin, emiş hattı\nE-102 Düşük Su Seviyesi Besleme pompası P-04 devre dışı\nvanasını açın. Aşırı yük veya brülör kontrolden V-12 ana valfini kapatın, sistemi 45 dk\nE-204 Kritik Sıcaklık (SCRAM)\nçıktı soğumaya bırakın. E-309 Alev Duyarga Arızası Fotosel sensör yüzeyi kirlenmiş Sensör lensini izopropil alkol ile temizleyin. Pano klemens bağlantılarını ve sonlandırma\nE-412 İletişim Kopukluğu (PLC) RS485 Modbus kablosu gevşek\ndirencini sıkın.",
-            "rrf_score": 0.0318,
+            "rrf_score": 0.032,
             "dense_rank": 2,
-            "sparse_rank": 4,
-            "dense_score": 0.518,
-            "sparse_score": 1.1459,
+            "sparse_rank": 3,
+            "dense_score": 0.6065,
+            "sparse_score": 0.6518,
+            "rerank_score": 0.0
+          },
+          {
+            "chunk_id": 4,
+            "text": "Periyodik Bakım ve Kontrol Çizelgesi\nKazan sisteminin kullanım ömrünü uzatmak ve garanti kapsamını korumak için aşağıdaki bakım takvimine uyulması\nzorunludur. Periyot Kontrol Noktası Yapılacak İşlem Sorumlu\nGösterge değerlerinin nominal aralıkta olduğu teyit\nGünlük Su Seviyesi ve Basınç Vardiya Operatörü\nedilir. Haftalık Emniyet Valfleri V-10 ve V-12 valfleri manuel test kolu ile blöf ettirilir. Bakım Teknisyeni\nAteşleme elektrot aralığı (3.5 mm) ayarlanır ve\nAylık Brülör ve Elektrotlar Bakım Teknisyeni\nkurum temizlenir. Kimyasal yıkama (Descaling) ile kireç birikintileri\n6 Aylık Kazan Taş ve Tortu Temizliği Yetkili Servis\nsökülür. Yıllık Tahribatsız Test (NDT) Kaynak dikişlerine ultrasonik çatlak testi uygulanır.",
+            "rrf_score": 0.032,
+            "dense_rank": 3,
+            "sparse_rank": 2,
+            "dense_score": 0.5877,
+            "sparse_score": 0.7379,
             "rerank_score": 0.0
           }
         ],
-        "retrieval_latency": 1.0061,
+        "retrieval_latency": 1.031,
         "context_precision": 1.0,
         "context_recall": 1.0
       }
     },
     {
-      "id": 4,
+      "id": 8,
       "category": "specific_detail",
-      "user_input": "E-204 arıza kodu alındığında yapılması gereken müdahale nedir?",
-      "reference": "V-12 ana valfi kapatılmalı ve sistem 45 dakika soğumaya bırakılmalıdır.",
+      "user_input": "Kazan iç sıcaklığı 115 °C'ye ulaştığında hangi uyarılar devreye girer?",
+      "reference": "Kontrol panosundaki sarı ikaz lambası sürekli yanar ve sesli uyarı devreye girer.",
       "naive_rag": {
         "retrieved_chunks": [
           {
-            "chunk_id": 3,
-            "text": "-12 ana valfini manuel olarak kapatmalıdır.\n3. Arıza Kodları (Error Codes) ve Müdahale Adımları\nArıza Kodu\nArıza Tanımı\nOlası Neden\nÇözüm / Müdahale\nE-101\nAşırı Basınç Yükselmesi\nV-10 Valfi tıkalı veya duyarga\narızalı\nV-10 valfini manuel açın, duyarga\nkalibrasyonunu kontrol edin.\nE-102\nDüşük Su Seviyesi\nBesleme pompası P-04 devre dışı\nP-04 sigortasını kontrol edin, emiş hattı\nvanasını açın.\nE-204\nKritik Sıcaklık (SCRAM)\nAşırı yük veya brülör kontrolden\nçıktı\nV-12 ana valfini kapatın, sistemi 45",
-            "similarity_score": 0.7121
+            "chunk_id": 1,
+            "text": "ır. Bu aralığın dışındaki işletim\nşartları, güvenlik mimarisi tarafından otomatik olarak engellenir.\nKazan içi su seviyesi sürekli olarak ultrasonik debimetreler ve elektrotlu seviye sensörleri ile izlenmektedir. Optimum\nçalışma koşullarında kazan besleme suyu sıcaklığı 85 °C seviyesinde tutulmalıdır.\n2. Güvenlik Protokolleri ve Kritik Limitler\nSistemin güvenli işletimi için 3 kademeli koruma protokolü tanımlanmıştır:\n• Kademeli Uyarı (115 °C): Kazan iç sıcaklığı 115 °C değerine ulaştığında kont",
+            "similarity_score": 0.7879
           },
           {
-            "chunk_id": 5,
-            "text": "unludur.\nPeriyot\nKontrol Noktası\nYapılacak İşlem\nSorumlu\nGünlük\nSu Seviyesi ve Basınç\nGösterge değerlerinin nominal aralıkta olduğu teyit\nedilir.\nVardiya Operatörü\nHaftalık\nEmniyet Valfleri\nV-10 ve V-12 valfleri manuel test kolu ile blöf ettirilir.\nBakım Teknisyeni\nAylık\nBrülör ve Elektrotlar\nAteşleme elektrot aralığı (3.5 mm) ayarlanır ve\nkurum temizlenir.\nBakım Teknisyeni\n6 Aylık\nKazan Taş ve Tortu Temizliği\nKimyasal yıkama (Descaling) ile kireç birikintileri\nsökülür.\nYetkili Servis\nYıllık\nTah",
-            "similarity_score": 0.7097
+            "chunk_id": 2,
+            "text": "azan iç sıcaklığı 115 °C değerine ulaştığında kontrol panosundaki sarı ikaz lambası sürekli\nyanar ve sesli uyarı devreye girer.\n• Otomatik Tahliye (125 °C / 5.8 bar): Basınç 5,8 bar sınırına ulaştığında Solenoid V-10 tahliye valfi otomatik açılarak\nfazla basıncı atmosfere salar.\n• Acil Kapatma - SCRAM (135 °C / 6.2 bar): Kritik eşik olan 135 °C sıcaklık veya 6.2 bar basınç aşıldığında acil kapatma\nsistemi (SCRAM) tetiklenir. Bu aşamada operatör V-12 ana valfini manuel olarak kapatmalıdır.\n3. Arı",
+            "similarity_score": 0.7144
           },
           {
             "chunk_id": 0,
             "text": "ENDÜSTRİYEL KAZAN SİSTEMLERİ X-200\nKAPSAMLI TEKNİK İŞLETİM VE BAKIM KILAVUZU (V4.2)\n1. Genel Çalışma Prensipleri ve Yapısal Özellikler\nX-200 modeli, yüksek basınçlı endüstriyel buhar üretimi için özel olarak tasarlanmış modüler bir kazan sistemidir.\nSistem, yüksek sıcaklık dayanımına sahip 316L paslanmaz çelik gövde yapısı ve titanyum kaplamalı eşanjör plaka\nboruları ile donatılmıştır. Standart çalışma basınç aralığı 4,2 bar ile 5,5 bar arasındadır. Bu aralığın dışındaki işletim\nşartları, güvenl",
-            "similarity_score": 0.6984
+            "similarity_score": 0.6797
           }
         ],
-        "retrieval_latency": 0.3827,
+        "retrieval_latency": 0.4458,
+        "context_precision": 1.0,
+        "context_recall": 1.0
+      },
+      "advanced_rag": {
+        "retrieved_chunks": [
+          {
+            "chunk_id": 1,
+            "text": "Kazan içi su seviyesi sürekli olarak ultrasonik debimetreler ve elektrotlu seviye sensörleri ile izlenmektedir. Optimum\nçalışma koşullarında kazan besleme suyu sıcaklığı 85 °C seviyesinde tutulmalıdır. Güvenlik Protokolleri ve Kritik Limitler\nSistemin güvenli işletimi için 3 kademeli koruma protokolü tanımlanmıştır:\n• Kademeli Uyarı (115 °C): Kazan iç sıcaklığı 115 °C değerine ulaştığında kontrol panosundaki sarı ikaz lambası sürekli\nyanar ve sesli uyarı devreye girer. • Otomatik Tahliye (125 °C / 5.8 bar): Basınç 5,8 bar sınırına ulaştığında Solenoid V-10 tahliye valfi otomatik açılarak\nfazla basıncı atmosfere salar. • Acil Kapatma - SCRAM (135 °C / 6.2 bar): Kritik eşik olan 135 °C sıcaklık veya 6.2 bar basınç aşıldığında acil kapatma\nsistemi (SCRAM) tetiklenir. Bu aşamada operatör V-12 ana valfini manuel olarak kapatmalıdır. Arıza Kodları (Error Codes) ve Müdahale Adımları\nArıza Kodu Arıza Tanımı Olası Neden Çözüm / Müdahale\nV-10 Valfi tıkalı veya duyarga V-10 valfini manuel açın, duyarga\nE-101 Aşırı Basınç Yükselmesi\narızalı kalibrasyonunu kontrol edin. P-04 sigortasını kontrol edin, emiş hattı\nE-102 Düşük Su Seviyesi Besleme pompası P-04 devre dışı\nvanasını açın. Aşırı yük veya brülör kontrolden V-12 ana valfini kapatın, sistemi 45 dk\nE-204 Kritik Sıcaklık (SCRAM)\nçıktı soğumaya bırakın. E-309 Alev Duyarga Arızası Fotosel sensör yüzeyi kirlenmiş Sensör lensini izopropil alkol ile temizleyin. Pano klemens bağlantılarını ve sonlandırma\nE-412 İletişim Kopukluğu (PLC) RS485 Modbus kablosu gevşek\ndirencini sıkın.",
+            "rrf_score": 0.0328,
+            "dense_rank": 1,
+            "sparse_rank": 1,
+            "dense_score": 0.7089,
+            "sparse_score": 9.6378,
+            "rerank_score": 0.0
+          },
+          {
+            "chunk_id": 6,
+            "text": "Elektrik ve Otomasyon Bağlantı Kuralları\nKazan kontrol panosu 380V AC 50Hz trifaze şebeke gerilimi ile beslenmektedir. PLC giriş/çıkış modülleri 24V DC izole\ngüç kaynağı üzerinden beslenmelidir. Topraklama direnci maksimum 2 Ohm seviyesinde olmalı, nötr ve toprak\nhatları kesinlikle birleştirilmemelidir (TN-S sistemi).",
+            "rrf_score": 0.032,
+            "dense_rank": 2,
+            "sparse_rank": 3,
+            "dense_score": 0.5489,
+            "sparse_score": 0.35,
+            "rerank_score": 0.0
+          },
+          {
+            "chunk_id": 4,
+            "text": "Periyodik Bakım ve Kontrol Çizelgesi\nKazan sisteminin kullanım ömrünü uzatmak ve garanti kapsamını korumak için aşağıdaki bakım takvimine uyulması\nzorunludur. Periyot Kontrol Noktası Yapılacak İşlem Sorumlu\nGösterge değerlerinin nominal aralıkta olduğu teyit\nGünlük Su Seviyesi ve Basınç Vardiya Operatörü\nedilir. Haftalık Emniyet Valfleri V-10 ve V-12 valfleri manuel test kolu ile blöf ettirilir. Bakım Teknisyeni\nAteşleme elektrot aralığı (3.5 mm) ayarlanır ve\nAylık Brülör ve Elektrotlar Bakım Teknisyeni\nkurum temizlenir. Kimyasal yıkama (Descaling) ile kireç birikintileri\n6 Aylık Kazan Taş ve Tortu Temizliği Yetkili Servis\nsökülür. Yıllık Tahribatsız Test (NDT) Kaynak dikişlerine ultrasonik çatlak testi uygulanır.",
+            "rrf_score": 0.0318,
+            "dense_rank": 4,
+            "sparse_rank": 2,
+            "dense_score": 0.5332,
+            "sparse_score": 0.369,
+            "rerank_score": 0.0
+          }
+        ],
+        "retrieval_latency": 0.8805,
+        "context_precision": 1.0,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "id": 9,
+      "category": "specific_detail",
+      "user_input": "Basınç 5,8 bar sınırına ulaştığında otomatik tahliye nasıl gerçekleşir?",
+      "reference": "Solenoid V-10 tahliye valfi otomatik açılır ve fazla basıncı atmosfere salar.",
+      "naive_rag": {
+        "retrieved_chunks": [
+          {
+            "chunk_id": 2,
+            "text": "azan iç sıcaklığı 115 °C değerine ulaştığında kontrol panosundaki sarı ikaz lambası sürekli\nyanar ve sesli uyarı devreye girer.\n• Otomatik Tahliye (125 °C / 5.8 bar): Basınç 5,8 bar sınırına ulaştığında Solenoid V-10 tahliye valfi otomatik açılarak\nfazla basıncı atmosfere salar.\n• Acil Kapatma - SCRAM (135 °C / 6.2 bar): Kritik eşik olan 135 °C sıcaklık veya 6.2 bar basınç aşıldığında acil kapatma\nsistemi (SCRAM) tetiklenir. Bu aşamada operatör V-12 ana valfini manuel olarak kapatmalıdır.\n3. Arı",
+            "similarity_score": 0.7161
+          },
+          {
+            "chunk_id": 1,
+            "text": "ır. Bu aralığın dışındaki işletim\nşartları, güvenlik mimarisi tarafından otomatik olarak engellenir.\nKazan içi su seviyesi sürekli olarak ultrasonik debimetreler ve elektrotlu seviye sensörleri ile izlenmektedir. Optimum\nçalışma koşullarında kazan besleme suyu sıcaklığı 85 °C seviyesinde tutulmalıdır.\n2. Güvenlik Protokolleri ve Kritik Limitler\nSistemin güvenli işletimi için 3 kademeli koruma protokolü tanımlanmıştır:\n• Kademeli Uyarı (115 °C): Kazan iç sıcaklığı 115 °C değerine ulaştığında kont",
+            "similarity_score": 0.6449
+          },
+          {
+            "chunk_id": 0,
+            "text": "ENDÜSTRİYEL KAZAN SİSTEMLERİ X-200\nKAPSAMLI TEKNİK İŞLETİM VE BAKIM KILAVUZU (V4.2)\n1. Genel Çalışma Prensipleri ve Yapısal Özellikler\nX-200 modeli, yüksek basınçlı endüstriyel buhar üretimi için özel olarak tasarlanmış modüler bir kazan sistemidir.\nSistem, yüksek sıcaklık dayanımına sahip 316L paslanmaz çelik gövde yapısı ve titanyum kaplamalı eşanjör plaka\nboruları ile donatılmıştır. Standart çalışma basınç aralığı 4,2 bar ile 5,5 bar arasındadır. Bu aralığın dışındaki işletim\nşartları, güvenl",
+            "similarity_score": 0.6388
+          }
+        ],
+        "retrieval_latency": 0.3976,
+        "context_precision": 1.0,
+        "context_recall": 1.0
+      },
+      "advanced_rag": {
+        "retrieved_chunks": [
+          {
+            "chunk_id": 1,
+            "text": "Kazan içi su seviyesi sürekli olarak ultrasonik debimetreler ve elektrotlu seviye sensörleri ile izlenmektedir. Optimum\nçalışma koşullarında kazan besleme suyu sıcaklığı 85 °C seviyesinde tutulmalıdır. Güvenlik Protokolleri ve Kritik Limitler\nSistemin güvenli işletimi için 3 kademeli koruma protokolü tanımlanmıştır:\n• Kademeli Uyarı (115 °C): Kazan iç sıcaklığı 115 °C değerine ulaştığında kontrol panosundaki sarı ikaz lambası sürekli\nyanar ve sesli uyarı devreye girer. • Otomatik Tahliye (125 °C / 5.8 bar): Basınç 5,8 bar sınırına ulaştığında Solenoid V-10 tahliye valfi otomatik açılarak\nfazla basıncı atmosfere salar. • Acil Kapatma - SCRAM (135 °C / 6.2 bar): Kritik eşik olan 135 °C sıcaklık veya 6.2 bar basınç aşıldığında acil kapatma\nsistemi (SCRAM) tetiklenir. Bu aşamada operatör V-12 ana valfini manuel olarak kapatmalıdır. Arıza Kodları (Error Codes) ve Müdahale Adımları\nArıza Kodu Arıza Tanımı Olası Neden Çözüm / Müdahale\nV-10 Valfi tıkalı veya duyarga V-10 valfini manuel açın, duyarga\nE-101 Aşırı Basınç Yükselmesi\narızalı kalibrasyonunu kontrol edin. P-04 sigortasını kontrol edin, emiş hattı\nE-102 Düşük Su Seviyesi Besleme pompası P-04 devre dışı\nvanasını açın. Aşırı yük veya brülör kontrolden V-12 ana valfini kapatın, sistemi 45 dk\nE-204 Kritik Sıcaklık (SCRAM)\nçıktı soğumaya bırakın. E-309 Alev Duyarga Arızası Fotosel sensör yüzeyi kirlenmiş Sensör lensini izopropil alkol ile temizleyin. Pano klemens bağlantılarını ve sonlandırma\nE-412 İletişim Kopukluğu (PLC) RS485 Modbus kablosu gevşek\ndirencini sıkın.",
+            "rrf_score": 0.0328,
+            "dense_rank": 1,
+            "sparse_rank": 1,
+            "dense_score": 0.5567,
+            "sparse_score": 7.5978,
+            "rerank_score": 0.0
+          },
+          {
+            "chunk_id": 2,
+            "text": "=== SAYFA 2 ===\n| Periyot | Kontrol Noktası | Yapılacak İşlem | Sorumlu |\n| Günlük | Su Seviyesi ve Basınç | Gösterge değerlerinin nominal aralıkta olduğu teyit edilir. | Vardiya Operatörü |\n| Haftalık | Emniyet Valfleri | V-10 ve V-12 valfleri manuel test kolu ile blöf ettirilir. | Bakım Teknisyeni |\n| Aylık | Brülör ve Elektrotlar | Ateşleme elektrot aralığı (3.5 mm) ayarlanır ve kurum temizlenir. | Bakım Teknisyeni |\n| 6 Aylık | Kazan Taş ve Tortu Temizliği | Kimyasal yıkama (Descaling) ile kireç birikintileri sökülür. | Yetkili Servis |\n| Yıllık | Tahribatsız Test (NDT) | Kaynak dikişlerine ultrasonik çatlak testi uygulanır.",
+            "rrf_score": 0.032,
+            "dense_rank": 2,
+            "sparse_rank": 3,
+            "dense_score": 0.519,
+            "sparse_score": 0.5583,
+            "rerank_score": 0.0
+          },
+          {
+            "chunk_id": 0,
+            "text": "=== SAYFA 1 ===\n| Arıza Kodu | Arıza Tanımı | Olası Neden | Çözüm / Müdahale |\n| E-101 | Aşırı Basınç Yükselmesi | V-10 Valfi tıkalı veya duyarga arızalı | V-10 valfini manuel açın, duyarga kalibrasyonunu kontrol edin. |\n| E-102 | Düşük Su Seviyesi | Besleme pompası P-04 devre dışı | P-04 sigortasını kontrol edin, emiş hattı vanasını açın. |\n| E-204 | Kritik Sıcaklık (SCRAM) | Aşırı yük veya brülör kontrolden çıktı | V-12 ana valfini kapatın, sistemi 45 dk soğumaya bırakın. |\n| E-309 | Alev Duyarga Arızası | Fotosel sensör yüzeyi kirlenmiş | Sensör lensini izopropil alkol ile temizleyin. |\n| E-412 | İletişim Kopukluğu (PLC) | RS485 Modbus kablosu gevşek | Pano klemens bağlantılarını ve sonlandırma direncini sıkın. ENDÜSTRİYEL KAZAN SİSTEMLERİ X-200\nKAPSAMLI TEKNİK İŞLETİM VE BAKIM KILAVUZU (V4.2)\n1. Genel Çalışma Prensipleri ve Yapısal Özellikler\nX-200 modeli, yüksek basınçlı endüstriyel buhar üretimi için özel olarak tasarlanmış modüler bir kazan sistemidir. Sistem, yüksek sıcaklık dayanımına sahip 316L paslanmaz çelik gövde yapısı ve titanyum kaplamalı eşanjör plaka\nboruları ile donatılmıştır. Standart çalışma basınç aralığı 4,2 bar ile 5,5 bar arasındadır. Bu aralığın dışındaki işletim\nşartları, güvenlik mimarisi tarafından otomatik olarak engellenir.",
+            "rrf_score": 0.032,
+            "dense_rank": 3,
+            "sparse_rank": 2,
+            "dense_score": 0.5134,
+            "sparse_score": 1.9881,
+            "rerank_score": 0.0
+          }
+        ],
+        "retrieval_latency": 0.9438,
+        "context_precision": 0.8333,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "id": 10,
+      "category": "specific_detail",
+      "user_input": "SCRAM hangi sıcaklık veya basınç eşiğinde tetiklenir ve operatör hangi işlemi yapmalıdır?",
+      "reference": "Sıcaklık 135 °C'yi veya basınç 6,2 barı aştığında SCRAM tetiklenir; operatör V-12 ana valfini manuel olarak kapatmalıdır.",
+      "naive_rag": {
+        "retrieved_chunks": [
+          {
+            "chunk_id": 5,
+            "text": "unludur.\nPeriyot\nKontrol Noktası\nYapılacak İşlem\nSorumlu\nGünlük\nSu Seviyesi ve Basınç\nGösterge değerlerinin nominal aralıkta olduğu teyit\nedilir.\nVardiya Operatörü\nHaftalık\nEmniyet Valfleri\nV-10 ve V-12 valfleri manuel test kolu ile blöf ettirilir.\nBakım Teknisyeni\nAylık\nBrülör ve Elektrotlar\nAteşleme elektrot aralığı (3.5 mm) ayarlanır ve\nkurum temizlenir.\nBakım Teknisyeni\n6 Aylık\nKazan Taş ve Tortu Temizliği\nKimyasal yıkama (Descaling) ile kireç birikintileri\nsökülür.\nYetkili Servis\nYıllık\nTah",
+            "similarity_score": 0.7449
+          },
+          {
+            "chunk_id": 2,
+            "text": "azan iç sıcaklığı 115 °C değerine ulaştığında kontrol panosundaki sarı ikaz lambası sürekli\nyanar ve sesli uyarı devreye girer.\n• Otomatik Tahliye (125 °C / 5.8 bar): Basınç 5,8 bar sınırına ulaştığında Solenoid V-10 tahliye valfi otomatik açılarak\nfazla basıncı atmosfere salar.\n• Acil Kapatma - SCRAM (135 °C / 6.2 bar): Kritik eşik olan 135 °C sıcaklık veya 6.2 bar basınç aşıldığında acil kapatma\nsistemi (SCRAM) tetiklenir. Bu aşamada operatör V-12 ana valfini manuel olarak kapatmalıdır.\n3. Arı",
+            "similarity_score": 0.7164
+          },
+          {
+            "chunk_id": 0,
+            "text": "ENDÜSTRİYEL KAZAN SİSTEMLERİ X-200\nKAPSAMLI TEKNİK İŞLETİM VE BAKIM KILAVUZU (V4.2)\n1. Genel Çalışma Prensipleri ve Yapısal Özellikler\nX-200 modeli, yüksek basınçlı endüstriyel buhar üretimi için özel olarak tasarlanmış modüler bir kazan sistemidir.\nSistem, yüksek sıcaklık dayanımına sahip 316L paslanmaz çelik gövde yapısı ve titanyum kaplamalı eşanjör plaka\nboruları ile donatılmıştır. Standart çalışma basınç aralığı 4,2 bar ile 5,5 bar arasındadır. Bu aralığın dışındaki işletim\nşartları, güvenl",
+            "similarity_score": 0.6945
+          }
+        ],
+        "retrieval_latency": 0.1897,
+        "context_precision": 0.5,
+        "context_recall": 1.0
+      },
+      "advanced_rag": {
+        "retrieved_chunks": [
+          {
+            "chunk_id": 1,
+            "text": "Kazan içi su seviyesi sürekli olarak ultrasonik debimetreler ve elektrotlu seviye sensörleri ile izlenmektedir. Optimum\nçalışma koşullarında kazan besleme suyu sıcaklığı 85 °C seviyesinde tutulmalıdır. Güvenlik Protokolleri ve Kritik Limitler\nSistemin güvenli işletimi için 3 kademeli koruma protokolü tanımlanmıştır:\n• Kademeli Uyarı (115 °C): Kazan iç sıcaklığı 115 °C değerine ulaştığında kontrol panosundaki sarı ikaz lambası sürekli\nyanar ve sesli uyarı devreye girer. • Otomatik Tahliye (125 °C / 5.8 bar): Basınç 5,8 bar sınırına ulaştığında Solenoid V-10 tahliye valfi otomatik açılarak\nfazla basıncı atmosfere salar. • Acil Kapatma - SCRAM (135 °C / 6.2 bar): Kritik eşik olan 135 °C sıcaklık veya 6.2 bar basınç aşıldığında acil kapatma\nsistemi (SCRAM) tetiklenir. Bu aşamada operatör V-12 ana valfini manuel olarak kapatmalıdır. Arıza Kodları (Error Codes) ve Müdahale Adımları\nArıza Kodu Arıza Tanımı Olası Neden Çözüm / Müdahale\nV-10 Valfi tıkalı veya duyarga V-10 valfini manuel açın, duyarga\nE-101 Aşırı Basınç Yükselmesi\narızalı kalibrasyonunu kontrol edin. P-04 sigortasını kontrol edin, emiş hattı\nE-102 Düşük Su Seviyesi Besleme pompası P-04 devre dışı\nvanasını açın. Aşırı yük veya brülör kontrolden V-12 ana valfini kapatın, sistemi 45 dk\nE-204 Kritik Sıcaklık (SCRAM)\nçıktı soğumaya bırakın. E-309 Alev Duyarga Arızası Fotosel sensör yüzeyi kirlenmiş Sensör lensini izopropil alkol ile temizleyin. Pano klemens bağlantılarını ve sonlandırma\nE-412 İletişim Kopukluğu (PLC) RS485 Modbus kablosu gevşek\ndirencini sıkın.",
+            "rrf_score": 0.0328,
+            "dense_rank": 1,
+            "sparse_rank": 1,
+            "dense_score": 0.5955,
+            "sparse_score": 5.1845,
+            "rerank_score": 0.0
+          },
+          {
+            "chunk_id": 0,
+            "text": "=== SAYFA 1 ===\n| Arıza Kodu | Arıza Tanımı | Olası Neden | Çözüm / Müdahale |\n| E-101 | Aşırı Basınç Yükselmesi | V-10 Valfi tıkalı veya duyarga arızalı | V-10 valfini manuel açın, duyarga kalibrasyonunu kontrol edin. |\n| E-102 | Düşük Su Seviyesi | Besleme pompası P-04 devre dışı | P-04 sigortasını kontrol edin, emiş hattı vanasını açın. |\n| E-204 | Kritik Sıcaklık (SCRAM) | Aşırı yük veya brülör kontrolden çıktı | V-12 ana valfini kapatın, sistemi 45 dk soğumaya bırakın. |\n| E-309 | Alev Duyarga Arızası | Fotosel sensör yüzeyi kirlenmiş | Sensör lensini izopropil alkol ile temizleyin. |\n| E-412 | İletişim Kopukluğu (PLC) | RS485 Modbus kablosu gevşek | Pano klemens bağlantılarını ve sonlandırma direncini sıkın. ENDÜSTRİYEL KAZAN SİSTEMLERİ X-200\nKAPSAMLI TEKNİK İŞLETİM VE BAKIM KILAVUZU (V4.2)\n1. Genel Çalışma Prensipleri ve Yapısal Özellikler\nX-200 modeli, yüksek basınçlı endüstriyel buhar üretimi için özel olarak tasarlanmış modüler bir kazan sistemidir. Sistem, yüksek sıcaklık dayanımına sahip 316L paslanmaz çelik gövde yapısı ve titanyum kaplamalı eşanjör plaka\nboruları ile donatılmıştır. Standart çalışma basınç aralığı 4,2 bar ile 5,5 bar arasındadır. Bu aralığın dışındaki işletim\nşartları, güvenlik mimarisi tarafından otomatik olarak engellenir.",
+            "rrf_score": 0.032,
+            "dense_rank": 3,
+            "sparse_rank": 2,
+            "dense_score": 0.4483,
+            "sparse_score": 2.9605,
+            "rerank_score": 0.0
+          },
+          {
+            "chunk_id": 6,
+            "text": "Elektrik ve Otomasyon Bağlantı Kuralları\nKazan kontrol panosu 380V AC 50Hz trifaze şebeke gerilimi ile beslenmektedir. PLC giriş/çıkış modülleri 24V DC izole\ngüç kaynağı üzerinden beslenmelidir. Topraklama direnci maksimum 2 Ohm seviyesinde olmalı, nötr ve toprak\nhatları kesinlikle birleştirilmemelidir (TN-S sistemi).",
+            "rrf_score": 0.0315,
+            "dense_rank": 2,
+            "sparse_rank": 5,
+            "dense_score": 0.4598,
+            "sparse_score": 0.4595,
+            "rerank_score": 0.0
+          }
+        ],
+        "retrieval_latency": 0.9967,
+        "context_precision": 1.0,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "id": 11,
+      "category": "specific_detail",
+      "user_input": "E-101 arızasının olası nedeni ve kılavuzda önerilen müdahale nedir?",
+      "reference": "Olası neden V-10 valfinin tıkalı olması veya duyarga arızasıdır. V-10 manuel açılmalı ve duyarga kalibrasyonu kontrol edilmelidir.",
+      "naive_rag": {
+        "retrieved_chunks": [
+          {
+            "chunk_id": 5,
+            "text": "unludur.\nPeriyot\nKontrol Noktası\nYapılacak İşlem\nSorumlu\nGünlük\nSu Seviyesi ve Basınç\nGösterge değerlerinin nominal aralıkta olduğu teyit\nedilir.\nVardiya Operatörü\nHaftalık\nEmniyet Valfleri\nV-10 ve V-12 valfleri manuel test kolu ile blöf ettirilir.\nBakım Teknisyeni\nAylık\nBrülör ve Elektrotlar\nAteşleme elektrot aralığı (3.5 mm) ayarlanır ve\nkurum temizlenir.\nBakım Teknisyeni\n6 Aylık\nKazan Taş ve Tortu Temizliği\nKimyasal yıkama (Descaling) ile kireç birikintileri\nsökülür.\nYetkili Servis\nYıllık\nTah",
+            "similarity_score": 0.7247
+          },
+          {
+            "chunk_id": 3,
+            "text": "-12 ana valfini manuel olarak kapatmalıdır.\n3. Arıza Kodları (Error Codes) ve Müdahale Adımları\nArıza Kodu\nArıza Tanımı\nOlası Neden\nÇözüm / Müdahale\nE-101\nAşırı Basınç Yükselmesi\nV-10 Valfi tıkalı veya duyarga\narızalı\nV-10 valfini manuel açın, duyarga\nkalibrasyonunu kontrol edin.\nE-102\nDüşük Su Seviyesi\nBesleme pompası P-04 devre dışı\nP-04 sigortasını kontrol edin, emiş hattı\nvanasını açın.\nE-204\nKritik Sıcaklık (SCRAM)\nAşırı yük veya brülör kontrolden\nçıktı\nV-12 ana valfini kapatın, sistemi 45",
+            "similarity_score": 0.7234
+          },
+          {
+            "chunk_id": 6,
+            "text": "ç birikintileri\nsökülür.\nYetkili Servis\nYıllık\nTahribatsız Test (NDT)\nKaynak dikişlerine ultrasonik çatlak testi uygulanır.\nSertifikalı Mühendis\n5. Elektrik ve Otomasyon Bağlantı Kuralları\nKazan kontrol panosu 380V AC 50Hz trifaze şebeke gerilimi ile beslenmektedir. PLC giriş/çıkış modülleri 24V DC izole\ngüç kaynağı üzerinden beslenmelidir. Topraklama direnci maksimum 2 Ohm seviyesinde olmalı, nötr ve toprak\nhatları kesinlikle birleştirilmemelidir (TN-S sistemi).",
+            "similarity_score": 0.6925
+          }
+        ],
+        "retrieval_latency": 0.5592,
         "context_precision": 1.0,
         "context_recall": 1.0
       },
@@ -253,8 +708,8 @@
             "rrf_score": 0.0325,
             "dense_rank": 1,
             "sparse_rank": 2,
-            "dense_score": 0.586,
-            "sparse_score": 2.5023,
+            "dense_score": 0.591,
+            "sparse_score": 2.0502,
             "rerank_score": 0.0
           },
           {
@@ -263,7 +718,202 @@
             "rrf_score": 0.0325,
             "dense_rank": 2,
             "sparse_rank": 1,
-            "dense_score": 0.4978,
+            "dense_score": 0.4674,
+            "sparse_score": 2.1226,
+            "rerank_score": 0.0
+          },
+          {
+            "chunk_id": 2,
+            "text": "=== SAYFA 2 ===\n| Periyot | Kontrol Noktası | Yapılacak İşlem | Sorumlu |\n| Günlük | Su Seviyesi ve Basınç | Gösterge değerlerinin nominal aralıkta olduğu teyit edilir. | Vardiya Operatörü |\n| Haftalık | Emniyet Valfleri | V-10 ve V-12 valfleri manuel test kolu ile blöf ettirilir. | Bakım Teknisyeni |\n| Aylık | Brülör ve Elektrotlar | Ateşleme elektrot aralığı (3.5 mm) ayarlanır ve kurum temizlenir. | Bakım Teknisyeni |\n| 6 Aylık | Kazan Taş ve Tortu Temizliği | Kimyasal yıkama (Descaling) ile kireç birikintileri sökülür. | Yetkili Servis |\n| Yıllık | Tahribatsız Test (NDT) | Kaynak dikişlerine ultrasonik çatlak testi uygulanır.",
+            "rrf_score": 0.0315,
+            "dense_rank": 3,
+            "sparse_rank": 4,
+            "dense_score": 0.4214,
+            "sparse_score": 0.5229,
+            "rerank_score": 0.0
+          }
+        ],
+        "retrieval_latency": 1.0088,
+        "context_precision": 0.8333,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "id": 12,
+      "category": "specific_detail",
+      "user_input": "E-102 düşük su seviyesi arızasında hangi olası neden belirtilir ve ne yapılmalıdır?",
+      "reference": "Olası neden besleme pompası P-04'ün devre dışı kalmasıdır. P-04 sigortası kontrol edilmeli ve emiş hattı vanası açılmalıdır.",
+      "naive_rag": {
+        "retrieved_chunks": [
+          {
+            "chunk_id": 3,
+            "text": "-12 ana valfini manuel olarak kapatmalıdır.\n3. Arıza Kodları (Error Codes) ve Müdahale Adımları\nArıza Kodu\nArıza Tanımı\nOlası Neden\nÇözüm / Müdahale\nE-101\nAşırı Basınç Yükselmesi\nV-10 Valfi tıkalı veya duyarga\narızalı\nV-10 valfini manuel açın, duyarga\nkalibrasyonunu kontrol edin.\nE-102\nDüşük Su Seviyesi\nBesleme pompası P-04 devre dışı\nP-04 sigortasını kontrol edin, emiş hattı\nvanasını açın.\nE-204\nKritik Sıcaklık (SCRAM)\nAşırı yük veya brülör kontrolden\nçıktı\nV-12 ana valfini kapatın, sistemi 45",
+            "similarity_score": 0.7193
+          },
+          {
+            "chunk_id": 5,
+            "text": "unludur.\nPeriyot\nKontrol Noktası\nYapılacak İşlem\nSorumlu\nGünlük\nSu Seviyesi ve Basınç\nGösterge değerlerinin nominal aralıkta olduğu teyit\nedilir.\nVardiya Operatörü\nHaftalık\nEmniyet Valfleri\nV-10 ve V-12 valfleri manuel test kolu ile blöf ettirilir.\nBakım Teknisyeni\nAylık\nBrülör ve Elektrotlar\nAteşleme elektrot aralığı (3.5 mm) ayarlanır ve\nkurum temizlenir.\nBakım Teknisyeni\n6 Aylık\nKazan Taş ve Tortu Temizliği\nKimyasal yıkama (Descaling) ile kireç birikintileri\nsökülür.\nYetkili Servis\nYıllık\nTah",
+            "similarity_score": 0.7086
+          },
+          {
+            "chunk_id": 0,
+            "text": "ENDÜSTRİYEL KAZAN SİSTEMLERİ X-200\nKAPSAMLI TEKNİK İŞLETİM VE BAKIM KILAVUZU (V4.2)\n1. Genel Çalışma Prensipleri ve Yapısal Özellikler\nX-200 modeli, yüksek basınçlı endüstriyel buhar üretimi için özel olarak tasarlanmış modüler bir kazan sistemidir.\nSistem, yüksek sıcaklık dayanımına sahip 316L paslanmaz çelik gövde yapısı ve titanyum kaplamalı eşanjör plaka\nboruları ile donatılmıştır. Standart çalışma basınç aralığı 4,2 bar ile 5,5 bar arasındadır. Bu aralığın dışındaki işletim\nşartları, güvenl",
+            "similarity_score": 0.7008
+          }
+        ],
+        "retrieval_latency": 0.1731,
+        "context_precision": 1.0,
+        "context_recall": 1.0
+      },
+      "advanced_rag": {
+        "retrieved_chunks": [
+          {
+            "chunk_id": 0,
+            "text": "=== SAYFA 1 ===\n| Arıza Kodu | Arıza Tanımı | Olası Neden | Çözüm / Müdahale |\n| E-101 | Aşırı Basınç Yükselmesi | V-10 Valfi tıkalı veya duyarga arızalı | V-10 valfini manuel açın, duyarga kalibrasyonunu kontrol edin. |\n| E-102 | Düşük Su Seviyesi | Besleme pompası P-04 devre dışı | P-04 sigortasını kontrol edin, emiş hattı vanasını açın. |\n| E-204 | Kritik Sıcaklık (SCRAM) | Aşırı yük veya brülör kontrolden çıktı | V-12 ana valfini kapatın, sistemi 45 dk soğumaya bırakın. |\n| E-309 | Alev Duyarga Arızası | Fotosel sensör yüzeyi kirlenmiş | Sensör lensini izopropil alkol ile temizleyin. |\n| E-412 | İletişim Kopukluğu (PLC) | RS485 Modbus kablosu gevşek | Pano klemens bağlantılarını ve sonlandırma direncini sıkın. ENDÜSTRİYEL KAZAN SİSTEMLERİ X-200\nKAPSAMLI TEKNİK İŞLETİM VE BAKIM KILAVUZU (V4.2)\n1. Genel Çalışma Prensipleri ve Yapısal Özellikler\nX-200 modeli, yüksek basınçlı endüstriyel buhar üretimi için özel olarak tasarlanmış modüler bir kazan sistemidir. Sistem, yüksek sıcaklık dayanımına sahip 316L paslanmaz çelik gövde yapısı ve titanyum kaplamalı eşanjör plaka\nboruları ile donatılmıştır. Standart çalışma basınç aralığı 4,2 bar ile 5,5 bar arasındadır. Bu aralığın dışındaki işletim\nşartları, güvenlik mimarisi tarafından otomatik olarak engellenir.",
+            "rrf_score": 0.0328,
+            "dense_rank": 1,
+            "sparse_rank": 1,
+            "dense_score": 0.5755,
+            "sparse_score": 2.9704,
+            "rerank_score": 0.0
+          },
+          {
+            "chunk_id": 1,
+            "text": "Kazan içi su seviyesi sürekli olarak ultrasonik debimetreler ve elektrotlu seviye sensörleri ile izlenmektedir. Optimum\nçalışma koşullarında kazan besleme suyu sıcaklığı 85 °C seviyesinde tutulmalıdır. Güvenlik Protokolleri ve Kritik Limitler\nSistemin güvenli işletimi için 3 kademeli koruma protokolü tanımlanmıştır:\n• Kademeli Uyarı (115 °C): Kazan iç sıcaklığı 115 °C değerine ulaştığında kontrol panosundaki sarı ikaz lambası sürekli\nyanar ve sesli uyarı devreye girer. • Otomatik Tahliye (125 °C / 5.8 bar): Basınç 5,8 bar sınırına ulaştığında Solenoid V-10 tahliye valfi otomatik açılarak\nfazla basıncı atmosfere salar. • Acil Kapatma - SCRAM (135 °C / 6.2 bar): Kritik eşik olan 135 °C sıcaklık veya 6.2 bar basınç aşıldığında acil kapatma\nsistemi (SCRAM) tetiklenir. Bu aşamada operatör V-12 ana valfini manuel olarak kapatmalıdır. Arıza Kodları (Error Codes) ve Müdahale Adımları\nArıza Kodu Arıza Tanımı Olası Neden Çözüm / Müdahale\nV-10 Valfi tıkalı veya duyarga V-10 valfini manuel açın, duyarga\nE-101 Aşırı Basınç Yükselmesi\narızalı kalibrasyonunu kontrol edin. P-04 sigortasını kontrol edin, emiş hattı\nE-102 Düşük Su Seviyesi Besleme pompası P-04 devre dışı\nvanasını açın. Aşırı yük veya brülör kontrolden V-12 ana valfini kapatın, sistemi 45 dk\nE-204 Kritik Sıcaklık (SCRAM)\nçıktı soğumaya bırakın. E-309 Alev Duyarga Arızası Fotosel sensör yüzeyi kirlenmiş Sensör lensini izopropil alkol ile temizleyin. Pano klemens bağlantılarını ve sonlandırma\nE-412 İletişim Kopukluğu (PLC) RS485 Modbus kablosu gevşek\ndirencini sıkın.",
+            "rrf_score": 0.0323,
+            "dense_rank": 2,
+            "sparse_rank": 2,
+            "dense_score": 0.5179,
+            "sparse_score": 2.8253,
+            "rerank_score": 0.0
+          },
+          {
+            "chunk_id": 2,
+            "text": "=== SAYFA 2 ===\n| Periyot | Kontrol Noktası | Yapılacak İşlem | Sorumlu |\n| Günlük | Su Seviyesi ve Basınç | Gösterge değerlerinin nominal aralıkta olduğu teyit edilir. | Vardiya Operatörü |\n| Haftalık | Emniyet Valfleri | V-10 ve V-12 valfleri manuel test kolu ile blöf ettirilir. | Bakım Teknisyeni |\n| Aylık | Brülör ve Elektrotlar | Ateşleme elektrot aralığı (3.5 mm) ayarlanır ve kurum temizlenir. | Bakım Teknisyeni |\n| 6 Aylık | Kazan Taş ve Tortu Temizliği | Kimyasal yıkama (Descaling) ile kireç birikintileri sökülür. | Yetkili Servis |\n| Yıllık | Tahribatsız Test (NDT) | Kaynak dikişlerine ultrasonik çatlak testi uygulanır.",
+            "rrf_score": 0.0317,
+            "dense_rank": 3,
+            "sparse_rank": 3,
+            "dense_score": 0.4602,
+            "sparse_score": 1.0812,
+            "rerank_score": 0.0
+          }
+        ],
+        "retrieval_latency": 0.718,
+        "context_precision": 1.0,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "id": 13,
+      "category": "specific_detail",
+      "user_input": "E-204 kritik sıcaklık (SCRAM) kodu için belirtilen soğutma müdahalesi nedir?",
+      "reference": "V-12 ana valfi kapatılmalı ve sistem 45 dakika soğumaya bırakılmalıdır.",
+      "naive_rag": {
+        "retrieved_chunks": [
+          {
+            "chunk_id": 3,
+            "text": "-12 ana valfini manuel olarak kapatmalıdır.\n3. Arıza Kodları (Error Codes) ve Müdahale Adımları\nArıza Kodu\nArıza Tanımı\nOlası Neden\nÇözüm / Müdahale\nE-101\nAşırı Basınç Yükselmesi\nV-10 Valfi tıkalı veya duyarga\narızalı\nV-10 valfini manuel açın, duyarga\nkalibrasyonunu kontrol edin.\nE-102\nDüşük Su Seviyesi\nBesleme pompası P-04 devre dışı\nP-04 sigortasını kontrol edin, emiş hattı\nvanasını açın.\nE-204\nKritik Sıcaklık (SCRAM)\nAşırı yük veya brülör kontrolden\nçıktı\nV-12 ana valfini kapatın, sistemi 45",
+            "similarity_score": 0.6983
+          },
+          {
+            "chunk_id": 5,
+            "text": "unludur.\nPeriyot\nKontrol Noktası\nYapılacak İşlem\nSorumlu\nGünlük\nSu Seviyesi ve Basınç\nGösterge değerlerinin nominal aralıkta olduğu teyit\nedilir.\nVardiya Operatörü\nHaftalık\nEmniyet Valfleri\nV-10 ve V-12 valfleri manuel test kolu ile blöf ettirilir.\nBakım Teknisyeni\nAylık\nBrülör ve Elektrotlar\nAteşleme elektrot aralığı (3.5 mm) ayarlanır ve\nkurum temizlenir.\nBakım Teknisyeni\n6 Aylık\nKazan Taş ve Tortu Temizliği\nKimyasal yıkama (Descaling) ile kireç birikintileri\nsökülür.\nYetkili Servis\nYıllık\nTah",
+            "similarity_score": 0.6974
+          },
+          {
+            "chunk_id": 0,
+            "text": "ENDÜSTRİYEL KAZAN SİSTEMLERİ X-200\nKAPSAMLI TEKNİK İŞLETİM VE BAKIM KILAVUZU (V4.2)\n1. Genel Çalışma Prensipleri ve Yapısal Özellikler\nX-200 modeli, yüksek basınçlı endüstriyel buhar üretimi için özel olarak tasarlanmış modüler bir kazan sistemidir.\nSistem, yüksek sıcaklık dayanımına sahip 316L paslanmaz çelik gövde yapısı ve titanyum kaplamalı eşanjör plaka\nboruları ile donatılmıştır. Standart çalışma basınç aralığı 4,2 bar ile 5,5 bar arasındadır. Bu aralığın dışındaki işletim\nşartları, güvenl",
+            "similarity_score": 0.6962
+          }
+        ],
+        "retrieval_latency": 0.4933,
+        "context_precision": 1.0,
+        "context_recall": 1.0
+      },
+      "advanced_rag": {
+        "retrieved_chunks": [
+          {
+            "chunk_id": 1,
+            "text": "Kazan içi su seviyesi sürekli olarak ultrasonik debimetreler ve elektrotlu seviye sensörleri ile izlenmektedir. Optimum\nçalışma koşullarında kazan besleme suyu sıcaklığı 85 °C seviyesinde tutulmalıdır. Güvenlik Protokolleri ve Kritik Limitler\nSistemin güvenli işletimi için 3 kademeli koruma protokolü tanımlanmıştır:\n• Kademeli Uyarı (115 °C): Kazan iç sıcaklığı 115 °C değerine ulaştığında kontrol panosundaki sarı ikaz lambası sürekli\nyanar ve sesli uyarı devreye girer. • Otomatik Tahliye (125 °C / 5.8 bar): Basınç 5,8 bar sınırına ulaştığında Solenoid V-10 tahliye valfi otomatik açılarak\nfazla basıncı atmosfere salar. • Acil Kapatma - SCRAM (135 °C / 6.2 bar): Kritik eşik olan 135 °C sıcaklık veya 6.2 bar basınç aşıldığında acil kapatma\nsistemi (SCRAM) tetiklenir. Bu aşamada operatör V-12 ana valfini manuel olarak kapatmalıdır. Arıza Kodları (Error Codes) ve Müdahale Adımları\nArıza Kodu Arıza Tanımı Olası Neden Çözüm / Müdahale\nV-10 Valfi tıkalı veya duyarga V-10 valfini manuel açın, duyarga\nE-101 Aşırı Basınç Yükselmesi\narızalı kalibrasyonunu kontrol edin. P-04 sigortasını kontrol edin, emiş hattı\nE-102 Düşük Su Seviyesi Besleme pompası P-04 devre dışı\nvanasını açın. Aşırı yük veya brülör kontrolden V-12 ana valfini kapatın, sistemi 45 dk\nE-204 Kritik Sıcaklık (SCRAM)\nçıktı soğumaya bırakın. E-309 Alev Duyarga Arızası Fotosel sensör yüzeyi kirlenmiş Sensör lensini izopropil alkol ile temizleyin. Pano klemens bağlantılarını ve sonlandırma\nE-412 İletişim Kopukluğu (PLC) RS485 Modbus kablosu gevşek\ndirencini sıkın.",
+            "rrf_score": 0.0328,
+            "dense_rank": 1,
+            "sparse_rank": 1,
+            "dense_score": 0.5643,
+            "sparse_score": 3.7845,
+            "rerank_score": 0.0
+          },
+          {
+            "chunk_id": 0,
+            "text": "=== SAYFA 1 ===\n| Arıza Kodu | Arıza Tanımı | Olası Neden | Çözüm / Müdahale |\n| E-101 | Aşırı Basınç Yükselmesi | V-10 Valfi tıkalı veya duyarga arızalı | V-10 valfini manuel açın, duyarga kalibrasyonunu kontrol edin. |\n| E-102 | Düşük Su Seviyesi | Besleme pompası P-04 devre dışı | P-04 sigortasını kontrol edin, emiş hattı vanasını açın. |\n| E-204 | Kritik Sıcaklık (SCRAM) | Aşırı yük veya brülör kontrolden çıktı | V-12 ana valfini kapatın, sistemi 45 dk soğumaya bırakın. |\n| E-309 | Alev Duyarga Arızası | Fotosel sensör yüzeyi kirlenmiş | Sensör lensini izopropil alkol ile temizleyin. |\n| E-412 | İletişim Kopukluğu (PLC) | RS485 Modbus kablosu gevşek | Pano klemens bağlantılarını ve sonlandırma direncini sıkın. ENDÜSTRİYEL KAZAN SİSTEMLERİ X-200\nKAPSAMLI TEKNİK İŞLETİM VE BAKIM KILAVUZU (V4.2)\n1. Genel Çalışma Prensipleri ve Yapısal Özellikler\nX-200 modeli, yüksek basınçlı endüstriyel buhar üretimi için özel olarak tasarlanmış modüler bir kazan sistemidir. Sistem, yüksek sıcaklık dayanımına sahip 316L paslanmaz çelik gövde yapısı ve titanyum kaplamalı eşanjör plaka\nboruları ile donatılmıştır. Standart çalışma basınç aralığı 4,2 bar ile 5,5 bar arasındadır. Bu aralığın dışındaki işletim\nşartları, güvenlik mimarisi tarafından otomatik olarak engellenir.",
+            "rrf_score": 0.0323,
+            "dense_rank": 2,
+            "sparse_rank": 2,
+            "dense_score": 0.5127,
+            "sparse_score": 3.2252,
+            "rerank_score": 0.0
+          },
+          {
+            "chunk_id": 4,
+            "text": "Periyodik Bakım ve Kontrol Çizelgesi\nKazan sisteminin kullanım ömrünü uzatmak ve garanti kapsamını korumak için aşağıdaki bakım takvimine uyulması\nzorunludur. Periyot Kontrol Noktası Yapılacak İşlem Sorumlu\nGösterge değerlerinin nominal aralıkta olduğu teyit\nGünlük Su Seviyesi ve Basınç Vardiya Operatörü\nedilir. Haftalık Emniyet Valfleri V-10 ve V-12 valfleri manuel test kolu ile blöf ettirilir. Bakım Teknisyeni\nAteşleme elektrot aralığı (3.5 mm) ayarlanır ve\nAylık Brülör ve Elektrotlar Bakım Teknisyeni\nkurum temizlenir. Kimyasal yıkama (Descaling) ile kireç birikintileri\n6 Aylık Kazan Taş ve Tortu Temizliği Yetkili Servis\nsökülür. Yıllık Tahribatsız Test (NDT) Kaynak dikişlerine ultrasonik çatlak testi uygulanır.",
+            "rrf_score": 0.0313,
+            "dense_rank": 5,
+            "sparse_rank": 3,
+            "dense_score": 0.3799,
+            "sparse_score": 0.2393,
+            "rerank_score": 0.0
+          }
+        ],
+        "retrieval_latency": 0.9842,
+        "context_precision": 1.0,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "id": 14,
+      "category": "specific_detail",
+      "user_input": "E-309 alev duyarga arızasında sensöre nasıl müdahale edilmelidir?",
+      "reference": "Fotosel sensör yüzeyi kirlenmiş olabilir; sensör lensi izopropil alkol ile temizlenmelidir.",
+      "naive_rag": {
+        "retrieved_chunks": [
+          {
+            "chunk_id": 4,
+            "text": "rolden\nçıktı\nV-12 ana valfini kapatın, sistemi 45 dk\nsoğumaya bırakın.\nE-309\nAlev Duyarga Arızası\nFotosel sensör yüzeyi kirlenmiş\nSensör lensini izopropil alkol ile temizleyin.\nE-412\nİletişim Kopukluğu (PLC)\nRS485 Modbus kablosu gevşek\nPano klemens bağlantılarını ve sonlandırma\ndirencini sıkın.\n\n4. Periyodik Bakım ve Kontrol Çizelgesi\nKazan sisteminin kullanım ömrünü uzatmak ve garanti kapsamını korumak için aşağıdaki bakım takvimine uyulması\nzorunludur.\nPeriyot\nKontrol Noktası\nYapılacak İşlem\nS",
+            "similarity_score": 0.7497
+          },
+          {
+            "chunk_id": 5,
+            "text": "unludur.\nPeriyot\nKontrol Noktası\nYapılacak İşlem\nSorumlu\nGünlük\nSu Seviyesi ve Basınç\nGösterge değerlerinin nominal aralıkta olduğu teyit\nedilir.\nVardiya Operatörü\nHaftalık\nEmniyet Valfleri\nV-10 ve V-12 valfleri manuel test kolu ile blöf ettirilir.\nBakım Teknisyeni\nAylık\nBrülör ve Elektrotlar\nAteşleme elektrot aralığı (3.5 mm) ayarlanır ve\nkurum temizlenir.\nBakım Teknisyeni\n6 Aylık\nKazan Taş ve Tortu Temizliği\nKimyasal yıkama (Descaling) ile kireç birikintileri\nsökülür.\nYetkili Servis\nYıllık\nTah",
+            "similarity_score": 0.7226
+          },
+          {
+            "chunk_id": 6,
+            "text": "ç birikintileri\nsökülür.\nYetkili Servis\nYıllık\nTahribatsız Test (NDT)\nKaynak dikişlerine ultrasonik çatlak testi uygulanır.\nSertifikalı Mühendis\n5. Elektrik ve Otomasyon Bağlantı Kuralları\nKazan kontrol panosu 380V AC 50Hz trifaze şebeke gerilimi ile beslenmektedir. PLC giriş/çıkış modülleri 24V DC izole\ngüç kaynağı üzerinden beslenmelidir. Topraklama direnci maksimum 2 Ohm seviyesinde olmalı, nötr ve toprak\nhatları kesinlikle birleştirilmemelidir (TN-S sistemi).",
+            "similarity_score": 0.7083
+          }
+        ],
+        "retrieval_latency": 0.0302,
+        "context_precision": 1.0,
+        "context_recall": 1.0
+      },
+      "advanced_rag": {
+        "retrieved_chunks": [
+          {
+            "chunk_id": 0,
+            "text": "=== SAYFA 1 ===\n| Arıza Kodu | Arıza Tanımı | Olası Neden | Çözüm / Müdahale |\n| E-101 | Aşırı Basınç Yükselmesi | V-10 Valfi tıkalı veya duyarga arızalı | V-10 valfini manuel açın, duyarga kalibrasyonunu kontrol edin. |\n| E-102 | Düşük Su Seviyesi | Besleme pompası P-04 devre dışı | P-04 sigortasını kontrol edin, emiş hattı vanasını açın. |\n| E-204 | Kritik Sıcaklık (SCRAM) | Aşırı yük veya brülör kontrolden çıktı | V-12 ana valfini kapatın, sistemi 45 dk soğumaya bırakın. |\n| E-309 | Alev Duyarga Arızası | Fotosel sensör yüzeyi kirlenmiş | Sensör lensini izopropil alkol ile temizleyin. |\n| E-412 | İletişim Kopukluğu (PLC) | RS485 Modbus kablosu gevşek | Pano klemens bağlantılarını ve sonlandırma direncini sıkın. ENDÜSTRİYEL KAZAN SİSTEMLERİ X-200\nKAPSAMLI TEKNİK İŞLETİM VE BAKIM KILAVUZU (V4.2)\n1. Genel Çalışma Prensipleri ve Yapısal Özellikler\nX-200 modeli, yüksek basınçlı endüstriyel buhar üretimi için özel olarak tasarlanmış modüler bir kazan sistemidir. Sistem, yüksek sıcaklık dayanımına sahip 316L paslanmaz çelik gövde yapısı ve titanyum kaplamalı eşanjör plaka\nboruları ile donatılmıştır. Standart çalışma basınç aralığı 4,2 bar ile 5,5 bar arasındadır. Bu aralığın dışındaki işletim\nşartları, güvenlik mimarisi tarafından otomatik olarak engellenir.",
+            "rrf_score": 0.0328,
+            "dense_rank": 1,
+            "sparse_rank": 1,
+            "dense_score": 0.6034,
+            "sparse_score": 2.7013,
+            "rerank_score": 0.0
+          },
+          {
+            "chunk_id": 1,
+            "text": "Kazan içi su seviyesi sürekli olarak ultrasonik debimetreler ve elektrotlu seviye sensörleri ile izlenmektedir. Optimum\nçalışma koşullarında kazan besleme suyu sıcaklığı 85 °C seviyesinde tutulmalıdır. Güvenlik Protokolleri ve Kritik Limitler\nSistemin güvenli işletimi için 3 kademeli koruma protokolü tanımlanmıştır:\n• Kademeli Uyarı (115 °C): Kazan iç sıcaklığı 115 °C değerine ulaştığında kontrol panosundaki sarı ikaz lambası sürekli\nyanar ve sesli uyarı devreye girer. • Otomatik Tahliye (125 °C / 5.8 bar): Basınç 5,8 bar sınırına ulaştığında Solenoid V-10 tahliye valfi otomatik açılarak\nfazla basıncı atmosfere salar. • Acil Kapatma - SCRAM (135 °C / 6.2 bar): Kritik eşik olan 135 °C sıcaklık veya 6.2 bar basınç aşıldığında acil kapatma\nsistemi (SCRAM) tetiklenir. Bu aşamada operatör V-12 ana valfini manuel olarak kapatmalıdır. Arıza Kodları (Error Codes) ve Müdahale Adımları\nArıza Kodu Arıza Tanımı Olası Neden Çözüm / Müdahale\nV-10 Valfi tıkalı veya duyarga V-10 valfini manuel açın, duyarga\nE-101 Aşırı Basınç Yükselmesi\narızalı kalibrasyonunu kontrol edin. P-04 sigortasını kontrol edin, emiş hattı\nE-102 Düşük Su Seviyesi Besleme pompası P-04 devre dışı\nvanasını açın. Aşırı yük veya brülör kontrolden V-12 ana valfini kapatın, sistemi 45 dk\nE-204 Kritik Sıcaklık (SCRAM)\nçıktı soğumaya bırakın. E-309 Alev Duyarga Arızası Fotosel sensör yüzeyi kirlenmiş Sensör lensini izopropil alkol ile temizleyin. Pano klemens bağlantılarını ve sonlandırma\nE-412 İletişim Kopukluğu (PLC) RS485 Modbus kablosu gevşek\ndirencini sıkın.",
+            "rrf_score": 0.0323,
+            "dense_rank": 2,
+            "sparse_rank": 2,
+            "dense_score": 0.5775,
             "sparse_score": 2.673,
             "rerank_score": 0.0
           },
@@ -273,42 +923,237 @@
             "rrf_score": 0.0317,
             "dense_rank": 3,
             "sparse_rank": 3,
-            "dense_score": 0.4702,
+            "dense_score": 0.4846,
             "sparse_score": 0.0,
             "rerank_score": 0.0
           }
         ],
-        "retrieval_latency": 1.054,
+        "retrieval_latency": 9.8794,
         "context_precision": 1.0,
         "context_recall": 1.0
       }
     },
     {
-      "id": 5,
-      "category": "unanswerable",
-      "user_input": "X-200 kazan sisteminde yıllık motor yağ değişimi süresi ve garantisi nedir?",
-      "reference": "Dokümanda yıllık motor yağ değişimi süresi veya garantisine dair bir bilgi bulunmamaktadır.",
+      "id": 15,
+      "category": "specific_detail",
+      "user_input": "E-412 PLC iletişim kopukluğu için hangi bağlantı sorunu ve çözüm adımları belirtilmiştir?",
+      "reference": "RS485 Modbus kablosu gevşek olabilir. Pano klemens bağlantıları ve sonlandırma direnci sıkılmalıdır.",
       "naive_rag": {
         "retrieved_chunks": [
           {
-            "chunk_id": 0,
-            "text": "ENDÜSTRİYEL KAZAN SİSTEMLERİ X-200\nKAPSAMLI TEKNİK İŞLETİM VE BAKIM KILAVUZU (V4.2)\n1. Genel Çalışma Prensipleri ve Yapısal Özellikler\nX-200 modeli, yüksek basınçlı endüstriyel buhar üretimi için özel olarak tasarlanmış modüler bir kazan sistemidir.\nSistem, yüksek sıcaklık dayanımına sahip 316L paslanmaz çelik gövde yapısı ve titanyum kaplamalı eşanjör plaka\nboruları ile donatılmıştır. Standart çalışma basınç aralığı 4,2 bar ile 5,5 bar arasındadır. Bu aralığın dışındaki işletim\nşartları, güvenl",
-            "similarity_score": 0.8211
+            "chunk_id": 4,
+            "text": "rolden\nçıktı\nV-12 ana valfini kapatın, sistemi 45 dk\nsoğumaya bırakın.\nE-309\nAlev Duyarga Arızası\nFotosel sensör yüzeyi kirlenmiş\nSensör lensini izopropil alkol ile temizleyin.\nE-412\nİletişim Kopukluğu (PLC)\nRS485 Modbus kablosu gevşek\nPano klemens bağlantılarını ve sonlandırma\ndirencini sıkın.\n\n4. Periyodik Bakım ve Kontrol Çizelgesi\nKazan sisteminin kullanım ömrünü uzatmak ve garanti kapsamını korumak için aşağıdaki bakım takvimine uyulması\nzorunludur.\nPeriyot\nKontrol Noktası\nYapılacak İşlem\nS",
+            "similarity_score": 0.7103
           },
           {
-            "chunk_id": 1,
-            "text": "ır. Bu aralığın dışındaki işletim\nşartları, güvenlik mimarisi tarafından otomatik olarak engellenir.\nKazan içi su seviyesi sürekli olarak ultrasonik debimetreler ve elektrotlu seviye sensörleri ile izlenmektedir. Optimum\nçalışma koşullarında kazan besleme suyu sıcaklığı 85 °C seviyesinde tutulmalıdır.\n2. Güvenlik Protokolleri ve Kritik Limitler\nSistemin güvenli işletimi için 3 kademeli koruma protokolü tanımlanmıştır:\n• Kademeli Uyarı (115 °C): Kazan iç sıcaklığı 115 °C değerine ulaştığında kont",
-            "similarity_score": 0.7313
+            "chunk_id": 5,
+            "text": "unludur.\nPeriyot\nKontrol Noktası\nYapılacak İşlem\nSorumlu\nGünlük\nSu Seviyesi ve Basınç\nGösterge değerlerinin nominal aralıkta olduğu teyit\nedilir.\nVardiya Operatörü\nHaftalık\nEmniyet Valfleri\nV-10 ve V-12 valfleri manuel test kolu ile blöf ettirilir.\nBakım Teknisyeni\nAylık\nBrülör ve Elektrotlar\nAteşleme elektrot aralığı (3.5 mm) ayarlanır ve\nkurum temizlenir.\nBakım Teknisyeni\n6 Aylık\nKazan Taş ve Tortu Temizliği\nKimyasal yıkama (Descaling) ile kireç birikintileri\nsökülür.\nYetkili Servis\nYıllık\nTah",
+            "similarity_score": 0.6854
           },
           {
             "chunk_id": 6,
             "text": "ç birikintileri\nsökülür.\nYetkili Servis\nYıllık\nTahribatsız Test (NDT)\nKaynak dikişlerine ultrasonik çatlak testi uygulanır.\nSertifikalı Mühendis\n5. Elektrik ve Otomasyon Bağlantı Kuralları\nKazan kontrol panosu 380V AC 50Hz trifaze şebeke gerilimi ile beslenmektedir. PLC giriş/çıkış modülleri 24V DC izole\ngüç kaynağı üzerinden beslenmelidir. Topraklama direnci maksimum 2 Ohm seviyesinde olmalı, nötr ve toprak\nhatları kesinlikle birleştirilmemelidir (TN-S sistemi).",
-            "similarity_score": 0.7289
+            "similarity_score": 0.6811
           }
         ],
-        "retrieval_latency": 0.3677,
-        "context_precision": 0.0,
-        "context_recall": 0.0
+        "retrieval_latency": 0.0317,
+        "context_precision": 1.0,
+        "context_recall": 1.0
+      },
+      "advanced_rag": {
+        "retrieved_chunks": [
+          {
+            "chunk_id": 0,
+            "text": "=== SAYFA 1 ===\n| Arıza Kodu | Arıza Tanımı | Olası Neden | Çözüm / Müdahale |\n| E-101 | Aşırı Basınç Yükselmesi | V-10 Valfi tıkalı veya duyarga arızalı | V-10 valfini manuel açın, duyarga kalibrasyonunu kontrol edin. |\n| E-102 | Düşük Su Seviyesi | Besleme pompası P-04 devre dışı | P-04 sigortasını kontrol edin, emiş hattı vanasını açın. |\n| E-204 | Kritik Sıcaklık (SCRAM) | Aşırı yük veya brülör kontrolden çıktı | V-12 ana valfini kapatın, sistemi 45 dk soğumaya bırakın. |\n| E-309 | Alev Duyarga Arızası | Fotosel sensör yüzeyi kirlenmiş | Sensör lensini izopropil alkol ile temizleyin. |\n| E-412 | İletişim Kopukluğu (PLC) | RS485 Modbus kablosu gevşek | Pano klemens bağlantılarını ve sonlandırma direncini sıkın. ENDÜSTRİYEL KAZAN SİSTEMLERİ X-200\nKAPSAMLI TEKNİK İŞLETİM VE BAKIM KILAVUZU (V4.2)\n1. Genel Çalışma Prensipleri ve Yapısal Özellikler\nX-200 modeli, yüksek basınçlı endüstriyel buhar üretimi için özel olarak tasarlanmış modüler bir kazan sistemidir. Sistem, yüksek sıcaklık dayanımına sahip 316L paslanmaz çelik gövde yapısı ve titanyum kaplamalı eşanjör plaka\nboruları ile donatılmıştır. Standart çalışma basınç aralığı 4,2 bar ile 5,5 bar arasındadır. Bu aralığın dışındaki işletim\nşartları, güvenlik mimarisi tarafından otomatik olarak engellenir.",
+            "rrf_score": 0.0323,
+            "dense_rank": 1,
+            "sparse_rank": 3,
+            "dense_score": 0.4981,
+            "sparse_score": 2.3996,
+            "rerank_score": 0.0
+          },
+          {
+            "chunk_id": 1,
+            "text": "Kazan içi su seviyesi sürekli olarak ultrasonik debimetreler ve elektrotlu seviye sensörleri ile izlenmektedir. Optimum\nçalışma koşullarında kazan besleme suyu sıcaklığı 85 °C seviyesinde tutulmalıdır. Güvenlik Protokolleri ve Kritik Limitler\nSistemin güvenli işletimi için 3 kademeli koruma protokolü tanımlanmıştır:\n• Kademeli Uyarı (115 °C): Kazan iç sıcaklığı 115 °C değerine ulaştığında kontrol panosundaki sarı ikaz lambası sürekli\nyanar ve sesli uyarı devreye girer. • Otomatik Tahliye (125 °C / 5.8 bar): Basınç 5,8 bar sınırına ulaştığında Solenoid V-10 tahliye valfi otomatik açılarak\nfazla basıncı atmosfere salar. • Acil Kapatma - SCRAM (135 °C / 6.2 bar): Kritik eşik olan 135 °C sıcaklık veya 6.2 bar basınç aşıldığında acil kapatma\nsistemi (SCRAM) tetiklenir. Bu aşamada operatör V-12 ana valfini manuel olarak kapatmalıdır. Arıza Kodları (Error Codes) ve Müdahale Adımları\nArıza Kodu Arıza Tanımı Olası Neden Çözüm / Müdahale\nV-10 Valfi tıkalı veya duyarga V-10 valfini manuel açın, duyarga\nE-101 Aşırı Basınç Yükselmesi\narızalı kalibrasyonunu kontrol edin. P-04 sigortasını kontrol edin, emiş hattı\nE-102 Düşük Su Seviyesi Besleme pompası P-04 devre dışı\nvanasını açın. Aşırı yük veya brülör kontrolden V-12 ana valfini kapatın, sistemi 45 dk\nE-204 Kritik Sıcaklık (SCRAM)\nçıktı soğumaya bırakın. E-309 Alev Duyarga Arızası Fotosel sensör yüzeyi kirlenmiş Sensör lensini izopropil alkol ile temizleyin. Pano klemens bağlantılarını ve sonlandırma\nE-412 İletişim Kopukluğu (PLC) RS485 Modbus kablosu gevşek\ndirencini sıkın.",
+            "rrf_score": 0.0323,
+            "dense_rank": 3,
+            "sparse_rank": 1,
+            "dense_score": 0.4326,
+            "sparse_score": 3.0164,
+            "rerank_score": 0.0
+          },
+          {
+            "chunk_id": 6,
+            "text": "Elektrik ve Otomasyon Bağlantı Kuralları\nKazan kontrol panosu 380V AC 50Hz trifaze şebeke gerilimi ile beslenmektedir. PLC giriş/çıkış modülleri 24V DC izole\ngüç kaynağı üzerinden beslenmelidir. Topraklama direnci maksimum 2 Ohm seviyesinde olmalı, nötr ve toprak\nhatları kesinlikle birleştirilmemelidir (TN-S sistemi).",
+            "rrf_score": 0.0323,
+            "dense_rank": 2,
+            "sparse_rank": 2,
+            "dense_score": 0.4821,
+            "sparse_score": 2.7065,
+            "rerank_score": 0.0
+          }
+        ],
+        "retrieval_latency": 0.1187,
+        "context_precision": 1.0,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "id": 16,
+      "category": "comparison",
+      "user_input": "115 °C uyarı kademesi ile 5,8 bar otomatik tahliye kademesi hangi açıdan farklıdır?",
+      "reference": "115 °C'de sarı ikaz lambası sürekli yanar ve sesli uyarı verilir; basınç 5,8 bar olduğunda ise V-10 otomatik açılarak fazla basıncı atmosfere salar.",
+      "naive_rag": {
+        "retrieved_chunks": [
+          {
+            "chunk_id": 2,
+            "text": "azan iç sıcaklığı 115 °C değerine ulaştığında kontrol panosundaki sarı ikaz lambası sürekli\nyanar ve sesli uyarı devreye girer.\n• Otomatik Tahliye (125 °C / 5.8 bar): Basınç 5,8 bar sınırına ulaştığında Solenoid V-10 tahliye valfi otomatik açılarak\nfazla basıncı atmosfere salar.\n• Acil Kapatma - SCRAM (135 °C / 6.2 bar): Kritik eşik olan 135 °C sıcaklık veya 6.2 bar basınç aşıldığında acil kapatma\nsistemi (SCRAM) tetiklenir. Bu aşamada operatör V-12 ana valfini manuel olarak kapatmalıdır.\n3. Arı",
+            "similarity_score": 0.7962
+          },
+          {
+            "chunk_id": 1,
+            "text": "ır. Bu aralığın dışındaki işletim\nşartları, güvenlik mimarisi tarafından otomatik olarak engellenir.\nKazan içi su seviyesi sürekli olarak ultrasonik debimetreler ve elektrotlu seviye sensörleri ile izlenmektedir. Optimum\nçalışma koşullarında kazan besleme suyu sıcaklığı 85 °C seviyesinde tutulmalıdır.\n2. Güvenlik Protokolleri ve Kritik Limitler\nSistemin güvenli işletimi için 3 kademeli koruma protokolü tanımlanmıştır:\n• Kademeli Uyarı (115 °C): Kazan iç sıcaklığı 115 °C değerine ulaştığında kont",
+            "similarity_score": 0.7195
+          },
+          {
+            "chunk_id": 6,
+            "text": "ç birikintileri\nsökülür.\nYetkili Servis\nYıllık\nTahribatsız Test (NDT)\nKaynak dikişlerine ultrasonik çatlak testi uygulanır.\nSertifikalı Mühendis\n5. Elektrik ve Otomasyon Bağlantı Kuralları\nKazan kontrol panosu 380V AC 50Hz trifaze şebeke gerilimi ile beslenmektedir. PLC giriş/çıkış modülleri 24V DC izole\ngüç kaynağı üzerinden beslenmelidir. Topraklama direnci maksimum 2 Ohm seviyesinde olmalı, nötr ve toprak\nhatları kesinlikle birleştirilmemelidir (TN-S sistemi).",
+            "similarity_score": 0.6452
+          }
+        ],
+        "retrieval_latency": 0.4208,
+        "context_precision": 1.0,
+        "context_recall": 1.0
+      },
+      "advanced_rag": {
+        "retrieved_chunks": [
+          {
+            "chunk_id": 1,
+            "text": "Kazan içi su seviyesi sürekli olarak ultrasonik debimetreler ve elektrotlu seviye sensörleri ile izlenmektedir. Optimum\nçalışma koşullarında kazan besleme suyu sıcaklığı 85 °C seviyesinde tutulmalıdır. Güvenlik Protokolleri ve Kritik Limitler\nSistemin güvenli işletimi için 3 kademeli koruma protokolü tanımlanmıştır:\n• Kademeli Uyarı (115 °C): Kazan iç sıcaklığı 115 °C değerine ulaştığında kontrol panosundaki sarı ikaz lambası sürekli\nyanar ve sesli uyarı devreye girer. • Otomatik Tahliye (125 °C / 5.8 bar): Basınç 5,8 bar sınırına ulaştığında Solenoid V-10 tahliye valfi otomatik açılarak\nfazla basıncı atmosfere salar. • Acil Kapatma - SCRAM (135 °C / 6.2 bar): Kritik eşik olan 135 °C sıcaklık veya 6.2 bar basınç aşıldığında acil kapatma\nsistemi (SCRAM) tetiklenir. Bu aşamada operatör V-12 ana valfini manuel olarak kapatmalıdır. Arıza Kodları (Error Codes) ve Müdahale Adımları\nArıza Kodu Arıza Tanımı Olası Neden Çözüm / Müdahale\nV-10 Valfi tıkalı veya duyarga V-10 valfini manuel açın, duyarga\nE-101 Aşırı Basınç Yükselmesi\narızalı kalibrasyonunu kontrol edin. P-04 sigortasını kontrol edin, emiş hattı\nE-102 Düşük Su Seviyesi Besleme pompası P-04 devre dışı\nvanasını açın. Aşırı yük veya brülör kontrolden V-12 ana valfini kapatın, sistemi 45 dk\nE-204 Kritik Sıcaklık (SCRAM)\nçıktı soğumaya bırakın. E-309 Alev Duyarga Arızası Fotosel sensör yüzeyi kirlenmiş Sensör lensini izopropil alkol ile temizleyin. Pano klemens bağlantılarını ve sonlandırma\nE-412 İletişim Kopukluğu (PLC) RS485 Modbus kablosu gevşek\ndirencini sıkın.",
+            "rrf_score": 0.0328,
+            "dense_rank": 1,
+            "sparse_rank": 1,
+            "dense_score": 0.564,
+            "sparse_score": 10.473,
+            "rerank_score": 0.0
+          },
+          {
+            "chunk_id": 2,
+            "text": "=== SAYFA 2 ===\n| Periyot | Kontrol Noktası | Yapılacak İşlem | Sorumlu |\n| Günlük | Su Seviyesi ve Basınç | Gösterge değerlerinin nominal aralıkta olduğu teyit edilir. | Vardiya Operatörü |\n| Haftalık | Emniyet Valfleri | V-10 ve V-12 valfleri manuel test kolu ile blöf ettirilir. | Bakım Teknisyeni |\n| Aylık | Brülör ve Elektrotlar | Ateşleme elektrot aralığı (3.5 mm) ayarlanır ve kurum temizlenir. | Bakım Teknisyeni |\n| 6 Aylık | Kazan Taş ve Tortu Temizliği | Kimyasal yıkama (Descaling) ile kireç birikintileri sökülür. | Yetkili Servis |\n| Yıllık | Tahribatsız Test (NDT) | Kaynak dikişlerine ultrasonik çatlak testi uygulanır.",
+            "rrf_score": 0.032,
+            "dense_rank": 2,
+            "sparse_rank": 3,
+            "dense_score": 0.4793,
+            "sparse_score": 0.6731,
+            "rerank_score": 0.0
+          },
+          {
+            "chunk_id": 0,
+            "text": "=== SAYFA 1 ===\n| Arıza Kodu | Arıza Tanımı | Olası Neden | Çözüm / Müdahale |\n| E-101 | Aşırı Basınç Yükselmesi | V-10 Valfi tıkalı veya duyarga arızalı | V-10 valfini manuel açın, duyarga kalibrasyonunu kontrol edin. |\n| E-102 | Düşük Su Seviyesi | Besleme pompası P-04 devre dışı | P-04 sigortasını kontrol edin, emiş hattı vanasını açın. |\n| E-204 | Kritik Sıcaklık (SCRAM) | Aşırı yük veya brülör kontrolden çıktı | V-12 ana valfini kapatın, sistemi 45 dk soğumaya bırakın. |\n| E-309 | Alev Duyarga Arızası | Fotosel sensör yüzeyi kirlenmiş | Sensör lensini izopropil alkol ile temizleyin. |\n| E-412 | İletişim Kopukluğu (PLC) | RS485 Modbus kablosu gevşek | Pano klemens bağlantılarını ve sonlandırma direncini sıkın. ENDÜSTRİYEL KAZAN SİSTEMLERİ X-200\nKAPSAMLI TEKNİK İŞLETİM VE BAKIM KILAVUZU (V4.2)\n1. Genel Çalışma Prensipleri ve Yapısal Özellikler\nX-200 modeli, yüksek basınçlı endüstriyel buhar üretimi için özel olarak tasarlanmış modüler bir kazan sistemidir. Sistem, yüksek sıcaklık dayanımına sahip 316L paslanmaz çelik gövde yapısı ve titanyum kaplamalı eşanjör plaka\nboruları ile donatılmıştır. Standart çalışma basınç aralığı 4,2 bar ile 5,5 bar arasındadır. Bu aralığın dışındaki işletim\nşartları, güvenlik mimarisi tarafından otomatik olarak engellenir.",
+            "rrf_score": 0.032,
+            "dense_rank": 3,
+            "sparse_rank": 2,
+            "dense_score": 0.4713,
+            "sparse_score": 2.0557,
+            "rerank_score": 0.0
+          }
+        ],
+        "retrieval_latency": 1.0066,
+        "context_precision": 1.0,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "id": 17,
+      "category": "comparison",
+      "user_input": "5,8 bar tahliye eşiği ile 6,2 bar SCRAM eşiğini tetiklenen işlem ve valf kullanımı bakımından karşılaştırın.",
+      "reference": "5,8 barda V-10 otomatik açılarak basıncı tahliye eder. 6,2 bar basınç aşıldığında SCRAM tetiklenir ve operatör V-12'yi manuel kapatmalıdır.",
+      "naive_rag": {
+        "retrieved_chunks": [
+          {
+            "chunk_id": 2,
+            "text": "azan iç sıcaklığı 115 °C değerine ulaştığında kontrol panosundaki sarı ikaz lambası sürekli\nyanar ve sesli uyarı devreye girer.\n• Otomatik Tahliye (125 °C / 5.8 bar): Basınç 5,8 bar sınırına ulaştığında Solenoid V-10 tahliye valfi otomatik açılarak\nfazla basıncı atmosfere salar.\n• Acil Kapatma - SCRAM (135 °C / 6.2 bar): Kritik eşik olan 135 °C sıcaklık veya 6.2 bar basınç aşıldığında acil kapatma\nsistemi (SCRAM) tetiklenir. Bu aşamada operatör V-12 ana valfini manuel olarak kapatmalıdır.\n3. Arı",
+            "similarity_score": 0.7551
+          },
+          {
+            "chunk_id": 5,
+            "text": "unludur.\nPeriyot\nKontrol Noktası\nYapılacak İşlem\nSorumlu\nGünlük\nSu Seviyesi ve Basınç\nGösterge değerlerinin nominal aralıkta olduğu teyit\nedilir.\nVardiya Operatörü\nHaftalık\nEmniyet Valfleri\nV-10 ve V-12 valfleri manuel test kolu ile blöf ettirilir.\nBakım Teknisyeni\nAylık\nBrülör ve Elektrotlar\nAteşleme elektrot aralığı (3.5 mm) ayarlanır ve\nkurum temizlenir.\nBakım Teknisyeni\n6 Aylık\nKazan Taş ve Tortu Temizliği\nKimyasal yıkama (Descaling) ile kireç birikintileri\nsökülür.\nYetkili Servis\nYıllık\nTah",
+            "similarity_score": 0.719
+          },
+          {
+            "chunk_id": 0,
+            "text": "ENDÜSTRİYEL KAZAN SİSTEMLERİ X-200\nKAPSAMLI TEKNİK İŞLETİM VE BAKIM KILAVUZU (V4.2)\n1. Genel Çalışma Prensipleri ve Yapısal Özellikler\nX-200 modeli, yüksek basınçlı endüstriyel buhar üretimi için özel olarak tasarlanmış modüler bir kazan sistemidir.\nSistem, yüksek sıcaklık dayanımına sahip 316L paslanmaz çelik gövde yapısı ve titanyum kaplamalı eşanjör plaka\nboruları ile donatılmıştır. Standart çalışma basınç aralığı 4,2 bar ile 5,5 bar arasındadır. Bu aralığın dışındaki işletim\nşartları, güvenl",
+            "similarity_score": 0.6817
+          }
+        ],
+        "retrieval_latency": 0.5324,
+        "context_precision": 1.0,
+        "context_recall": 1.0
+      },
+      "advanced_rag": {
+        "retrieved_chunks": [
+          {
+            "chunk_id": 1,
+            "text": "Kazan içi su seviyesi sürekli olarak ultrasonik debimetreler ve elektrotlu seviye sensörleri ile izlenmektedir. Optimum\nçalışma koşullarında kazan besleme suyu sıcaklığı 85 °C seviyesinde tutulmalıdır. Güvenlik Protokolleri ve Kritik Limitler\nSistemin güvenli işletimi için 3 kademeli koruma protokolü tanımlanmıştır:\n• Kademeli Uyarı (115 °C): Kazan iç sıcaklığı 115 °C değerine ulaştığında kontrol panosundaki sarı ikaz lambası sürekli\nyanar ve sesli uyarı devreye girer. • Otomatik Tahliye (125 °C / 5.8 bar): Basınç 5,8 bar sınırına ulaştığında Solenoid V-10 tahliye valfi otomatik açılarak\nfazla basıncı atmosfere salar. • Acil Kapatma - SCRAM (135 °C / 6.2 bar): Kritik eşik olan 135 °C sıcaklık veya 6.2 bar basınç aşıldığında acil kapatma\nsistemi (SCRAM) tetiklenir. Bu aşamada operatör V-12 ana valfini manuel olarak kapatmalıdır. Arıza Kodları (Error Codes) ve Müdahale Adımları\nArıza Kodu Arıza Tanımı Olası Neden Çözüm / Müdahale\nV-10 Valfi tıkalı veya duyarga V-10 valfini manuel açın, duyarga\nE-101 Aşırı Basınç Yükselmesi\narızalı kalibrasyonunu kontrol edin. P-04 sigortasını kontrol edin, emiş hattı\nE-102 Düşük Su Seviyesi Besleme pompası P-04 devre dışı\nvanasını açın. Aşırı yük veya brülör kontrolden V-12 ana valfini kapatın, sistemi 45 dk\nE-204 Kritik Sıcaklık (SCRAM)\nçıktı soğumaya bırakın. E-309 Alev Duyarga Arızası Fotosel sensör yüzeyi kirlenmiş Sensör lensini izopropil alkol ile temizleyin. Pano klemens bağlantılarını ve sonlandırma\nE-412 İletişim Kopukluğu (PLC) RS485 Modbus kablosu gevşek\ndirencini sıkın.",
+            "rrf_score": 0.0328,
+            "dense_rank": 1,
+            "sparse_rank": 1,
+            "dense_score": 0.546,
+            "sparse_score": 7.4385,
+            "rerank_score": 0.0
+          },
+          {
+            "chunk_id": 2,
+            "text": "=== SAYFA 2 ===\n| Periyot | Kontrol Noktası | Yapılacak İşlem | Sorumlu |\n| Günlük | Su Seviyesi ve Basınç | Gösterge değerlerinin nominal aralıkta olduğu teyit edilir. | Vardiya Operatörü |\n| Haftalık | Emniyet Valfleri | V-10 ve V-12 valfleri manuel test kolu ile blöf ettirilir. | Bakım Teknisyeni |\n| Aylık | Brülör ve Elektrotlar | Ateşleme elektrot aralığı (3.5 mm) ayarlanır ve kurum temizlenir. | Bakım Teknisyeni |\n| 6 Aylık | Kazan Taş ve Tortu Temizliği | Kimyasal yıkama (Descaling) ile kireç birikintileri sökülür. | Yetkili Servis |\n| Yıllık | Tahribatsız Test (NDT) | Kaynak dikişlerine ultrasonik çatlak testi uygulanır.",
+            "rrf_score": 0.032,
+            "dense_rank": 2,
+            "sparse_rank": 3,
+            "dense_score": 0.5221,
+            "sparse_score": 1.7373,
+            "rerank_score": 0.0
+          },
+          {
+            "chunk_id": 0,
+            "text": "=== SAYFA 1 ===\n| Arıza Kodu | Arıza Tanımı | Olası Neden | Çözüm / Müdahale |\n| E-101 | Aşırı Basınç Yükselmesi | V-10 Valfi tıkalı veya duyarga arızalı | V-10 valfini manuel açın, duyarga kalibrasyonunu kontrol edin. |\n| E-102 | Düşük Su Seviyesi | Besleme pompası P-04 devre dışı | P-04 sigortasını kontrol edin, emiş hattı vanasını açın. |\n| E-204 | Kritik Sıcaklık (SCRAM) | Aşırı yük veya brülör kontrolden çıktı | V-12 ana valfini kapatın, sistemi 45 dk soğumaya bırakın. |\n| E-309 | Alev Duyarga Arızası | Fotosel sensör yüzeyi kirlenmiş | Sensör lensini izopropil alkol ile temizleyin. |\n| E-412 | İletişim Kopukluğu (PLC) | RS485 Modbus kablosu gevşek | Pano klemens bağlantılarını ve sonlandırma direncini sıkın. ENDÜSTRİYEL KAZAN SİSTEMLERİ X-200\nKAPSAMLI TEKNİK İŞLETİM VE BAKIM KILAVUZU (V4.2)\n1. Genel Çalışma Prensipleri ve Yapısal Özellikler\nX-200 modeli, yüksek basınçlı endüstriyel buhar üretimi için özel olarak tasarlanmış modüler bir kazan sistemidir. Sistem, yüksek sıcaklık dayanımına sahip 316L paslanmaz çelik gövde yapısı ve titanyum kaplamalı eşanjör plaka\nboruları ile donatılmıştır. Standart çalışma basınç aralığı 4,2 bar ile 5,5 bar arasındadır. Bu aralığın dışındaki işletim\nşartları, güvenlik mimarisi tarafından otomatik olarak engellenir.",
+            "rrf_score": 0.032,
+            "dense_rank": 3,
+            "sparse_rank": 2,
+            "dense_score": 0.4976,
+            "sparse_score": 3.6102,
+            "rerank_score": 0.0
+          }
+        ],
+        "retrieval_latency": 1.0623,
+        "context_precision": 0.8333,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "id": 18,
+      "category": "comparison",
+      "user_input": "Kazan gövdesi ile eşanjör plaka borularının malzemeleri nasıl farklıdır?",
+      "reference": "Gövde 316L paslanmaz çeliktir; eşanjör plaka boruları titanyum kaplamalıdır.",
+      "naive_rag": {
+        "retrieved_chunks": [
+          {
+            "chunk_id": 1,
+            "text": "ır. Bu aralığın dışındaki işletim\nşartları, güvenlik mimarisi tarafından otomatik olarak engellenir.\nKazan içi su seviyesi sürekli olarak ultrasonik debimetreler ve elektrotlu seviye sensörleri ile izlenmektedir. Optimum\nçalışma koşullarında kazan besleme suyu sıcaklığı 85 °C seviyesinde tutulmalıdır.\n2. Güvenlik Protokolleri ve Kritik Limitler\nSistemin güvenli işletimi için 3 kademeli koruma protokolü tanımlanmıştır:\n• Kademeli Uyarı (115 °C): Kazan iç sıcaklığı 115 °C değerine ulaştığında kont",
+            "similarity_score": 0.6986
+          },
+          {
+            "chunk_id": 0,
+            "text": "ENDÜSTRİYEL KAZAN SİSTEMLERİ X-200\nKAPSAMLI TEKNİK İŞLETİM VE BAKIM KILAVUZU (V4.2)\n1. Genel Çalışma Prensipleri ve Yapısal Özellikler\nX-200 modeli, yüksek basınçlı endüstriyel buhar üretimi için özel olarak tasarlanmış modüler bir kazan sistemidir.\nSistem, yüksek sıcaklık dayanımına sahip 316L paslanmaz çelik gövde yapısı ve titanyum kaplamalı eşanjör plaka\nboruları ile donatılmıştır. Standart çalışma basınç aralığı 4,2 bar ile 5,5 bar arasındadır. Bu aralığın dışındaki işletim\nşartları, güvenl",
+            "similarity_score": 0.6835
+          },
+          {
+            "chunk_id": 6,
+            "text": "ç birikintileri\nsökülür.\nYetkili Servis\nYıllık\nTahribatsız Test (NDT)\nKaynak dikişlerine ultrasonik çatlak testi uygulanır.\nSertifikalı Mühendis\n5. Elektrik ve Otomasyon Bağlantı Kuralları\nKazan kontrol panosu 380V AC 50Hz trifaze şebeke gerilimi ile beslenmektedir. PLC giriş/çıkış modülleri 24V DC izole\ngüç kaynağı üzerinden beslenmelidir. Topraklama direnci maksimum 2 Ohm seviyesinde olmalı, nötr ve toprak\nhatları kesinlikle birleştirilmemelidir (TN-S sistemi).",
+            "similarity_score": 0.6258
+          }
+        ],
+        "retrieval_latency": 0.397,
+        "context_precision": 0.5,
+        "context_recall": 1.0
       },
       "advanced_rag": {
         "retrieved_chunks": [
@@ -318,32 +1163,812 @@
             "rrf_score": 0.0325,
             "dense_rank": 1,
             "sparse_rank": 2,
-            "dense_score": 0.5774,
-            "sparse_score": 1.6624,
+            "dense_score": 0.4558,
+            "sparse_score": 0.7379,
             "rerank_score": 0.0
           },
           {
             "chunk_id": 0,
             "text": "=== SAYFA 1 ===\n| Arıza Kodu | Arıza Tanımı | Olası Neden | Çözüm / Müdahale |\n| E-101 | Aşırı Basınç Yükselmesi | V-10 Valfi tıkalı veya duyarga arızalı | V-10 valfini manuel açın, duyarga kalibrasyonunu kontrol edin. |\n| E-102 | Düşük Su Seviyesi | Besleme pompası P-04 devre dışı | P-04 sigortasını kontrol edin, emiş hattı vanasını açın. |\n| E-204 | Kritik Sıcaklık (SCRAM) | Aşırı yük veya brülör kontrolden çıktı | V-12 ana valfini kapatın, sistemi 45 dk soğumaya bırakın. |\n| E-309 | Alev Duyarga Arızası | Fotosel sensör yüzeyi kirlenmiş | Sensör lensini izopropil alkol ile temizleyin. |\n| E-412 | İletişim Kopukluğu (PLC) | RS485 Modbus kablosu gevşek | Pano klemens bağlantılarını ve sonlandırma direncini sıkın. ENDÜSTRİYEL KAZAN SİSTEMLERİ X-200\nKAPSAMLI TEKNİK İŞLETİM VE BAKIM KILAVUZU (V4.2)\n1. Genel Çalışma Prensipleri ve Yapısal Özellikler\nX-200 modeli, yüksek basınçlı endüstriyel buhar üretimi için özel olarak tasarlanmış modüler bir kazan sistemidir. Sistem, yüksek sıcaklık dayanımına sahip 316L paslanmaz çelik gövde yapısı ve titanyum kaplamalı eşanjör plaka\nboruları ile donatılmıştır. Standart çalışma basınç aralığı 4,2 bar ile 5,5 bar arasındadır. Bu aralığın dışındaki işletim\nşartları, güvenlik mimarisi tarafından otomatik olarak engellenir.",
-            "rrf_score": 0.0325,
-            "dense_rank": 2,
+            "rrf_score": 0.0323,
+            "dense_rank": 3,
             "sparse_rank": 1,
-            "dense_score": 0.5424,
-            "sparse_score": 2.292,
+            "dense_score": 0.4339,
+            "sparse_score": 2.6886,
+            "rerank_score": 0.0
+          },
+          {
+            "chunk_id": 6,
+            "text": "Elektrik ve Otomasyon Bağlantı Kuralları\nKazan kontrol panosu 380V AC 50Hz trifaze şebeke gerilimi ile beslenmektedir. PLC giriş/çıkış modülleri 24V DC izole\ngüç kaynağı üzerinden beslenmelidir. Topraklama direnci maksimum 2 Ohm seviyesinde olmalı, nötr ve toprak\nhatları kesinlikle birleştirilmemelidir (TN-S sistemi).",
+            "rrf_score": 0.032,
+            "dense_rank": 2,
+            "sparse_rank": 3,
+            "dense_score": 0.4439,
+            "sparse_score": 0.7,
+            "rerank_score": 0.0
+          }
+        ],
+        "retrieval_latency": 0.9122,
+        "context_precision": 0.5,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "id": 19,
+      "category": "comparison",
+      "user_input": "Günlük su seviyesi-basınç kontrolü ile haftalık emniyet valfi kontrolünü yapılacak iş ve sorumlu açısından karşılaştırın.",
+      "reference": "Günlük kontrolde gösterge değerlerinin nominal aralıkta olduğu doğrulanır ve sorumlu vardiya operatörüdür. Haftalık kontrolde V-10 ve V-12 valfleri manuel test koluyla blöf ettirilir; sorumlu bakım teknisyenidir.",
+      "naive_rag": {
+        "retrieved_chunks": [
+          {
+            "chunk_id": 5,
+            "text": "unludur.\nPeriyot\nKontrol Noktası\nYapılacak İşlem\nSorumlu\nGünlük\nSu Seviyesi ve Basınç\nGösterge değerlerinin nominal aralıkta olduğu teyit\nedilir.\nVardiya Operatörü\nHaftalık\nEmniyet Valfleri\nV-10 ve V-12 valfleri manuel test kolu ile blöf ettirilir.\nBakım Teknisyeni\nAylık\nBrülör ve Elektrotlar\nAteşleme elektrot aralığı (3.5 mm) ayarlanır ve\nkurum temizlenir.\nBakım Teknisyeni\n6 Aylık\nKazan Taş ve Tortu Temizliği\nKimyasal yıkama (Descaling) ile kireç birikintileri\nsökülür.\nYetkili Servis\nYıllık\nTah",
+            "similarity_score": 0.7525
+          },
+          {
+            "chunk_id": 0,
+            "text": "ENDÜSTRİYEL KAZAN SİSTEMLERİ X-200\nKAPSAMLI TEKNİK İŞLETİM VE BAKIM KILAVUZU (V4.2)\n1. Genel Çalışma Prensipleri ve Yapısal Özellikler\nX-200 modeli, yüksek basınçlı endüstriyel buhar üretimi için özel olarak tasarlanmış modüler bir kazan sistemidir.\nSistem, yüksek sıcaklık dayanımına sahip 316L paslanmaz çelik gövde yapısı ve titanyum kaplamalı eşanjör plaka\nboruları ile donatılmıştır. Standart çalışma basınç aralığı 4,2 bar ile 5,5 bar arasındadır. Bu aralığın dışındaki işletim\nşartları, güvenl",
+            "similarity_score": 0.6862
+          },
+          {
+            "chunk_id": 1,
+            "text": "ır. Bu aralığın dışındaki işletim\nşartları, güvenlik mimarisi tarafından otomatik olarak engellenir.\nKazan içi su seviyesi sürekli olarak ultrasonik debimetreler ve elektrotlu seviye sensörleri ile izlenmektedir. Optimum\nçalışma koşullarında kazan besleme suyu sıcaklığı 85 °C seviyesinde tutulmalıdır.\n2. Güvenlik Protokolleri ve Kritik Limitler\nSistemin güvenli işletimi için 3 kademeli koruma protokolü tanımlanmıştır:\n• Kademeli Uyarı (115 °C): Kazan iç sıcaklığı 115 °C değerine ulaştığında kont",
+            "similarity_score": 0.6856
+          }
+        ],
+        "retrieval_latency": 0.5072,
+        "context_precision": 1.0,
+        "context_recall": 1.0
+      },
+      "advanced_rag": {
+        "retrieved_chunks": [
+          {
+            "chunk_id": 2,
+            "text": "=== SAYFA 2 ===\n| Periyot | Kontrol Noktası | Yapılacak İşlem | Sorumlu |\n| Günlük | Su Seviyesi ve Basınç | Gösterge değerlerinin nominal aralıkta olduğu teyit edilir. | Vardiya Operatörü |\n| Haftalık | Emniyet Valfleri | V-10 ve V-12 valfleri manuel test kolu ile blöf ettirilir. | Bakım Teknisyeni |\n| Aylık | Brülör ve Elektrotlar | Ateşleme elektrot aralığı (3.5 mm) ayarlanır ve kurum temizlenir. | Bakım Teknisyeni |\n| 6 Aylık | Kazan Taş ve Tortu Temizliği | Kimyasal yıkama (Descaling) ile kireç birikintileri sökülür. | Yetkili Servis |\n| Yıllık | Tahribatsız Test (NDT) | Kaynak dikişlerine ultrasonik çatlak testi uygulanır.",
+            "rrf_score": 0.0328,
+            "dense_rank": 1,
+            "sparse_rank": 1,
+            "dense_score": 0.6191,
+            "sparse_score": 5.3092,
+            "rerank_score": 0.0
+          },
+          {
+            "chunk_id": 4,
+            "text": "Periyodik Bakım ve Kontrol Çizelgesi\nKazan sisteminin kullanım ömrünü uzatmak ve garanti kapsamını korumak için aşağıdaki bakım takvimine uyulması\nzorunludur. Periyot Kontrol Noktası Yapılacak İşlem Sorumlu\nGösterge değerlerinin nominal aralıkta olduğu teyit\nGünlük Su Seviyesi ve Basınç Vardiya Operatörü\nedilir. Haftalık Emniyet Valfleri V-10 ve V-12 valfleri manuel test kolu ile blöf ettirilir. Bakım Teknisyeni\nAteşleme elektrot aralığı (3.5 mm) ayarlanır ve\nAylık Brülör ve Elektrotlar Bakım Teknisyeni\nkurum temizlenir. Kimyasal yıkama (Descaling) ile kireç birikintileri\n6 Aylık Kazan Taş ve Tortu Temizliği Yetkili Servis\nsökülür. Yıllık Tahribatsız Test (NDT) Kaynak dikişlerine ultrasonik çatlak testi uygulanır.",
+            "rrf_score": 0.0323,
+            "dense_rank": 2,
+            "sparse_rank": 2,
+            "dense_score": 0.5669,
+            "sparse_score": 4.9199,
+            "rerank_score": 0.0
+          },
+          {
+            "chunk_id": 0,
+            "text": "=== SAYFA 1 ===\n| Arıza Kodu | Arıza Tanımı | Olası Neden | Çözüm / Müdahale |\n| E-101 | Aşırı Basınç Yükselmesi | V-10 Valfi tıkalı veya duyarga arızalı | V-10 valfini manuel açın, duyarga kalibrasyonunu kontrol edin. |\n| E-102 | Düşük Su Seviyesi | Besleme pompası P-04 devre dışı | P-04 sigortasını kontrol edin, emiş hattı vanasını açın. |\n| E-204 | Kritik Sıcaklık (SCRAM) | Aşırı yük veya brülör kontrolden çıktı | V-12 ana valfini kapatın, sistemi 45 dk soğumaya bırakın. |\n| E-309 | Alev Duyarga Arızası | Fotosel sensör yüzeyi kirlenmiş | Sensör lensini izopropil alkol ile temizleyin. |\n| E-412 | İletişim Kopukluğu (PLC) | RS485 Modbus kablosu gevşek | Pano klemens bağlantılarını ve sonlandırma direncini sıkın. ENDÜSTRİYEL KAZAN SİSTEMLERİ X-200\nKAPSAMLI TEKNİK İŞLETİM VE BAKIM KILAVUZU (V4.2)\n1. Genel Çalışma Prensipleri ve Yapısal Özellikler\nX-200 modeli, yüksek basınçlı endüstriyel buhar üretimi için özel olarak tasarlanmış modüler bir kazan sistemidir. Sistem, yüksek sıcaklık dayanımına sahip 316L paslanmaz çelik gövde yapısı ve titanyum kaplamalı eşanjör plaka\nboruları ile donatılmıştır. Standart çalışma basınç aralığı 4,2 bar ile 5,5 bar arasındadır. Bu aralığın dışındaki işletim\nşartları, güvenlik mimarisi tarafından otomatik olarak engellenir.",
+            "rrf_score": 0.0315,
+            "dense_rank": 3,
+            "sparse_rank": 4,
+            "dense_score": 0.5507,
+            "sparse_score": 1.4984,
+            "rerank_score": 0.0
+          }
+        ],
+        "retrieval_latency": 1.0769,
+        "context_precision": 1.0,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "id": 20,
+      "category": "comparison",
+      "user_input": "Haftalık emniyet valfi bakımı ile aylık brülör-elektrot bakımının işleri ve sorumluları nelerdir?",
+      "reference": "Haftalık bakımda bakım teknisyeni V-10 ve V-12 valflerini manuel test koluyla blöf ettirir. Aylık bakımda bakım teknisyeni ateşleme elektrot aralığını 3,5 mm'ye ayarlar ve kurumu temizler.",
+      "naive_rag": {
+        "retrieved_chunks": [
+          {
+            "chunk_id": 5,
+            "text": "unludur.\nPeriyot\nKontrol Noktası\nYapılacak İşlem\nSorumlu\nGünlük\nSu Seviyesi ve Basınç\nGösterge değerlerinin nominal aralıkta olduğu teyit\nedilir.\nVardiya Operatörü\nHaftalık\nEmniyet Valfleri\nV-10 ve V-12 valfleri manuel test kolu ile blöf ettirilir.\nBakım Teknisyeni\nAylık\nBrülör ve Elektrotlar\nAteşleme elektrot aralığı (3.5 mm) ayarlanır ve\nkurum temizlenir.\nBakım Teknisyeni\n6 Aylık\nKazan Taş ve Tortu Temizliği\nKimyasal yıkama (Descaling) ile kireç birikintileri\nsökülür.\nYetkili Servis\nYıllık\nTah",
+            "similarity_score": 0.7731
+          },
+          {
+            "chunk_id": 1,
+            "text": "ır. Bu aralığın dışındaki işletim\nşartları, güvenlik mimarisi tarafından otomatik olarak engellenir.\nKazan içi su seviyesi sürekli olarak ultrasonik debimetreler ve elektrotlu seviye sensörleri ile izlenmektedir. Optimum\nçalışma koşullarında kazan besleme suyu sıcaklığı 85 °C seviyesinde tutulmalıdır.\n2. Güvenlik Protokolleri ve Kritik Limitler\nSistemin güvenli işletimi için 3 kademeli koruma protokolü tanımlanmıştır:\n• Kademeli Uyarı (115 °C): Kazan iç sıcaklığı 115 °C değerine ulaştığında kont",
+            "similarity_score": 0.6931
+          },
+          {
+            "chunk_id": 3,
+            "text": "-12 ana valfini manuel olarak kapatmalıdır.\n3. Arıza Kodları (Error Codes) ve Müdahale Adımları\nArıza Kodu\nArıza Tanımı\nOlası Neden\nÇözüm / Müdahale\nE-101\nAşırı Basınç Yükselmesi\nV-10 Valfi tıkalı veya duyarga\narızalı\nV-10 valfini manuel açın, duyarga\nkalibrasyonunu kontrol edin.\nE-102\nDüşük Su Seviyesi\nBesleme pompası P-04 devre dışı\nP-04 sigortasını kontrol edin, emiş hattı\nvanasını açın.\nE-204\nKritik Sıcaklık (SCRAM)\nAşırı yük veya brülör kontrolden\nçıktı\nV-12 ana valfini kapatın, sistemi 45",
+            "similarity_score": 0.6726
+          }
+        ],
+        "retrieval_latency": 0.4876,
+        "context_precision": 0.8333,
+        "context_recall": 1.0
+      },
+      "advanced_rag": {
+        "retrieved_chunks": [
+          {
+            "chunk_id": 2,
+            "text": "=== SAYFA 2 ===\n| Periyot | Kontrol Noktası | Yapılacak İşlem | Sorumlu |\n| Günlük | Su Seviyesi ve Basınç | Gösterge değerlerinin nominal aralıkta olduğu teyit edilir. | Vardiya Operatörü |\n| Haftalık | Emniyet Valfleri | V-10 ve V-12 valfleri manuel test kolu ile blöf ettirilir. | Bakım Teknisyeni |\n| Aylık | Brülör ve Elektrotlar | Ateşleme elektrot aralığı (3.5 mm) ayarlanır ve kurum temizlenir. | Bakım Teknisyeni |\n| 6 Aylık | Kazan Taş ve Tortu Temizliği | Kimyasal yıkama (Descaling) ile kireç birikintileri sökülür. | Yetkili Servis |\n| Yıllık | Tahribatsız Test (NDT) | Kaynak dikişlerine ultrasonik çatlak testi uygulanır.",
+            "rrf_score": 0.0328,
+            "dense_rank": 1,
+            "sparse_rank": 1,
+            "dense_score": 0.6168,
+            "sparse_score": 3.723,
+            "rerank_score": 0.0
+          },
+          {
+            "chunk_id": 4,
+            "text": "Periyodik Bakım ve Kontrol Çizelgesi\nKazan sisteminin kullanım ömrünü uzatmak ve garanti kapsamını korumak için aşağıdaki bakım takvimine uyulması\nzorunludur. Periyot Kontrol Noktası Yapılacak İşlem Sorumlu\nGösterge değerlerinin nominal aralıkta olduğu teyit\nGünlük Su Seviyesi ve Basınç Vardiya Operatörü\nedilir. Haftalık Emniyet Valfleri V-10 ve V-12 valfleri manuel test kolu ile blöf ettirilir. Bakım Teknisyeni\nAteşleme elektrot aralığı (3.5 mm) ayarlanır ve\nAylık Brülör ve Elektrotlar Bakım Teknisyeni\nkurum temizlenir. Kimyasal yıkama (Descaling) ile kireç birikintileri\n6 Aylık Kazan Taş ve Tortu Temizliği Yetkili Servis\nsökülür. Yıllık Tahribatsız Test (NDT) Kaynak dikişlerine ultrasonik çatlak testi uygulanır.",
+            "rrf_score": 0.0323,
+            "dense_rank": 2,
+            "sparse_rank": 2,
+            "dense_score": 0.5973,
+            "sparse_score": 3.5004,
+            "rerank_score": 0.0
+          },
+          {
+            "chunk_id": 0,
+            "text": "=== SAYFA 1 ===\n| Arıza Kodu | Arıza Tanımı | Olası Neden | Çözüm / Müdahale |\n| E-101 | Aşırı Basınç Yükselmesi | V-10 Valfi tıkalı veya duyarga arızalı | V-10 valfini manuel açın, duyarga kalibrasyonunu kontrol edin. |\n| E-102 | Düşük Su Seviyesi | Besleme pompası P-04 devre dışı | P-04 sigortasını kontrol edin, emiş hattı vanasını açın. |\n| E-204 | Kritik Sıcaklık (SCRAM) | Aşırı yük veya brülör kontrolden çıktı | V-12 ana valfini kapatın, sistemi 45 dk soğumaya bırakın. |\n| E-309 | Alev Duyarga Arızası | Fotosel sensör yüzeyi kirlenmiş | Sensör lensini izopropil alkol ile temizleyin. |\n| E-412 | İletişim Kopukluğu (PLC) | RS485 Modbus kablosu gevşek | Pano klemens bağlantılarını ve sonlandırma direncini sıkın. ENDÜSTRİYEL KAZAN SİSTEMLERİ X-200\nKAPSAMLI TEKNİK İŞLETİM VE BAKIM KILAVUZU (V4.2)\n1. Genel Çalışma Prensipleri ve Yapısal Özellikler\nX-200 modeli, yüksek basınçlı endüstriyel buhar üretimi için özel olarak tasarlanmış modüler bir kazan sistemidir. Sistem, yüksek sıcaklık dayanımına sahip 316L paslanmaz çelik gövde yapısı ve titanyum kaplamalı eşanjör plaka\nboruları ile donatılmıştır. Standart çalışma basınç aralığı 4,2 bar ile 5,5 bar arasındadır. Bu aralığın dışındaki işletim\nşartları, güvenlik mimarisi tarafından otomatik olarak engellenir.",
+            "rrf_score": 0.0315,
+            "dense_rank": 3,
+            "sparse_rank": 4,
+            "dense_score": 0.4921,
+            "sparse_score": 1.3124,
+            "rerank_score": 0.0
+          }
+        ],
+        "retrieval_latency": 0.9861,
+        "context_precision": 1.0,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "id": 21,
+      "category": "comparison",
+      "user_input": "Altı aylık kazan temizliği ile yıllık NDT kontrolü hangi işlem ve sorumlular bakımından ayrılır?",
+      "reference": "Altı ayda bir yetkili servis kimyasal yıkamayla kireci temizler. Yılda bir sertifikalı mühendis kaynak dikişlerine ultrasonik çatlak testi uygular.",
+      "naive_rag": {
+        "retrieved_chunks": [
+          {
+            "chunk_id": 1,
+            "text": "ır. Bu aralığın dışındaki işletim\nşartları, güvenlik mimarisi tarafından otomatik olarak engellenir.\nKazan içi su seviyesi sürekli olarak ultrasonik debimetreler ve elektrotlu seviye sensörleri ile izlenmektedir. Optimum\nçalışma koşullarında kazan besleme suyu sıcaklığı 85 °C seviyesinde tutulmalıdır.\n2. Güvenlik Protokolleri ve Kritik Limitler\nSistemin güvenli işletimi için 3 kademeli koruma protokolü tanımlanmıştır:\n• Kademeli Uyarı (115 °C): Kazan iç sıcaklığı 115 °C değerine ulaştığında kont",
+            "similarity_score": 0.752
+          },
+          {
+            "chunk_id": 0,
+            "text": "ENDÜSTRİYEL KAZAN SİSTEMLERİ X-200\nKAPSAMLI TEKNİK İŞLETİM VE BAKIM KILAVUZU (V4.2)\n1. Genel Çalışma Prensipleri ve Yapısal Özellikler\nX-200 modeli, yüksek basınçlı endüstriyel buhar üretimi için özel olarak tasarlanmış modüler bir kazan sistemidir.\nSistem, yüksek sıcaklık dayanımına sahip 316L paslanmaz çelik gövde yapısı ve titanyum kaplamalı eşanjör plaka\nboruları ile donatılmıştır. Standart çalışma basınç aralığı 4,2 bar ile 5,5 bar arasındadır. Bu aralığın dışındaki işletim\nşartları, güvenl",
+            "similarity_score": 0.7138
+          },
+          {
+            "chunk_id": 5,
+            "text": "unludur.\nPeriyot\nKontrol Noktası\nYapılacak İşlem\nSorumlu\nGünlük\nSu Seviyesi ve Basınç\nGösterge değerlerinin nominal aralıkta olduğu teyit\nedilir.\nVardiya Operatörü\nHaftalık\nEmniyet Valfleri\nV-10 ve V-12 valfleri manuel test kolu ile blöf ettirilir.\nBakım Teknisyeni\nAylık\nBrülör ve Elektrotlar\nAteşleme elektrot aralığı (3.5 mm) ayarlanır ve\nkurum temizlenir.\nBakım Teknisyeni\n6 Aylık\nKazan Taş ve Tortu Temizliği\nKimyasal yıkama (Descaling) ile kireç birikintileri\nsökülür.\nYetkili Servis\nYıllık\nTah",
+            "similarity_score": 0.6947
+          }
+        ],
+        "retrieval_latency": 0.5488,
+        "context_precision": 0.0,
+        "context_recall": 0.5
+      },
+      "advanced_rag": {
+        "retrieved_chunks": [
+          {
+            "chunk_id": 4,
+            "text": "Periyodik Bakım ve Kontrol Çizelgesi\nKazan sisteminin kullanım ömrünü uzatmak ve garanti kapsamını korumak için aşağıdaki bakım takvimine uyulması\nzorunludur. Periyot Kontrol Noktası Yapılacak İşlem Sorumlu\nGösterge değerlerinin nominal aralıkta olduğu teyit\nGünlük Su Seviyesi ve Basınç Vardiya Operatörü\nedilir. Haftalık Emniyet Valfleri V-10 ve V-12 valfleri manuel test kolu ile blöf ettirilir. Bakım Teknisyeni\nAteşleme elektrot aralığı (3.5 mm) ayarlanır ve\nAylık Brülör ve Elektrotlar Bakım Teknisyeni\nkurum temizlenir. Kimyasal yıkama (Descaling) ile kireç birikintileri\n6 Aylık Kazan Taş ve Tortu Temizliği Yetkili Servis\nsökülür. Yıllık Tahribatsız Test (NDT) Kaynak dikişlerine ultrasonik çatlak testi uygulanır.",
+            "rrf_score": 0.0325,
+            "dense_rank": 1,
+            "sparse_rank": 2,
+            "dense_score": 0.6108,
+            "sparse_score": 4.62,
             "rerank_score": 0.0
           },
           {
             "chunk_id": 2,
             "text": "=== SAYFA 2 ===\n| Periyot | Kontrol Noktası | Yapılacak İşlem | Sorumlu |\n| Günlük | Su Seviyesi ve Basınç | Gösterge değerlerinin nominal aralıkta olduğu teyit edilir. | Vardiya Operatörü |\n| Haftalık | Emniyet Valfleri | V-10 ve V-12 valfleri manuel test kolu ile blöf ettirilir. | Bakım Teknisyeni |\n| Aylık | Brülör ve Elektrotlar | Ateşleme elektrot aralığı (3.5 mm) ayarlanır ve kurum temizlenir. | Bakım Teknisyeni |\n| 6 Aylık | Kazan Taş ve Tortu Temizliği | Kimyasal yıkama (Descaling) ile kireç birikintileri sökülür. | Yetkili Servis |\n| Yıllık | Tahribatsız Test (NDT) | Kaynak dikişlerine ultrasonik çatlak testi uygulanır.",
-            "rrf_score": 0.0317,
-            "dense_rank": 3,
+            "rrf_score": 0.0325,
+            "dense_rank": 2,
+            "sparse_rank": 1,
+            "dense_score": 0.5408,
+            "sparse_score": 4.8248,
+            "rerank_score": 0.0
+          },
+          {
+            "chunk_id": 6,
+            "text": "Elektrik ve Otomasyon Bağlantı Kuralları\nKazan kontrol panosu 380V AC 50Hz trifaze şebeke gerilimi ile beslenmektedir. PLC giriş/çıkış modülleri 24V DC izole\ngüç kaynağı üzerinden beslenmelidir. Topraklama direnci maksimum 2 Ohm seviyesinde olmalı, nötr ve toprak\nhatları kesinlikle birleştirilmemelidir (TN-S sistemi).",
+            "rrf_score": 0.0315,
+            "dense_rank": 4,
             "sparse_rank": 3,
-            "dense_score": 0.5265,
-            "sparse_score": 1.6247,
+            "dense_score": 0.4292,
+            "sparse_score": 1.1596,
             "rerank_score": 0.0
           }
         ],
-        "retrieval_latency": 1.0184,
+        "retrieval_latency": 0.9454,
+        "context_precision": 1.0,
+        "context_recall": 0.5
+      }
+    },
+    {
+      "id": 22,
+      "category": "comparison",
+      "user_input": "Kontrol panosunun beslemesi ile PLC giriş/çıkış modüllerinin beslemesi arasındaki fark nedir?",
+      "reference": "Kontrol panosu 380 V AC, 50 Hz trifaze şebekeden beslenir; PLC giriş/çıkış modülleri ise izole güç kaynağı üzerinden 24 V DC ile beslenmelidir.",
+      "naive_rag": {
+        "retrieved_chunks": [
+          {
+            "chunk_id": 6,
+            "text": "ç birikintileri\nsökülür.\nYetkili Servis\nYıllık\nTahribatsız Test (NDT)\nKaynak dikişlerine ultrasonik çatlak testi uygulanır.\nSertifikalı Mühendis\n5. Elektrik ve Otomasyon Bağlantı Kuralları\nKazan kontrol panosu 380V AC 50Hz trifaze şebeke gerilimi ile beslenmektedir. PLC giriş/çıkış modülleri 24V DC izole\ngüç kaynağı üzerinden beslenmelidir. Topraklama direnci maksimum 2 Ohm seviyesinde olmalı, nötr ve toprak\nhatları kesinlikle birleştirilmemelidir (TN-S sistemi).",
+            "similarity_score": 0.7281
+          },
+          {
+            "chunk_id": 4,
+            "text": "rolden\nçıktı\nV-12 ana valfini kapatın, sistemi 45 dk\nsoğumaya bırakın.\nE-309\nAlev Duyarga Arızası\nFotosel sensör yüzeyi kirlenmiş\nSensör lensini izopropil alkol ile temizleyin.\nE-412\nİletişim Kopukluğu (PLC)\nRS485 Modbus kablosu gevşek\nPano klemens bağlantılarını ve sonlandırma\ndirencini sıkın.\n\n4. Periyodik Bakım ve Kontrol Çizelgesi\nKazan sisteminin kullanım ömrünü uzatmak ve garanti kapsamını korumak için aşağıdaki bakım takvimine uyulması\nzorunludur.\nPeriyot\nKontrol Noktası\nYapılacak İşlem\nS",
+            "similarity_score": 0.7113
+          },
+          {
+            "chunk_id": 5,
+            "text": "unludur.\nPeriyot\nKontrol Noktası\nYapılacak İşlem\nSorumlu\nGünlük\nSu Seviyesi ve Basınç\nGösterge değerlerinin nominal aralıkta olduğu teyit\nedilir.\nVardiya Operatörü\nHaftalık\nEmniyet Valfleri\nV-10 ve V-12 valfleri manuel test kolu ile blöf ettirilir.\nBakım Teknisyeni\nAylık\nBrülör ve Elektrotlar\nAteşleme elektrot aralığı (3.5 mm) ayarlanır ve\nkurum temizlenir.\nBakım Teknisyeni\n6 Aylık\nKazan Taş ve Tortu Temizliği\nKimyasal yıkama (Descaling) ile kireç birikintileri\nsökülür.\nYetkili Servis\nYıllık\nTah",
+            "similarity_score": 0.6719
+          }
+        ],
+        "retrieval_latency": 0.3917,
+        "context_precision": 1.0,
+        "context_recall": 1.0
+      },
+      "advanced_rag": {
+        "retrieved_chunks": [
+          {
+            "chunk_id": 6,
+            "text": "Elektrik ve Otomasyon Bağlantı Kuralları\nKazan kontrol panosu 380V AC 50Hz trifaze şebeke gerilimi ile beslenmektedir. PLC giriş/çıkış modülleri 24V DC izole\ngüç kaynağı üzerinden beslenmelidir. Topraklama direnci maksimum 2 Ohm seviyesinde olmalı, nötr ve toprak\nhatları kesinlikle birleştirilmemelidir (TN-S sistemi).",
+            "rrf_score": 0.0328,
+            "dense_rank": 1,
+            "sparse_rank": 1,
+            "dense_score": 0.6617,
+            "sparse_score": 4.8652,
+            "rerank_score": 0.0
+          },
+          {
+            "chunk_id": 1,
+            "text": "Kazan içi su seviyesi sürekli olarak ultrasonik debimetreler ve elektrotlu seviye sensörleri ile izlenmektedir. Optimum\nçalışma koşullarında kazan besleme suyu sıcaklığı 85 °C seviyesinde tutulmalıdır. Güvenlik Protokolleri ve Kritik Limitler\nSistemin güvenli işletimi için 3 kademeli koruma protokolü tanımlanmıştır:\n• Kademeli Uyarı (115 °C): Kazan iç sıcaklığı 115 °C değerine ulaştığında kontrol panosundaki sarı ikaz lambası sürekli\nyanar ve sesli uyarı devreye girer. • Otomatik Tahliye (125 °C / 5.8 bar): Basınç 5,8 bar sınırına ulaştığında Solenoid V-10 tahliye valfi otomatik açılarak\nfazla basıncı atmosfere salar. • Acil Kapatma - SCRAM (135 °C / 6.2 bar): Kritik eşik olan 135 °C sıcaklık veya 6.2 bar basınç aşıldığında acil kapatma\nsistemi (SCRAM) tetiklenir. Bu aşamada operatör V-12 ana valfini manuel olarak kapatmalıdır. Arıza Kodları (Error Codes) ve Müdahale Adımları\nArıza Kodu Arıza Tanımı Olası Neden Çözüm / Müdahale\nV-10 Valfi tıkalı veya duyarga V-10 valfini manuel açın, duyarga\nE-101 Aşırı Basınç Yükselmesi\narızalı kalibrasyonunu kontrol edin. P-04 sigortasını kontrol edin, emiş hattı\nE-102 Düşük Su Seviyesi Besleme pompası P-04 devre dışı\nvanasını açın. Aşırı yük veya brülör kontrolden V-12 ana valfini kapatın, sistemi 45 dk\nE-204 Kritik Sıcaklık (SCRAM)\nçıktı soğumaya bırakın. E-309 Alev Duyarga Arızası Fotosel sensör yüzeyi kirlenmiş Sensör lensini izopropil alkol ile temizleyin. Pano klemens bağlantılarını ve sonlandırma\nE-412 İletişim Kopukluğu (PLC) RS485 Modbus kablosu gevşek\ndirencini sıkın.",
+            "rrf_score": 0.0318,
+            "dense_rank": 2,
+            "sparse_rank": 4,
+            "dense_score": 0.4959,
+            "sparse_score": 0.7364,
+            "rerank_score": 0.0
+          },
+          {
+            "chunk_id": 4,
+            "text": "Periyodik Bakım ve Kontrol Çizelgesi\nKazan sisteminin kullanım ömrünü uzatmak ve garanti kapsamını korumak için aşağıdaki bakım takvimine uyulması\nzorunludur. Periyot Kontrol Noktası Yapılacak İşlem Sorumlu\nGösterge değerlerinin nominal aralıkta olduğu teyit\nGünlük Su Seviyesi ve Basınç Vardiya Operatörü\nedilir. Haftalık Emniyet Valfleri V-10 ve V-12 valfleri manuel test kolu ile blöf ettirilir. Bakım Teknisyeni\nAteşleme elektrot aralığı (3.5 mm) ayarlanır ve\nAylık Brülör ve Elektrotlar Bakım Teknisyeni\nkurum temizlenir. Kimyasal yıkama (Descaling) ile kireç birikintileri\n6 Aylık Kazan Taş ve Tortu Temizliği Yetkili Servis\nsökülür. Yıllık Tahribatsız Test (NDT) Kaynak dikişlerine ultrasonik çatlak testi uygulanır.",
+            "rrf_score": 0.0317,
+            "dense_rank": 3,
+            "sparse_rank": 3,
+            "dense_score": 0.4376,
+            "sparse_score": 0.7379,
+            "rerank_score": 0.0
+          }
+        ],
+        "retrieval_latency": 1.0745,
+        "context_precision": 1.0,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "id": 23,
+      "category": "multi_hop",
+      "user_input": "E-101 ve E-102 kodlarında sırasıyla hangi bileşen sorunları olası görülür ve her biri için hangi müdahale belirtilir?",
+      "reference": "E-101'de V-10 valfinin tıkalı olması veya duyarga arızası olasıdır; valf manuel açılıp duyarga kalibrasyonu kontrol edilir. E-102'de P-04 besleme pompasının devre dışı kalması olasıdır; sigorta kontrol edilir ve emiş hattı vanası açılır.",
+      "naive_rag": {
+        "retrieved_chunks": [
+          {
+            "chunk_id": 3,
+            "text": "-12 ana valfini manuel olarak kapatmalıdır.\n3. Arıza Kodları (Error Codes) ve Müdahale Adımları\nArıza Kodu\nArıza Tanımı\nOlası Neden\nÇözüm / Müdahale\nE-101\nAşırı Basınç Yükselmesi\nV-10 Valfi tıkalı veya duyarga\narızalı\nV-10 valfini manuel açın, duyarga\nkalibrasyonunu kontrol edin.\nE-102\nDüşük Su Seviyesi\nBesleme pompası P-04 devre dışı\nP-04 sigortasını kontrol edin, emiş hattı\nvanasını açın.\nE-204\nKritik Sıcaklık (SCRAM)\nAşırı yük veya brülör kontrolden\nçıktı\nV-12 ana valfini kapatın, sistemi 45",
+            "similarity_score": 0.7096
+          },
+          {
+            "chunk_id": 5,
+            "text": "unludur.\nPeriyot\nKontrol Noktası\nYapılacak İşlem\nSorumlu\nGünlük\nSu Seviyesi ve Basınç\nGösterge değerlerinin nominal aralıkta olduğu teyit\nedilir.\nVardiya Operatörü\nHaftalık\nEmniyet Valfleri\nV-10 ve V-12 valfleri manuel test kolu ile blöf ettirilir.\nBakım Teknisyeni\nAylık\nBrülör ve Elektrotlar\nAteşleme elektrot aralığı (3.5 mm) ayarlanır ve\nkurum temizlenir.\nBakım Teknisyeni\n6 Aylık\nKazan Taş ve Tortu Temizliği\nKimyasal yıkama (Descaling) ile kireç birikintileri\nsökülür.\nYetkili Servis\nYıllık\nTah",
+            "similarity_score": 0.6926
+          },
+          {
+            "chunk_id": 0,
+            "text": "ENDÜSTRİYEL KAZAN SİSTEMLERİ X-200\nKAPSAMLI TEKNİK İŞLETİM VE BAKIM KILAVUZU (V4.2)\n1. Genel Çalışma Prensipleri ve Yapısal Özellikler\nX-200 modeli, yüksek basınçlı endüstriyel buhar üretimi için özel olarak tasarlanmış modüler bir kazan sistemidir.\nSistem, yüksek sıcaklık dayanımına sahip 316L paslanmaz çelik gövde yapısı ve titanyum kaplamalı eşanjör plaka\nboruları ile donatılmıştır. Standart çalışma basınç aralığı 4,2 bar ile 5,5 bar arasındadır. Bu aralığın dışındaki işletim\nşartları, güvenl",
+            "similarity_score": 0.6722
+          }
+        ],
+        "retrieval_latency": 0.5792,
+        "context_precision": 1.0,
+        "context_recall": 1.0
+      },
+      "advanced_rag": {
+        "retrieved_chunks": [
+          {
+            "chunk_id": 0,
+            "text": "=== SAYFA 1 ===\n| Arıza Kodu | Arıza Tanımı | Olası Neden | Çözüm / Müdahale |\n| E-101 | Aşırı Basınç Yükselmesi | V-10 Valfi tıkalı veya duyarga arızalı | V-10 valfini manuel açın, duyarga kalibrasyonunu kontrol edin. |\n| E-102 | Düşük Su Seviyesi | Besleme pompası P-04 devre dışı | P-04 sigortasını kontrol edin, emiş hattı vanasını açın. |\n| E-204 | Kritik Sıcaklık (SCRAM) | Aşırı yük veya brülör kontrolden çıktı | V-12 ana valfini kapatın, sistemi 45 dk soğumaya bırakın. |\n| E-309 | Alev Duyarga Arızası | Fotosel sensör yüzeyi kirlenmiş | Sensör lensini izopropil alkol ile temizleyin. |\n| E-412 | İletişim Kopukluğu (PLC) | RS485 Modbus kablosu gevşek | Pano klemens bağlantılarını ve sonlandırma direncini sıkın. ENDÜSTRİYEL KAZAN SİSTEMLERİ X-200\nKAPSAMLI TEKNİK İŞLETİM VE BAKIM KILAVUZU (V4.2)\n1. Genel Çalışma Prensipleri ve Yapısal Özellikler\nX-200 modeli, yüksek basınçlı endüstriyel buhar üretimi için özel olarak tasarlanmış modüler bir kazan sistemidir. Sistem, yüksek sıcaklık dayanımına sahip 316L paslanmaz çelik gövde yapısı ve titanyum kaplamalı eşanjör plaka\nboruları ile donatılmıştır. Standart çalışma basınç aralığı 4,2 bar ile 5,5 bar arasındadır. Bu aralığın dışındaki işletim\nşartları, güvenlik mimarisi tarafından otomatik olarak engellenir.",
+            "rrf_score": 0.0328,
+            "dense_rank": 1,
+            "sparse_rank": 1,
+            "dense_score": 0.5935,
+            "sparse_score": 3.1787,
+            "rerank_score": 0.0
+          },
+          {
+            "chunk_id": 1,
+            "text": "Kazan içi su seviyesi sürekli olarak ultrasonik debimetreler ve elektrotlu seviye sensörleri ile izlenmektedir. Optimum\nçalışma koşullarında kazan besleme suyu sıcaklığı 85 °C seviyesinde tutulmalıdır. Güvenlik Protokolleri ve Kritik Limitler\nSistemin güvenli işletimi için 3 kademeli koruma protokolü tanımlanmıştır:\n• Kademeli Uyarı (115 °C): Kazan iç sıcaklığı 115 °C değerine ulaştığında kontrol panosundaki sarı ikaz lambası sürekli\nyanar ve sesli uyarı devreye girer. • Otomatik Tahliye (125 °C / 5.8 bar): Basınç 5,8 bar sınırına ulaştığında Solenoid V-10 tahliye valfi otomatik açılarak\nfazla basıncı atmosfere salar. • Acil Kapatma - SCRAM (135 °C / 6.2 bar): Kritik eşik olan 135 °C sıcaklık veya 6.2 bar basınç aşıldığında acil kapatma\nsistemi (SCRAM) tetiklenir. Bu aşamada operatör V-12 ana valfini manuel olarak kapatmalıdır. Arıza Kodları (Error Codes) ve Müdahale Adımları\nArıza Kodu Arıza Tanımı Olası Neden Çözüm / Müdahale\nV-10 Valfi tıkalı veya duyarga V-10 valfini manuel açın, duyarga\nE-101 Aşırı Basınç Yükselmesi\narızalı kalibrasyonunu kontrol edin. P-04 sigortasını kontrol edin, emiş hattı\nE-102 Düşük Su Seviyesi Besleme pompası P-04 devre dışı\nvanasını açın. Aşırı yük veya brülör kontrolden V-12 ana valfini kapatın, sistemi 45 dk\nE-204 Kritik Sıcaklık (SCRAM)\nçıktı soğumaya bırakın. E-309 Alev Duyarga Arızası Fotosel sensör yüzeyi kirlenmiş Sensör lensini izopropil alkol ile temizleyin. Pano klemens bağlantılarını ve sonlandırma\nE-412 İletişim Kopukluğu (PLC) RS485 Modbus kablosu gevşek\ndirencini sıkın.",
+            "rrf_score": 0.0323,
+            "dense_rank": 2,
+            "sparse_rank": 2,
+            "dense_score": 0.481,
+            "sparse_score": 3.1579,
+            "rerank_score": 0.0
+          },
+          {
+            "chunk_id": 2,
+            "text": "=== SAYFA 2 ===\n| Periyot | Kontrol Noktası | Yapılacak İşlem | Sorumlu |\n| Günlük | Su Seviyesi ve Basınç | Gösterge değerlerinin nominal aralıkta olduğu teyit edilir. | Vardiya Operatörü |\n| Haftalık | Emniyet Valfleri | V-10 ve V-12 valfleri manuel test kolu ile blöf ettirilir. | Bakım Teknisyeni |\n| Aylık | Brülör ve Elektrotlar | Ateşleme elektrot aralığı (3.5 mm) ayarlanır ve kurum temizlenir. | Bakım Teknisyeni |\n| 6 Aylık | Kazan Taş ve Tortu Temizliği | Kimyasal yıkama (Descaling) ile kireç birikintileri sökülür. | Yetkili Servis |\n| Yıllık | Tahribatsız Test (NDT) | Kaynak dikişlerine ultrasonik çatlak testi uygulanır.",
+            "rrf_score": 0.0315,
+            "dense_rank": 3,
+            "sparse_rank": 4,
+            "dense_score": 0.4452,
+            "sparse_score": 1.0458,
+            "rerank_score": 0.0
+          }
+        ],
+        "retrieval_latency": 1.0332,
+        "context_precision": 1.0,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "id": 24,
+      "category": "multi_hop",
+      "user_input": "Su seviyesinin izlenmesinde kullanılan araçlar nelerdir ve optimum koşullarda besleme suyu kaç derece tutulur?",
+      "reference": "Su seviyesi ultrasonik debimetreler ve elektrotlu seviye sensörleriyle izlenir; besleme suyu 85 °C seviyesinde tutulmalıdır.",
+      "naive_rag": {
+        "retrieved_chunks": [
+          {
+            "chunk_id": 1,
+            "text": "ır. Bu aralığın dışındaki işletim\nşartları, güvenlik mimarisi tarafından otomatik olarak engellenir.\nKazan içi su seviyesi sürekli olarak ultrasonik debimetreler ve elektrotlu seviye sensörleri ile izlenmektedir. Optimum\nçalışma koşullarında kazan besleme suyu sıcaklığı 85 °C seviyesinde tutulmalıdır.\n2. Güvenlik Protokolleri ve Kritik Limitler\nSistemin güvenli işletimi için 3 kademeli koruma protokolü tanımlanmıştır:\n• Kademeli Uyarı (115 °C): Kazan iç sıcaklığı 115 °C değerine ulaştığında kont",
+            "similarity_score": 0.7147
+          },
+          {
+            "chunk_id": 5,
+            "text": "unludur.\nPeriyot\nKontrol Noktası\nYapılacak İşlem\nSorumlu\nGünlük\nSu Seviyesi ve Basınç\nGösterge değerlerinin nominal aralıkta olduğu teyit\nedilir.\nVardiya Operatörü\nHaftalık\nEmniyet Valfleri\nV-10 ve V-12 valfleri manuel test kolu ile blöf ettirilir.\nBakım Teknisyeni\nAylık\nBrülör ve Elektrotlar\nAteşleme elektrot aralığı (3.5 mm) ayarlanır ve\nkurum temizlenir.\nBakım Teknisyeni\n6 Aylık\nKazan Taş ve Tortu Temizliği\nKimyasal yıkama (Descaling) ile kireç birikintileri\nsökülür.\nYetkili Servis\nYıllık\nTah",
+            "similarity_score": 0.6955
+          },
+          {
+            "chunk_id": 6,
+            "text": "ç birikintileri\nsökülür.\nYetkili Servis\nYıllık\nTahribatsız Test (NDT)\nKaynak dikişlerine ultrasonik çatlak testi uygulanır.\nSertifikalı Mühendis\n5. Elektrik ve Otomasyon Bağlantı Kuralları\nKazan kontrol panosu 380V AC 50Hz trifaze şebeke gerilimi ile beslenmektedir. PLC giriş/çıkış modülleri 24V DC izole\ngüç kaynağı üzerinden beslenmelidir. Topraklama direnci maksimum 2 Ohm seviyesinde olmalı, nötr ve toprak\nhatları kesinlikle birleştirilmemelidir (TN-S sistemi).",
+            "similarity_score": 0.6828
+          }
+        ],
+        "retrieval_latency": 0.5083,
+        "context_precision": 1.0,
+        "context_recall": 1.0
+      },
+      "advanced_rag": {
+        "retrieved_chunks": [
+          {
+            "chunk_id": 1,
+            "text": "Kazan içi su seviyesi sürekli olarak ultrasonik debimetreler ve elektrotlu seviye sensörleri ile izlenmektedir. Optimum\nçalışma koşullarında kazan besleme suyu sıcaklığı 85 °C seviyesinde tutulmalıdır. Güvenlik Protokolleri ve Kritik Limitler\nSistemin güvenli işletimi için 3 kademeli koruma protokolü tanımlanmıştır:\n• Kademeli Uyarı (115 °C): Kazan iç sıcaklığı 115 °C değerine ulaştığında kontrol panosundaki sarı ikaz lambası sürekli\nyanar ve sesli uyarı devreye girer. • Otomatik Tahliye (125 °C / 5.8 bar): Basınç 5,8 bar sınırına ulaştığında Solenoid V-10 tahliye valfi otomatik açılarak\nfazla basıncı atmosfere salar. • Acil Kapatma - SCRAM (135 °C / 6.2 bar): Kritik eşik olan 135 °C sıcaklık veya 6.2 bar basınç aşıldığında acil kapatma\nsistemi (SCRAM) tetiklenir. Bu aşamada operatör V-12 ana valfini manuel olarak kapatmalıdır. Arıza Kodları (Error Codes) ve Müdahale Adımları\nArıza Kodu Arıza Tanımı Olası Neden Çözüm / Müdahale\nV-10 Valfi tıkalı veya duyarga V-10 valfini manuel açın, duyarga\nE-101 Aşırı Basınç Yükselmesi\narızalı kalibrasyonunu kontrol edin. P-04 sigortasını kontrol edin, emiş hattı\nE-102 Düşük Su Seviyesi Besleme pompası P-04 devre dışı\nvanasını açın. Aşırı yük veya brülör kontrolden V-12 ana valfini kapatın, sistemi 45 dk\nE-204 Kritik Sıcaklık (SCRAM)\nçıktı soğumaya bırakın. E-309 Alev Duyarga Arızası Fotosel sensör yüzeyi kirlenmiş Sensör lensini izopropil alkol ile temizleyin. Pano klemens bağlantılarını ve sonlandırma\nE-412 İletişim Kopukluğu (PLC) RS485 Modbus kablosu gevşek\ndirencini sıkın.",
+            "rrf_score": 0.0328,
+            "dense_rank": 1,
+            "sparse_rank": 1,
+            "dense_score": 0.6205,
+            "sparse_score": 3.1973,
+            "rerank_score": 0.0
+          },
+          {
+            "chunk_id": 0,
+            "text": "=== SAYFA 1 ===\n| Arıza Kodu | Arıza Tanımı | Olası Neden | Çözüm / Müdahale |\n| E-101 | Aşırı Basınç Yükselmesi | V-10 Valfi tıkalı veya duyarga arızalı | V-10 valfini manuel açın, duyarga kalibrasyonunu kontrol edin. |\n| E-102 | Düşük Su Seviyesi | Besleme pompası P-04 devre dışı | P-04 sigortasını kontrol edin, emiş hattı vanasını açın. |\n| E-204 | Kritik Sıcaklık (SCRAM) | Aşırı yük veya brülör kontrolden çıktı | V-12 ana valfini kapatın, sistemi 45 dk soğumaya bırakın. |\n| E-309 | Alev Duyarga Arızası | Fotosel sensör yüzeyi kirlenmiş | Sensör lensini izopropil alkol ile temizleyin. |\n| E-412 | İletişim Kopukluğu (PLC) | RS485 Modbus kablosu gevşek | Pano klemens bağlantılarını ve sonlandırma direncini sıkın. ENDÜSTRİYEL KAZAN SİSTEMLERİ X-200\nKAPSAMLI TEKNİK İŞLETİM VE BAKIM KILAVUZU (V4.2)\n1. Genel Çalışma Prensipleri ve Yapısal Özellikler\nX-200 modeli, yüksek basınçlı endüstriyel buhar üretimi için özel olarak tasarlanmış modüler bir kazan sistemidir. Sistem, yüksek sıcaklık dayanımına sahip 316L paslanmaz çelik gövde yapısı ve titanyum kaplamalı eşanjör plaka\nboruları ile donatılmıştır. Standart çalışma basınç aralığı 4,2 bar ile 5,5 bar arasındadır. Bu aralığın dışındaki işletim\nşartları, güvenlik mimarisi tarafından otomatik olarak engellenir.",
+            "rrf_score": 0.032,
+            "dense_rank": 3,
+            "sparse_rank": 2,
+            "dense_score": 0.4657,
+            "sparse_score": 1.1398,
+            "rerank_score": 0.0
+          },
+          {
+            "chunk_id": 6,
+            "text": "Elektrik ve Otomasyon Bağlantı Kuralları\nKazan kontrol panosu 380V AC 50Hz trifaze şebeke gerilimi ile beslenmektedir. PLC giriş/çıkış modülleri 24V DC izole\ngüç kaynağı üzerinden beslenmelidir. Topraklama direnci maksimum 2 Ohm seviyesinde olmalı, nötr ve toprak\nhatları kesinlikle birleştirilmemelidir (TN-S sistemi).",
+            "rrf_score": 0.0315,
+            "dense_rank": 2,
+            "sparse_rank": 5,
+            "dense_score": 0.5246,
+            "sparse_score": 0.4595,
+            "rerank_score": 0.0
+          }
+        ],
+        "retrieval_latency": 0.9808,
+        "context_precision": 1.0,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "id": 25,
+      "category": "multi_hop",
+      "user_input": "Haftalık bakımda hangi valfler, hangi yöntemle test edilir ve bu işin sorumlusu kimdir?",
+      "reference": "V-10 ve V-12 valfleri manuel test koluyla blöf ettirilir; sorumlu bakım teknisyenidir.",
+      "naive_rag": {
+        "retrieved_chunks": [
+          {
+            "chunk_id": 5,
+            "text": "unludur.\nPeriyot\nKontrol Noktası\nYapılacak İşlem\nSorumlu\nGünlük\nSu Seviyesi ve Basınç\nGösterge değerlerinin nominal aralıkta olduğu teyit\nedilir.\nVardiya Operatörü\nHaftalık\nEmniyet Valfleri\nV-10 ve V-12 valfleri manuel test kolu ile blöf ettirilir.\nBakım Teknisyeni\nAylık\nBrülör ve Elektrotlar\nAteşleme elektrot aralığı (3.5 mm) ayarlanır ve\nkurum temizlenir.\nBakım Teknisyeni\n6 Aylık\nKazan Taş ve Tortu Temizliği\nKimyasal yıkama (Descaling) ile kireç birikintileri\nsökülür.\nYetkili Servis\nYıllık\nTah",
+            "similarity_score": 0.735
+          },
+          {
+            "chunk_id": 6,
+            "text": "ç birikintileri\nsökülür.\nYetkili Servis\nYıllık\nTahribatsız Test (NDT)\nKaynak dikişlerine ultrasonik çatlak testi uygulanır.\nSertifikalı Mühendis\n5. Elektrik ve Otomasyon Bağlantı Kuralları\nKazan kontrol panosu 380V AC 50Hz trifaze şebeke gerilimi ile beslenmektedir. PLC giriş/çıkış modülleri 24V DC izole\ngüç kaynağı üzerinden beslenmelidir. Topraklama direnci maksimum 2 Ohm seviyesinde olmalı, nötr ve toprak\nhatları kesinlikle birleştirilmemelidir (TN-S sistemi).",
+            "similarity_score": 0.6588
+          },
+          {
+            "chunk_id": 3,
+            "text": "-12 ana valfini manuel olarak kapatmalıdır.\n3. Arıza Kodları (Error Codes) ve Müdahale Adımları\nArıza Kodu\nArıza Tanımı\nOlası Neden\nÇözüm / Müdahale\nE-101\nAşırı Basınç Yükselmesi\nV-10 Valfi tıkalı veya duyarga\narızalı\nV-10 valfini manuel açın, duyarga\nkalibrasyonunu kontrol edin.\nE-102\nDüşük Su Seviyesi\nBesleme pompası P-04 devre dışı\nP-04 sigortasını kontrol edin, emiş hattı\nvanasını açın.\nE-204\nKritik Sıcaklık (SCRAM)\nAşırı yük veya brülör kontrolden\nçıktı\nV-12 ana valfini kapatın, sistemi 45",
+            "similarity_score": 0.6245
+          }
+        ],
+        "retrieval_latency": 0.5615,
+        "context_precision": 0.8333,
+        "context_recall": 1.0
+      },
+      "advanced_rag": {
+        "retrieved_chunks": [
+          {
+            "chunk_id": 2,
+            "text": "=== SAYFA 2 ===\n| Periyot | Kontrol Noktası | Yapılacak İşlem | Sorumlu |\n| Günlük | Su Seviyesi ve Basınç | Gösterge değerlerinin nominal aralıkta olduğu teyit edilir. | Vardiya Operatörü |\n| Haftalık | Emniyet Valfleri | V-10 ve V-12 valfleri manuel test kolu ile blöf ettirilir. | Bakım Teknisyeni |\n| Aylık | Brülör ve Elektrotlar | Ateşleme elektrot aralığı (3.5 mm) ayarlanır ve kurum temizlenir. | Bakım Teknisyeni |\n| 6 Aylık | Kazan Taş ve Tortu Temizliği | Kimyasal yıkama (Descaling) ile kireç birikintileri sökülür. | Yetkili Servis |\n| Yıllık | Tahribatsız Test (NDT) | Kaynak dikişlerine ultrasonik çatlak testi uygulanır.",
+            "rrf_score": 0.0328,
+            "dense_rank": 1,
+            "sparse_rank": 1,
+            "dense_score": 0.5975,
+            "sparse_score": 3.329,
+            "rerank_score": 0.0
+          },
+          {
+            "chunk_id": 4,
+            "text": "Periyodik Bakım ve Kontrol Çizelgesi\nKazan sisteminin kullanım ömrünü uzatmak ve garanti kapsamını korumak için aşağıdaki bakım takvimine uyulması\nzorunludur. Periyot Kontrol Noktası Yapılacak İşlem Sorumlu\nGösterge değerlerinin nominal aralıkta olduğu teyit\nGünlük Su Seviyesi ve Basınç Vardiya Operatörü\nedilir. Haftalık Emniyet Valfleri V-10 ve V-12 valfleri manuel test kolu ile blöf ettirilir. Bakım Teknisyeni\nAteşleme elektrot aralığı (3.5 mm) ayarlanır ve\nAylık Brülör ve Elektrotlar Bakım Teknisyeni\nkurum temizlenir. Kimyasal yıkama (Descaling) ile kireç birikintileri\n6 Aylık Kazan Taş ve Tortu Temizliği Yetkili Servis\nsökülür. Yıllık Tahribatsız Test (NDT) Kaynak dikişlerine ultrasonik çatlak testi uygulanır.",
+            "rrf_score": 0.0323,
+            "dense_rank": 2,
+            "sparse_rank": 2,
+            "dense_score": 0.5767,
+            "sparse_score": 3.1315,
+            "rerank_score": 0.0
+          },
+          {
+            "chunk_id": 0,
+            "text": "=== SAYFA 1 ===\n| Arıza Kodu | Arıza Tanımı | Olası Neden | Çözüm / Müdahale |\n| E-101 | Aşırı Basınç Yükselmesi | V-10 Valfi tıkalı veya duyarga arızalı | V-10 valfini manuel açın, duyarga kalibrasyonunu kontrol edin. |\n| E-102 | Düşük Su Seviyesi | Besleme pompası P-04 devre dışı | P-04 sigortasını kontrol edin, emiş hattı vanasını açın. |\n| E-204 | Kritik Sıcaklık (SCRAM) | Aşırı yük veya brülör kontrolden çıktı | V-12 ana valfini kapatın, sistemi 45 dk soğumaya bırakın. |\n| E-309 | Alev Duyarga Arızası | Fotosel sensör yüzeyi kirlenmiş | Sensör lensini izopropil alkol ile temizleyin. |\n| E-412 | İletişim Kopukluğu (PLC) | RS485 Modbus kablosu gevşek | Pano klemens bağlantılarını ve sonlandırma direncini sıkın. ENDÜSTRİYEL KAZAN SİSTEMLERİ X-200\nKAPSAMLI TEKNİK İŞLETİM VE BAKIM KILAVUZU (V4.2)\n1. Genel Çalışma Prensipleri ve Yapısal Özellikler\nX-200 modeli, yüksek basınçlı endüstriyel buhar üretimi için özel olarak tasarlanmış modüler bir kazan sistemidir. Sistem, yüksek sıcaklık dayanımına sahip 316L paslanmaz çelik gövde yapısı ve titanyum kaplamalı eşanjör plaka\nboruları ile donatılmıştır. Standart çalışma basınç aralığı 4,2 bar ile 5,5 bar arasındadır. Bu aralığın dışındaki işletim\nşartları, güvenlik mimarisi tarafından otomatik olarak engellenir.",
+            "rrf_score": 0.0317,
+            "dense_rank": 3,
+            "sparse_rank": 3,
+            "dense_score": 0.4806,
+            "sparse_score": 0.9538,
+            "rerank_score": 0.0
+          }
+        ],
+        "retrieval_latency": 0.9843,
+        "context_precision": 1.0,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "id": 26,
+      "category": "multi_hop",
+      "user_input": "Aylık brülör ve elektrot bakımında hangi ayarlar ve temizlik yapılır, elektrot aralığı kaç milimetre olmalıdır?",
+      "reference": "Ateşleme elektrot aralığı 3,5 mm'ye ayarlanır ve kurum temizlenir; bakım teknisyeni bu işi yapar.",
+      "naive_rag": {
+        "retrieved_chunks": [
+          {
+            "chunk_id": 5,
+            "text": "unludur.\nPeriyot\nKontrol Noktası\nYapılacak İşlem\nSorumlu\nGünlük\nSu Seviyesi ve Basınç\nGösterge değerlerinin nominal aralıkta olduğu teyit\nedilir.\nVardiya Operatörü\nHaftalık\nEmniyet Valfleri\nV-10 ve V-12 valfleri manuel test kolu ile blöf ettirilir.\nBakım Teknisyeni\nAylık\nBrülör ve Elektrotlar\nAteşleme elektrot aralığı (3.5 mm) ayarlanır ve\nkurum temizlenir.\nBakım Teknisyeni\n6 Aylık\nKazan Taş ve Tortu Temizliği\nKimyasal yıkama (Descaling) ile kireç birikintileri\nsökülür.\nYetkili Servis\nYıllık\nTah",
+            "similarity_score": 0.7495
+          },
+          {
+            "chunk_id": 1,
+            "text": "ır. Bu aralığın dışındaki işletim\nşartları, güvenlik mimarisi tarafından otomatik olarak engellenir.\nKazan içi su seviyesi sürekli olarak ultrasonik debimetreler ve elektrotlu seviye sensörleri ile izlenmektedir. Optimum\nçalışma koşullarında kazan besleme suyu sıcaklığı 85 °C seviyesinde tutulmalıdır.\n2. Güvenlik Protokolleri ve Kritik Limitler\nSistemin güvenli işletimi için 3 kademeli koruma protokolü tanımlanmıştır:\n• Kademeli Uyarı (115 °C): Kazan iç sıcaklığı 115 °C değerine ulaştığında kont",
+            "similarity_score": 0.7257
+          },
+          {
+            "chunk_id": 6,
+            "text": "ç birikintileri\nsökülür.\nYetkili Servis\nYıllık\nTahribatsız Test (NDT)\nKaynak dikişlerine ultrasonik çatlak testi uygulanır.\nSertifikalı Mühendis\n5. Elektrik ve Otomasyon Bağlantı Kuralları\nKazan kontrol panosu 380V AC 50Hz trifaze şebeke gerilimi ile beslenmektedir. PLC giriş/çıkış modülleri 24V DC izole\ngüç kaynağı üzerinden beslenmelidir. Topraklama direnci maksimum 2 Ohm seviyesinde olmalı, nötr ve toprak\nhatları kesinlikle birleştirilmemelidir (TN-S sistemi).",
+            "similarity_score": 0.7049
+          }
+        ],
+        "retrieval_latency": 0.3604,
+        "context_precision": 1.0,
+        "context_recall": 1.0
+      },
+      "advanced_rag": {
+        "retrieved_chunks": [
+          {
+            "chunk_id": 2,
+            "text": "=== SAYFA 2 ===\n| Periyot | Kontrol Noktası | Yapılacak İşlem | Sorumlu |\n| Günlük | Su Seviyesi ve Basınç | Gösterge değerlerinin nominal aralıkta olduğu teyit edilir. | Vardiya Operatörü |\n| Haftalık | Emniyet Valfleri | V-10 ve V-12 valfleri manuel test kolu ile blöf ettirilir. | Bakım Teknisyeni |\n| Aylık | Brülör ve Elektrotlar | Ateşleme elektrot aralığı (3.5 mm) ayarlanır ve kurum temizlenir. | Bakım Teknisyeni |\n| 6 Aylık | Kazan Taş ve Tortu Temizliği | Kimyasal yıkama (Descaling) ile kireç birikintileri sökülür. | Yetkili Servis |\n| Yıllık | Tahribatsız Test (NDT) | Kaynak dikişlerine ultrasonik çatlak testi uygulanır.",
+            "rrf_score": 0.0328,
+            "dense_rank": 1,
+            "sparse_rank": 1,
+            "dense_score": 0.6025,
+            "sparse_score": 4.3933,
+            "rerank_score": 0.0
+          },
+          {
+            "chunk_id": 4,
+            "text": "Periyodik Bakım ve Kontrol Çizelgesi\nKazan sisteminin kullanım ömrünü uzatmak ve garanti kapsamını korumak için aşağıdaki bakım takvimine uyulması\nzorunludur. Periyot Kontrol Noktası Yapılacak İşlem Sorumlu\nGösterge değerlerinin nominal aralıkta olduğu teyit\nGünlük Su Seviyesi ve Basınç Vardiya Operatörü\nedilir. Haftalık Emniyet Valfleri V-10 ve V-12 valfleri manuel test kolu ile blöf ettirilir. Bakım Teknisyeni\nAteşleme elektrot aralığı (3.5 mm) ayarlanır ve\nAylık Brülör ve Elektrotlar Bakım Teknisyeni\nkurum temizlenir. Kimyasal yıkama (Descaling) ile kireç birikintileri\n6 Aylık Kazan Taş ve Tortu Temizliği Yetkili Servis\nsökülür. Yıllık Tahribatsız Test (NDT) Kaynak dikişlerine ultrasonik çatlak testi uygulanır.",
+            "rrf_score": 0.0323,
+            "dense_rank": 2,
+            "sparse_rank": 2,
+            "dense_score": 0.5997,
+            "sparse_score": 4.1683,
+            "rerank_score": 0.0
+          },
+          {
+            "chunk_id": 0,
+            "text": "=== SAYFA 1 ===\n| Arıza Kodu | Arıza Tanımı | Olası Neden | Çözüm / Müdahale |\n| E-101 | Aşırı Basınç Yükselmesi | V-10 Valfi tıkalı veya duyarga arızalı | V-10 valfini manuel açın, duyarga kalibrasyonunu kontrol edin. |\n| E-102 | Düşük Su Seviyesi | Besleme pompası P-04 devre dışı | P-04 sigortasını kontrol edin, emiş hattı vanasını açın. |\n| E-204 | Kritik Sıcaklık (SCRAM) | Aşırı yük veya brülör kontrolden çıktı | V-12 ana valfini kapatın, sistemi 45 dk soğumaya bırakın. |\n| E-309 | Alev Duyarga Arızası | Fotosel sensör yüzeyi kirlenmiş | Sensör lensini izopropil alkol ile temizleyin. |\n| E-412 | İletişim Kopukluğu (PLC) | RS485 Modbus kablosu gevşek | Pano klemens bağlantılarını ve sonlandırma direncini sıkın. ENDÜSTRİYEL KAZAN SİSTEMLERİ X-200\nKAPSAMLI TEKNİK İŞLETİM VE BAKIM KILAVUZU (V4.2)\n1. Genel Çalışma Prensipleri ve Yapısal Özellikler\nX-200 modeli, yüksek basınçlı endüstriyel buhar üretimi için özel olarak tasarlanmış modüler bir kazan sistemidir. Sistem, yüksek sıcaklık dayanımına sahip 316L paslanmaz çelik gövde yapısı ve titanyum kaplamalı eşanjör plaka\nboruları ile donatılmıştır. Standart çalışma basınç aralığı 4,2 bar ile 5,5 bar arasındadır. Bu aralığın dışındaki işletim\nşartları, güvenlik mimarisi tarafından otomatik olarak engellenir.",
+            "rrf_score": 0.0317,
+            "dense_rank": 3,
+            "sparse_rank": 3,
+            "dense_score": 0.4447,
+            "sparse_score": 1.172,
+            "rerank_score": 0.0
+          }
+        ],
+        "retrieval_latency": 0.9477,
+        "context_precision": 1.0,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "id": 27,
+      "category": "multi_hop",
+      "user_input": "Kireç birikintilerinin giderilmesi için hangi bakım işlemi ne sıklıkta yapılır ve kim tarafından üstlenilir?",
+      "reference": "Kazan taş ve tortu temizliği altı ayda bir kimyasal yıkama (descaling) ile yapılır ve sorumlusu yetkili servistir.",
+      "naive_rag": {
+        "retrieved_chunks": [
+          {
+            "chunk_id": 1,
+            "text": "ır. Bu aralığın dışındaki işletim\nşartları, güvenlik mimarisi tarafından otomatik olarak engellenir.\nKazan içi su seviyesi sürekli olarak ultrasonik debimetreler ve elektrotlu seviye sensörleri ile izlenmektedir. Optimum\nçalışma koşullarında kazan besleme suyu sıcaklığı 85 °C seviyesinde tutulmalıdır.\n2. Güvenlik Protokolleri ve Kritik Limitler\nSistemin güvenli işletimi için 3 kademeli koruma protokolü tanımlanmıştır:\n• Kademeli Uyarı (115 °C): Kazan iç sıcaklığı 115 °C değerine ulaştığında kont",
+            "similarity_score": 0.649
+          },
+          {
+            "chunk_id": 5,
+            "text": "unludur.\nPeriyot\nKontrol Noktası\nYapılacak İşlem\nSorumlu\nGünlük\nSu Seviyesi ve Basınç\nGösterge değerlerinin nominal aralıkta olduğu teyit\nedilir.\nVardiya Operatörü\nHaftalık\nEmniyet Valfleri\nV-10 ve V-12 valfleri manuel test kolu ile blöf ettirilir.\nBakım Teknisyeni\nAylık\nBrülör ve Elektrotlar\nAteşleme elektrot aralığı (3.5 mm) ayarlanır ve\nkurum temizlenir.\nBakım Teknisyeni\n6 Aylık\nKazan Taş ve Tortu Temizliği\nKimyasal yıkama (Descaling) ile kireç birikintileri\nsökülür.\nYetkili Servis\nYıllık\nTah",
+            "similarity_score": 0.6296
+          },
+          {
+            "chunk_id": 6,
+            "text": "ç birikintileri\nsökülür.\nYetkili Servis\nYıllık\nTahribatsız Test (NDT)\nKaynak dikişlerine ultrasonik çatlak testi uygulanır.\nSertifikalı Mühendis\n5. Elektrik ve Otomasyon Bağlantı Kuralları\nKazan kontrol panosu 380V AC 50Hz trifaze şebeke gerilimi ile beslenmektedir. PLC giriş/çıkış modülleri 24V DC izole\ngüç kaynağı üzerinden beslenmelidir. Topraklama direnci maksimum 2 Ohm seviyesinde olmalı, nötr ve toprak\nhatları kesinlikle birleştirilmemelidir (TN-S sistemi).",
+            "similarity_score": 0.6189
+          }
+        ],
+        "retrieval_latency": 0.4123,
+        "context_precision": 0.5,
+        "context_recall": 1.0
+      },
+      "advanced_rag": {
+        "retrieved_chunks": [
+          {
+            "chunk_id": 4,
+            "text": "Periyodik Bakım ve Kontrol Çizelgesi\nKazan sisteminin kullanım ömrünü uzatmak ve garanti kapsamını korumak için aşağıdaki bakım takvimine uyulması\nzorunludur. Periyot Kontrol Noktası Yapılacak İşlem Sorumlu\nGösterge değerlerinin nominal aralıkta olduğu teyit\nGünlük Su Seviyesi ve Basınç Vardiya Operatörü\nedilir. Haftalık Emniyet Valfleri V-10 ve V-12 valfleri manuel test kolu ile blöf ettirilir. Bakım Teknisyeni\nAteşleme elektrot aralığı (3.5 mm) ayarlanır ve\nAylık Brülör ve Elektrotlar Bakım Teknisyeni\nkurum temizlenir. Kimyasal yıkama (Descaling) ile kireç birikintileri\n6 Aylık Kazan Taş ve Tortu Temizliği Yetkili Servis\nsökülür. Yıllık Tahribatsız Test (NDT) Kaynak dikişlerine ultrasonik çatlak testi uygulanır.",
+            "rrf_score": 0.0328,
+            "dense_rank": 1,
+            "sparse_rank": 1,
+            "dense_score": 0.5348,
+            "sparse_score": 2.9343,
+            "rerank_score": 0.0
+          },
+          {
+            "chunk_id": 2,
+            "text": "=== SAYFA 2 ===\n| Periyot | Kontrol Noktası | Yapılacak İşlem | Sorumlu |\n| Günlük | Su Seviyesi ve Basınç | Gösterge değerlerinin nominal aralıkta olduğu teyit edilir. | Vardiya Operatörü |\n| Haftalık | Emniyet Valfleri | V-10 ve V-12 valfleri manuel test kolu ile blöf ettirilir. | Bakım Teknisyeni |\n| Aylık | Brülör ve Elektrotlar | Ateşleme elektrot aralığı (3.5 mm) ayarlanır ve kurum temizlenir. | Bakım Teknisyeni |\n| 6 Aylık | Kazan Taş ve Tortu Temizliği | Kimyasal yıkama (Descaling) ile kireç birikintileri sökülür. | Yetkili Servis |\n| Yıllık | Tahribatsız Test (NDT) | Kaynak dikişlerine ultrasonik çatlak testi uygulanır.",
+            "rrf_score": 0.0323,
+            "dense_rank": 2,
+            "sparse_rank": 2,
+            "dense_score": 0.4959,
+            "sparse_score": 2.5064,
+            "rerank_score": 0.0
+          },
+          {
+            "chunk_id": 0,
+            "text": "=== SAYFA 1 ===\n| Arıza Kodu | Arıza Tanımı | Olası Neden | Çözüm / Müdahale |\n| E-101 | Aşırı Basınç Yükselmesi | V-10 Valfi tıkalı veya duyarga arızalı | V-10 valfini manuel açın, duyarga kalibrasyonunu kontrol edin. |\n| E-102 | Düşük Su Seviyesi | Besleme pompası P-04 devre dışı | P-04 sigortasını kontrol edin, emiş hattı vanasını açın. |\n| E-204 | Kritik Sıcaklık (SCRAM) | Aşırı yük veya brülör kontrolden çıktı | V-12 ana valfini kapatın, sistemi 45 dk soğumaya bırakın. |\n| E-309 | Alev Duyarga Arızası | Fotosel sensör yüzeyi kirlenmiş | Sensör lensini izopropil alkol ile temizleyin. |\n| E-412 | İletişim Kopukluğu (PLC) | RS485 Modbus kablosu gevşek | Pano klemens bağlantılarını ve sonlandırma direncini sıkın. ENDÜSTRİYEL KAZAN SİSTEMLERİ X-200\nKAPSAMLI TEKNİK İŞLETİM VE BAKIM KILAVUZU (V4.2)\n1. Genel Çalışma Prensipleri ve Yapısal Özellikler\nX-200 modeli, yüksek basınçlı endüstriyel buhar üretimi için özel olarak tasarlanmış modüler bir kazan sistemidir. Sistem, yüksek sıcaklık dayanımına sahip 316L paslanmaz çelik gövde yapısı ve titanyum kaplamalı eşanjör plaka\nboruları ile donatılmıştır. Standart çalışma basınç aralığı 4,2 bar ile 5,5 bar arasındadır. Bu aralığın dışındaki işletim\nşartları, güvenlik mimarisi tarafından otomatik olarak engellenir.",
+            "rrf_score": 0.0317,
+            "dense_rank": 3,
+            "sparse_rank": 3,
+            "dense_score": 0.3807,
+            "sparse_score": 1.5998,
+            "rerank_score": 0.0
+          }
+        ],
+        "retrieval_latency": 1.0175,
+        "context_precision": 1.0,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "id": 28,
+      "category": "multi_hop",
+      "user_input": "Yıllık tahribatsız testte hangi bölgeye hangi test uygulanır ve testten kim sorumludur?",
+      "reference": "Kaynak dikişlerine ultrasonik çatlak testi uygulanır; sorumlu sertifikalı mühendistir.",
+      "naive_rag": {
+        "retrieved_chunks": [
+          {
+            "chunk_id": 5,
+            "text": "unludur.\nPeriyot\nKontrol Noktası\nYapılacak İşlem\nSorumlu\nGünlük\nSu Seviyesi ve Basınç\nGösterge değerlerinin nominal aralıkta olduğu teyit\nedilir.\nVardiya Operatörü\nHaftalık\nEmniyet Valfleri\nV-10 ve V-12 valfleri manuel test kolu ile blöf ettirilir.\nBakım Teknisyeni\nAylık\nBrülör ve Elektrotlar\nAteşleme elektrot aralığı (3.5 mm) ayarlanır ve\nkurum temizlenir.\nBakım Teknisyeni\n6 Aylık\nKazan Taş ve Tortu Temizliği\nKimyasal yıkama (Descaling) ile kireç birikintileri\nsökülür.\nYetkili Servis\nYıllık\nTah",
+            "similarity_score": 0.6819
+          },
+          {
+            "chunk_id": 6,
+            "text": "ç birikintileri\nsökülür.\nYetkili Servis\nYıllık\nTahribatsız Test (NDT)\nKaynak dikişlerine ultrasonik çatlak testi uygulanır.\nSertifikalı Mühendis\n5. Elektrik ve Otomasyon Bağlantı Kuralları\nKazan kontrol panosu 380V AC 50Hz trifaze şebeke gerilimi ile beslenmektedir. PLC giriş/çıkış modülleri 24V DC izole\ngüç kaynağı üzerinden beslenmelidir. Topraklama direnci maksimum 2 Ohm seviyesinde olmalı, nötr ve toprak\nhatları kesinlikle birleştirilmemelidir (TN-S sistemi).",
+            "similarity_score": 0.6662
+          },
+          {
+            "chunk_id": 1,
+            "text": "ır. Bu aralığın dışındaki işletim\nşartları, güvenlik mimarisi tarafından otomatik olarak engellenir.\nKazan içi su seviyesi sürekli olarak ultrasonik debimetreler ve elektrotlu seviye sensörleri ile izlenmektedir. Optimum\nçalışma koşullarında kazan besleme suyu sıcaklığı 85 °C seviyesinde tutulmalıdır.\n2. Güvenlik Protokolleri ve Kritik Limitler\nSistemin güvenli işletimi için 3 kademeli koruma protokolü tanımlanmıştır:\n• Kademeli Uyarı (115 °C): Kazan iç sıcaklığı 115 °C değerine ulaştığında kont",
+            "similarity_score": 0.602
+          }
+        ],
+        "retrieval_latency": 0.4071,
+        "context_precision": 0.5,
+        "context_recall": 1.0
+      },
+      "advanced_rag": {
+        "retrieved_chunks": [
+          {
+            "chunk_id": 2,
+            "text": "=== SAYFA 2 ===\n| Periyot | Kontrol Noktası | Yapılacak İşlem | Sorumlu |\n| Günlük | Su Seviyesi ve Basınç | Gösterge değerlerinin nominal aralıkta olduğu teyit edilir. | Vardiya Operatörü |\n| Haftalık | Emniyet Valfleri | V-10 ve V-12 valfleri manuel test kolu ile blöf ettirilir. | Bakım Teknisyeni |\n| Aylık | Brülör ve Elektrotlar | Ateşleme elektrot aralığı (3.5 mm) ayarlanır ve kurum temizlenir. | Bakım Teknisyeni |\n| 6 Aylık | Kazan Taş ve Tortu Temizliği | Kimyasal yıkama (Descaling) ile kireç birikintileri sökülür. | Yetkili Servis |\n| Yıllık | Tahribatsız Test (NDT) | Kaynak dikişlerine ultrasonik çatlak testi uygulanır.",
+            "rrf_score": 0.0328,
+            "dense_rank": 1,
+            "sparse_rank": 1,
+            "dense_score": 0.4861,
+            "sparse_score": 4.1517,
+            "rerank_score": 0.0
+          },
+          {
+            "chunk_id": 4,
+            "text": "Periyodik Bakım ve Kontrol Çizelgesi\nKazan sisteminin kullanım ömrünü uzatmak ve garanti kapsamını korumak için aşağıdaki bakım takvimine uyulması\nzorunludur. Periyot Kontrol Noktası Yapılacak İşlem Sorumlu\nGösterge değerlerinin nominal aralıkta olduğu teyit\nGünlük Su Seviyesi ve Basınç Vardiya Operatörü\nedilir. Haftalık Emniyet Valfleri V-10 ve V-12 valfleri manuel test kolu ile blöf ettirilir. Bakım Teknisyeni\nAteşleme elektrot aralığı (3.5 mm) ayarlanır ve\nAylık Brülör ve Elektrotlar Bakım Teknisyeni\nkurum temizlenir. Kimyasal yıkama (Descaling) ile kireç birikintileri\n6 Aylık Kazan Taş ve Tortu Temizliği Yetkili Servis\nsökülür. Yıllık Tahribatsız Test (NDT) Kaynak dikişlerine ultrasonik çatlak testi uygulanır.",
+            "rrf_score": 0.0323,
+            "dense_rank": 2,
+            "sparse_rank": 2,
+            "dense_score": 0.4621,
+            "sparse_score": 3.8821,
+            "rerank_score": 0.0
+          },
+          {
+            "chunk_id": 6,
+            "text": "Elektrik ve Otomasyon Bağlantı Kuralları\nKazan kontrol panosu 380V AC 50Hz trifaze şebeke gerilimi ile beslenmektedir. PLC giriş/çıkış modülleri 24V DC izole\ngüç kaynağı üzerinden beslenmelidir. Topraklama direnci maksimum 2 Ohm seviyesinde olmalı, nötr ve toprak\nhatları kesinlikle birleştirilmemelidir (TN-S sistemi).",
+            "rrf_score": 0.0313,
+            "dense_rank": 5,
+            "sparse_rank": 3,
+            "dense_score": 0.3479,
+            "sparse_score": 0.4595,
+            "rerank_score": 0.0
+          }
+        ],
+        "retrieval_latency": 1.0412,
+        "context_precision": 1.0,
+        "context_recall": 0.5
+      }
+    },
+    {
+      "id": 29,
+      "category": "multi_hop",
+      "user_input": "Topraklama direnci ve nötr-toprak bağlantısı için kılavuzdaki iki elektriksel koşul nedir?",
+      "reference": "Topraklama direnci en fazla 2 Ohm olmalı ve nötr ile toprak hatları kesinlikle birleştirilmemelidir.",
+      "naive_rag": {
+        "retrieved_chunks": [
+          {
+            "chunk_id": 6,
+            "text": "ç birikintileri\nsökülür.\nYetkili Servis\nYıllık\nTahribatsız Test (NDT)\nKaynak dikişlerine ultrasonik çatlak testi uygulanır.\nSertifikalı Mühendis\n5. Elektrik ve Otomasyon Bağlantı Kuralları\nKazan kontrol panosu 380V AC 50Hz trifaze şebeke gerilimi ile beslenmektedir. PLC giriş/çıkış modülleri 24V DC izole\ngüç kaynağı üzerinden beslenmelidir. Topraklama direnci maksimum 2 Ohm seviyesinde olmalı, nötr ve toprak\nhatları kesinlikle birleştirilmemelidir (TN-S sistemi).",
+            "similarity_score": 0.7484
+          },
+          {
+            "chunk_id": 1,
+            "text": "ır. Bu aralığın dışındaki işletim\nşartları, güvenlik mimarisi tarafından otomatik olarak engellenir.\nKazan içi su seviyesi sürekli olarak ultrasonik debimetreler ve elektrotlu seviye sensörleri ile izlenmektedir. Optimum\nçalışma koşullarında kazan besleme suyu sıcaklığı 85 °C seviyesinde tutulmalıdır.\n2. Güvenlik Protokolleri ve Kritik Limitler\nSistemin güvenli işletimi için 3 kademeli koruma protokolü tanımlanmıştır:\n• Kademeli Uyarı (115 °C): Kazan iç sıcaklığı 115 °C değerine ulaştığında kont",
+            "similarity_score": 0.7138
+          },
+          {
+            "chunk_id": 5,
+            "text": "unludur.\nPeriyot\nKontrol Noktası\nYapılacak İşlem\nSorumlu\nGünlük\nSu Seviyesi ve Basınç\nGösterge değerlerinin nominal aralıkta olduğu teyit\nedilir.\nVardiya Operatörü\nHaftalık\nEmniyet Valfleri\nV-10 ve V-12 valfleri manuel test kolu ile blöf ettirilir.\nBakım Teknisyeni\nAylık\nBrülör ve Elektrotlar\nAteşleme elektrot aralığı (3.5 mm) ayarlanır ve\nkurum temizlenir.\nBakım Teknisyeni\n6 Aylık\nKazan Taş ve Tortu Temizliği\nKimyasal yıkama (Descaling) ile kireç birikintileri\nsökülür.\nYetkili Servis\nYıllık\nTah",
+            "similarity_score": 0.7136
+          }
+        ],
+        "retrieval_latency": 0.381,
+        "context_precision": 1.0,
+        "context_recall": 1.0
+      },
+      "advanced_rag": {
+        "retrieved_chunks": [
+          {
+            "chunk_id": 6,
+            "text": "Elektrik ve Otomasyon Bağlantı Kuralları\nKazan kontrol panosu 380V AC 50Hz trifaze şebeke gerilimi ile beslenmektedir. PLC giriş/çıkış modülleri 24V DC izole\ngüç kaynağı üzerinden beslenmelidir. Topraklama direnci maksimum 2 Ohm seviyesinde olmalı, nötr ve toprak\nhatları kesinlikle birleştirilmemelidir (TN-S sistemi).",
+            "rrf_score": 0.0328,
+            "dense_rank": 1,
+            "sparse_rank": 1,
+            "dense_score": 0.5694,
+            "sparse_score": 4.296,
+            "rerank_score": 0.0
+          },
+          {
+            "chunk_id": 4,
+            "text": "Periyodik Bakım ve Kontrol Çizelgesi\nKazan sisteminin kullanım ömrünü uzatmak ve garanti kapsamını korumak için aşağıdaki bakım takvimine uyulması\nzorunludur. Periyot Kontrol Noktası Yapılacak İşlem Sorumlu\nGösterge değerlerinin nominal aralıkta olduğu teyit\nGünlük Su Seviyesi ve Basınç Vardiya Operatörü\nedilir. Haftalık Emniyet Valfleri V-10 ve V-12 valfleri manuel test kolu ile blöf ettirilir. Bakım Teknisyeni\nAteşleme elektrot aralığı (3.5 mm) ayarlanır ve\nAylık Brülör ve Elektrotlar Bakım Teknisyeni\nkurum temizlenir. Kimyasal yıkama (Descaling) ile kireç birikintileri\n6 Aylık Kazan Taş ve Tortu Temizliği Yetkili Servis\nsökülür. Yıllık Tahribatsız Test (NDT) Kaynak dikişlerine ultrasonik çatlak testi uygulanır.",
+            "rrf_score": 0.0318,
+            "dense_rank": 4,
+            "sparse_rank": 2,
+            "dense_score": 0.3733,
+            "sparse_score": 0.7821,
+            "rerank_score": 0.0
+          },
+          {
+            "chunk_id": 0,
+            "text": "=== SAYFA 1 ===\n| Arıza Kodu | Arıza Tanımı | Olası Neden | Çözüm / Müdahale |\n| E-101 | Aşırı Basınç Yükselmesi | V-10 Valfi tıkalı veya duyarga arızalı | V-10 valfini manuel açın, duyarga kalibrasyonunu kontrol edin. |\n| E-102 | Düşük Su Seviyesi | Besleme pompası P-04 devre dışı | P-04 sigortasını kontrol edin, emiş hattı vanasını açın. |\n| E-204 | Kritik Sıcaklık (SCRAM) | Aşırı yük veya brülör kontrolden çıktı | V-12 ana valfini kapatın, sistemi 45 dk soğumaya bırakın. |\n| E-309 | Alev Duyarga Arızası | Fotosel sensör yüzeyi kirlenmiş | Sensör lensini izopropil alkol ile temizleyin. |\n| E-412 | İletişim Kopukluğu (PLC) | RS485 Modbus kablosu gevşek | Pano klemens bağlantılarını ve sonlandırma direncini sıkın. ENDÜSTRİYEL KAZAN SİSTEMLERİ X-200\nKAPSAMLI TEKNİK İŞLETİM VE BAKIM KILAVUZU (V4.2)\n1. Genel Çalışma Prensipleri ve Yapısal Özellikler\nX-200 modeli, yüksek basınçlı endüstriyel buhar üretimi için özel olarak tasarlanmış modüler bir kazan sistemidir. Sistem, yüksek sıcaklık dayanımına sahip 316L paslanmaz çelik gövde yapısı ve titanyum kaplamalı eşanjör plaka\nboruları ile donatılmıştır. Standart çalışma basınç aralığı 4,2 bar ile 5,5 bar arasındadır. Bu aralığın dışındaki işletim\nşartları, güvenlik mimarisi tarafından otomatik olarak engellenir.",
+            "rrf_score": 0.0317,
+            "dense_rank": 3,
+            "sparse_rank": 3,
+            "dense_score": 0.3832,
+            "sparse_score": 0.5804,
+            "rerank_score": 0.0
+          }
+        ],
+        "retrieval_latency": 0.9812,
+        "context_precision": 1.0,
+        "context_recall": 1.0
+      }
+    },
+    {
+      "id": 30,
+      "category": "multi_hop",
+      "user_input": "Kılavuzdaki üç kademeli koruma protokolünü, her kademenin eşiği ve sistem tepkisiyle birlikte sıralayın.",
+      "reference": "115 °C'de sarı ikaz lambası sürekli yanar ve sesli uyarı verilir. Basınç 5,8 bar sınırına ulaştığında V-10 otomatik açılarak fazla basıncı atmosfere salar. Sıcaklık 135 °C'yi veya basınç 6,2 barı aştığında SCRAM tetiklenir ve operatör V-12 ana valfini manuel kapatır.",
+      "naive_rag": {
+        "retrieved_chunks": [
+          {
+            "chunk_id": 5,
+            "text": "unludur.\nPeriyot\nKontrol Noktası\nYapılacak İşlem\nSorumlu\nGünlük\nSu Seviyesi ve Basınç\nGösterge değerlerinin nominal aralıkta olduğu teyit\nedilir.\nVardiya Operatörü\nHaftalık\nEmniyet Valfleri\nV-10 ve V-12 valfleri manuel test kolu ile blöf ettirilir.\nBakım Teknisyeni\nAylık\nBrülör ve Elektrotlar\nAteşleme elektrot aralığı (3.5 mm) ayarlanır ve\nkurum temizlenir.\nBakım Teknisyeni\n6 Aylık\nKazan Taş ve Tortu Temizliği\nKimyasal yıkama (Descaling) ile kireç birikintileri\nsökülür.\nYetkili Servis\nYıllık\nTah",
+            "similarity_score": 0.7091
+          },
+          {
+            "chunk_id": 0,
+            "text": "ENDÜSTRİYEL KAZAN SİSTEMLERİ X-200\nKAPSAMLI TEKNİK İŞLETİM VE BAKIM KILAVUZU (V4.2)\n1. Genel Çalışma Prensipleri ve Yapısal Özellikler\nX-200 modeli, yüksek basınçlı endüstriyel buhar üretimi için özel olarak tasarlanmış modüler bir kazan sistemidir.\nSistem, yüksek sıcaklık dayanımına sahip 316L paslanmaz çelik gövde yapısı ve titanyum kaplamalı eşanjör plaka\nboruları ile donatılmıştır. Standart çalışma basınç aralığı 4,2 bar ile 5,5 bar arasındadır. Bu aralığın dışındaki işletim\nşartları, güvenl",
+            "similarity_score": 0.7091
+          },
+          {
+            "chunk_id": 1,
+            "text": "ır. Bu aralığın dışındaki işletim\nşartları, güvenlik mimarisi tarafından otomatik olarak engellenir.\nKazan içi su seviyesi sürekli olarak ultrasonik debimetreler ve elektrotlu seviye sensörleri ile izlenmektedir. Optimum\nçalışma koşullarında kazan besleme suyu sıcaklığı 85 °C seviyesinde tutulmalıdır.\n2. Güvenlik Protokolleri ve Kritik Limitler\nSistemin güvenli işletimi için 3 kademeli koruma protokolü tanımlanmıştır:\n• Kademeli Uyarı (115 °C): Kazan iç sıcaklığı 115 °C değerine ulaştığında kont",
+            "similarity_score": 0.7036
+          }
+        ],
+        "retrieval_latency": 0.3679,
+        "context_precision": 0.0,
+        "context_recall": 0.0
+      },
+      "advanced_rag": {
+        "retrieved_chunks": [
+          {
+            "chunk_id": 1,
+            "text": "Kazan içi su seviyesi sürekli olarak ultrasonik debimetreler ve elektrotlu seviye sensörleri ile izlenmektedir. Optimum\nçalışma koşullarında kazan besleme suyu sıcaklığı 85 °C seviyesinde tutulmalıdır. Güvenlik Protokolleri ve Kritik Limitler\nSistemin güvenli işletimi için 3 kademeli koruma protokolü tanımlanmıştır:\n• Kademeli Uyarı (115 °C): Kazan iç sıcaklığı 115 °C değerine ulaştığında kontrol panosundaki sarı ikaz lambası sürekli\nyanar ve sesli uyarı devreye girer. • Otomatik Tahliye (125 °C / 5.8 bar): Basınç 5,8 bar sınırına ulaştığında Solenoid V-10 tahliye valfi otomatik açılarak\nfazla basıncı atmosfere salar. • Acil Kapatma - SCRAM (135 °C / 6.2 bar): Kritik eşik olan 135 °C sıcaklık veya 6.2 bar basınç aşıldığında acil kapatma\nsistemi (SCRAM) tetiklenir. Bu aşamada operatör V-12 ana valfini manuel olarak kapatmalıdır. Arıza Kodları (Error Codes) ve Müdahale Adımları\nArıza Kodu Arıza Tanımı Olası Neden Çözüm / Müdahale\nV-10 Valfi tıkalı veya duyarga V-10 valfini manuel açın, duyarga\nE-101 Aşırı Basınç Yükselmesi\narızalı kalibrasyonunu kontrol edin. P-04 sigortasını kontrol edin, emiş hattı\nE-102 Düşük Su Seviyesi Besleme pompası P-04 devre dışı\nvanasını açın. Aşırı yük veya brülör kontrolden V-12 ana valfini kapatın, sistemi 45 dk\nE-204 Kritik Sıcaklık (SCRAM)\nçıktı soğumaya bırakın. E-309 Alev Duyarga Arızası Fotosel sensör yüzeyi kirlenmiş Sensör lensini izopropil alkol ile temizleyin. Pano klemens bağlantılarını ve sonlandırma\nE-412 İletişim Kopukluğu (PLC) RS485 Modbus kablosu gevşek\ndirencini sıkın.",
+            "rrf_score": 0.0328,
+            "dense_rank": 1,
+            "sparse_rank": 1,
+            "dense_score": 0.5347,
+            "sparse_score": 2.7133,
+            "rerank_score": 0.0
+          },
+          {
+            "chunk_id": 0,
+            "text": "=== SAYFA 1 ===\n| Arıza Kodu | Arıza Tanımı | Olası Neden | Çözüm / Müdahale |\n| E-101 | Aşırı Basınç Yükselmesi | V-10 Valfi tıkalı veya duyarga arızalı | V-10 valfini manuel açın, duyarga kalibrasyonunu kontrol edin. |\n| E-102 | Düşük Su Seviyesi | Besleme pompası P-04 devre dışı | P-04 sigortasını kontrol edin, emiş hattı vanasını açın. |\n| E-204 | Kritik Sıcaklık (SCRAM) | Aşırı yük veya brülör kontrolden çıktı | V-12 ana valfini kapatın, sistemi 45 dk soğumaya bırakın. |\n| E-309 | Alev Duyarga Arızası | Fotosel sensör yüzeyi kirlenmiş | Sensör lensini izopropil alkol ile temizleyin. |\n| E-412 | İletişim Kopukluğu (PLC) | RS485 Modbus kablosu gevşek | Pano klemens bağlantılarını ve sonlandırma direncini sıkın. ENDÜSTRİYEL KAZAN SİSTEMLERİ X-200\nKAPSAMLI TEKNİK İŞLETİM VE BAKIM KILAVUZU (V4.2)\n1. Genel Çalışma Prensipleri ve Yapısal Özellikler\nX-200 modeli, yüksek basınçlı endüstriyel buhar üretimi için özel olarak tasarlanmış modüler bir kazan sistemidir. Sistem, yüksek sıcaklık dayanımına sahip 316L paslanmaz çelik gövde yapısı ve titanyum kaplamalı eşanjör plaka\nboruları ile donatılmıştır. Standart çalışma basınç aralığı 4,2 bar ile 5,5 bar arasındadır. Bu aralığın dışındaki işletim\nşartları, güvenlik mimarisi tarafından otomatik olarak engellenir.",
+            "rrf_score": 0.032,
+            "dense_rank": 3,
+            "sparse_rank": 2,
+            "dense_score": 0.4577,
+            "sparse_score": 1.4251,
+            "rerank_score": 0.0
+          },
+          {
+            "chunk_id": 2,
+            "text": "=== SAYFA 2 ===\n| Periyot | Kontrol Noktası | Yapılacak İşlem | Sorumlu |\n| Günlük | Su Seviyesi ve Basınç | Gösterge değerlerinin nominal aralıkta olduğu teyit edilir. | Vardiya Operatörü |\n| Haftalık | Emniyet Valfleri | V-10 ve V-12 valfleri manuel test kolu ile blöf ettirilir. | Bakım Teknisyeni |\n| Aylık | Brülör ve Elektrotlar | Ateşleme elektrot aralığı (3.5 mm) ayarlanır ve kurum temizlenir. | Bakım Teknisyeni |\n| 6 Aylık | Kazan Taş ve Tortu Temizliği | Kimyasal yıkama (Descaling) ile kireç birikintileri sökülür. | Yetkili Servis |\n| Yıllık | Tahribatsız Test (NDT) | Kaynak dikişlerine ultrasonik çatlak testi uygulanır.",
+            "rrf_score": 0.0318,
+            "dense_rank": 2,
+            "sparse_rank": 4,
+            "dense_score": 0.466,
+            "sparse_score": 0.5229,
+            "rerank_score": 0.0
+          }
+        ],
+        "retrieval_latency": 0.9713,
         "context_precision": 1.0,
         "context_recall": 1.0
       }

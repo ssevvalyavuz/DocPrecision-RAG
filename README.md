@@ -1,789 +1,172 @@
-# 🚀 DocPrecision-RAG: Gelişmiş RAG Mimarisi
+# DocPrecision-RAG
 
-> **Karşılaştırmalı RAG Motoru:** Naive RAG temel yaklaşımından; Semantic Chunking, Hybrid Search (BM25 + BGE) ve Cross-Encoder Reranking kullanan gelişmiş RAG mimarisi.
+**DocPrecision-RAG**, endüstriyel teknik dokümantasyon (`data/X200_Kapsamli_Teknik_Kilavuz.pdf`) üzerinde klasik **Naive RAG** yaklaşımı ile **Semantic Chunking + Hibrit Arama (BM25 + Dense) + Reciprocal Rank Fusion (RRF)** tabanlı **Advanced RAG** mimarisini karşılaştıran bir Retrieval-Augmented Generation (RAG) mühendislik ve değerlendirme projesidir[cite: 5, 7, 10, 12].
 
-**DocPrecision-RAG**, sabit karakter sayısına dayalı standart (Naive) RAG yaklaşımlarının ötesine geçerek; metni anlamsal mesafe kopuşlarına göre bölen (**Semantic Chunking**), kelime tabanlı ve vektörel aramayı RRF ile birleştiren (**Hybrid Search**) ve bulunan sonuçları Cross-Encoder ile yeniden sıralayan (**Reranking**) uçtan uca, modüler bir RAG mimarisidir.
+**Ragas 0.4.3 Collections API** ile (`Top-3`, `n=30` alan-spesifik soru, `retrieval_only` modu) gerçekleştirilen kıyaslamada Advanced RAG boru hattı, **Context Recall** skorunu **0.9667** seviyesinde tutarken **Context Precision** değerini **+%17.57** (`0.8222` → `0.9667`) artırmıştır[cite: 7]. *(Not: Bu sürümde harici bir Cross-Encoder yeniden sıralama modeli kullanılmamış; sıralama kalitesi doğrudan RRF füzyon puanları üzerinden sağlanmıştır[cite: 5, 12].)*
 
 ---
 
-## 🏛️ Sistem Mimarisi
+## 📊 Retrieval Benchmark Sonuçları (Ragas 0.4.3 Collections)
+
+![DocPrecision-RAG Benchmark](benchmark_comparison.png)
+
+| Metrik (`Top-3`, `n=30`) | Naive RAG Baseline | Advanced RAG Pipeline | Mutlak Fark | Göreli Değişim |
+| :--- | :---: | :---: | :---: | :---: |
+| **Context Precision** | `0.8222` | **`0.9667`** | `+0.1445` | **+%17.57** |
+| **Context Recall** | `0.9500` | **`0.9667`** | `+0.0167` | **+%1.76** |
+| **Ort. Retrieval Süresi** | **`0.4075 sn`** | `1.2354 sn` | `+0.8279 sn` | `3.03x` ödünleşim |
+
+### Temel Mühendislik Çıkarımları
+
+* **Cross-Encoder Olmadan Yüksek Sıralama Kesinliği (+%17.57 Context Precision):** Ek bir Cross-Encoder gecikmesi eklenmeden yalnızca **Semantic Chunking** (`threshold_percentile=85.0`) ve **RRF (`rrf_k=60`)** tabanlı hibrit füzyon kullanılarak doğru teknik bağlamın ilk sırada getirilme oranı `0.8222`'den `0.9667`'ye yükselmiştir[cite: 5, 12].
+* **Tablo ve Teknik Kod Hassasiyeti:** `pdfplumber` ile sayfalardaki tabloları Markdown formatında ayrıştıran ingest katmanı[cite: 5] ve kelime nadirliğini (IDF) koruyan `BM25Okapi` motoru[cite: 9, 12], `E-309`, `E-412` gibi arıza kodları ile basınç/sıcaklık eşiklerini yüksek isabetle eşleştirir[cite: 10].
+* **Gecikme ve Doğruluk Ödünleşimi (Latency Trade-off):** Çift yönlü indeks taraması (Dense `BAAI/bge-m3` + Sparse `BM25Okapi`) ve RRF hesaplaması sorgu başına ortalama `+0.8279 sn` ek süre (`0.4075 sn` → `1.2354 sn`) getirirken bağlam gürültüsünü belirgin şekilde azaltır[cite: 5, 12].
+
+---
+
+## 🏗️ Sistem Mimarisi
 
 ```text
-                               [ Ham PDF Dokümanı ]
-                                        │
-                                        ▼
-                              [ PyMuPDF Doküman Okuyucu ]
-                                        │
-                                        ▼
-                              [ Özel Semantic Chunker ]
-                  (Dinamik Percentile Tabanlı Cosine Distance Threshold)
-                                        │
-                                        ▼
-                              [ Hibrit Arama İndeksi ]
-           ┌────────────────────────────┴────────────────────────────┐
-           ▼                                                         ▼
-   [ BM25 Retriever ]                                       [ BGE Dense Retriever ]
- (Kesin Kelime Eşleşmesi)                                (BAAI/bge-small-en-v1.5)
-           │                                                         │
-           └────────────────────────────┬────────────────────────────┘
-                                        ▼
-                       [ Reciprocal Rank Fusion (RRF) ]
-                              (Birleşik Aday Havuzu)
-                                        │
-                                        ▼
-                          [ Cross-Encoder Reranker ]
-                          (BAAI/bge-reranker-base)
-                                        │
-                                        ▼
-                           [ Katı Prompt Mühendisliği ]
-                                        │
-                                        ▼
-                             [ Groq Cloud LLM ]
-                              (OpenAI-compatible API)
+                       ┌──────────────────────────────────────────────┐
+                       │   Teknik PDF Kılavuzu (X-200 Bakım Kılavuzu) │
+                       └──────────────────────┬───────────────────────┘
+                                              │
+                ┌─────────────────────────────┴─────────────────────────────┐
+                ▼                                                           ▼
+┌───────────────────────────────────┐                       ┌───────────────────────────────────┐
+│        Naive RAG Baseline         │                       │       Advanced RAG Pipeline       │
+├───────────────────────────────────┤                       ├───────────────────────────────────┤
+│ 1. Sabit Boyutlu Karakter Bölme   │                       │ 1. pdfplumber Tablo & Metin Okuma │
+│ 2. Dense Vektör Gömme             │                       │ 2. Semantic Chunking (%85 eşik)   │
+│ 3. Kosinüs Benzerliği Sıralama    │                       │ 3. Hibrit Arama (BM25 + BAAI/bge-m3)
+│                                   │                       │ 4. Reciprocal Rank Fusion (k=60)  │
+└─────────────────┬─────────────────┘                       └─────────────────┬─────────────────┘
+                  │ Top-3 Parça                                               │ Top-3 Parça
+                  └────────────────────────────┬──────────────────────────────┘
+                                               ▼
+                       ┌──────────────────────────────────────────────┐
+                       │   Ragas 0.4.3 Collections Değerlendirme      │
+                       │   • ContextPrecision (Sıralama Kesinliği)    │
+                       │   • ContextRecall (Referans Kapsama Oranı)   │
+                       └──────────────────────────────────────────────┘
 ```
 
+### Bileşen Karşılaştırması
+
+| Katman | Naive RAG Baseline (`naive_rag.py`) | Advanced RAG Pipeline (`advanced_rag.py`) |
+| --- | --- | --- |
+| **Doküman Ayrıştırma** | Düz metin okuma | `pdfplumber` ile sayfa bazlı tablo |
+| **Bölümleme (Chunking)** | Sabit boyutlu karakter bölme | `SemanticChunker` (`threshold_percentile=85.0`) |
+| **Gömme Modeli (Embedding)** | Dense embedding | `BAAI/bge-m3` (`HuggingFaceEmbedding`) |
+| **Arama ve Sıralama** | Doğrudan kosinüs benzerliği (`top_k=3`) | `HybridRetriever`: `BM25Okapi` + Dense kosinüs benzerliği + RRF (`rrf_k=60`, `top_k=6` aday havuzu) |
+| **Reranking** | Yok | Harici Cross-Encoder yok; doğrudan RRF füzyon skoru sıralaması |
+| **Yanıt Üretimi (UI Modu)** | — | OpenAI uyumlu protokol üzerinden Groq Cloud API (`OpenAILike`) |
+
 ---
 
-## 🔑 Temel Özellikler ve Teknik Detaylar
-
-- **Semantic Chunking (`semantic_chunker.py`):** Sabit boyutlu Naive Chunking yaklaşımı yerine, `BAAI/bge-small-en-v1.5` kullanarak cümleler arasındaki anlamsal mesafeyi analiz eder. Dinamik eşik belirleme yöntemiyle metni anlamsal geçiş noktalarından böler. Bu projede eşik değeri **%85'lik percentile** üzerinden belirlenmektedir.
-
-- **Hybrid Retrieval Engine (`hybrid_retriever.py`):** Kesin terimler, model ID'leri ve hata kodları gibi ifadeler için **BM25**, bağlamsal sorgular için ise **Dense BGE Embeddings** kullanır. İki arama sonucunu **Reciprocal Rank Fusion (RRF)** ile birleştirir. RRF parametresi `k=60` olarak kullanılmaktadır.
-
-- **Cross-Encoder Reranking (`reranker.py`):** `BAAI/bge-reranker-base` modeli ile sorgu ve doküman parçalarını birlikte değerlendirir. Böylece düşük alakalı içerikleri filtreleyerek LLM'e yalnızca daha ilgili bağlamı gönderir.
-
-- **Hallüsinasyon Önleme (`advanced_rag.py`):** LLM'in yalnızca getirilen bağlamı kullanmasını sağlayan katı prompt kuralları uygular. Yeterli bilgi bulunmadığında sistemin açık bir bilgi bulunamadı cevabı üretmesini sağlar.
-
----
-
-## 🛠️ Proje Yapısı
+## 📂 Proje Yapısı
 
 ```text
 DocPrecision-RAG/
+├── benchmark_comparison.png            # Retrieval & gecikme karşılaştırma grafiği
 ├── data/
-│   └── manual.pdf             # Örnek teknik PDF dokümanı
-├── semantic_chunker.py        # Cosine distance tabanlı semantic chunking
-├── hybrid_retriever.py        # BM25 + Dense Vector + RRF retrieval modülü
-├── reranker.py                # Cross-Encoder reranking modülü
-├── advanced_rag.py            # Uçtan uca RAG pipeline yöneticisi
-├── requirements.txt           # Python bağımlılıkları
-└── README.md                  # Proje dokümantasyonu
+│   └── X200_Kapsamli_Teknik_Kilavuz.pdf # Sentetik endüstriyel kazan teknik kılavuzu[cite: 7, 10]
+├── evaluation/
+│   ├── questions.json                  # ground_truth içeren 30 soruluk değerlendirme veri seti[cite: 7]
+│   └── ragas_collections_results.json  # Soru bazlı ve özet Ragas 0.4.3 metrik sonuçları[cite: 7]
+├── naive_rag.py                        # Temel dense vektör retrieval boru hattı[cite: 7]
+├── advanced_rag.py                     # Semantic chunking + Hibrit RRF boru hattı[cite: 5]
+├── semantic_chunker.py                 # Anlamsal sınır tespit ve parçalama modülü[cite: 5]
+├── hybrid_retriever.py                 # BM25Okapi + Dense vektör + RRF arama motoru[cite: 12]
+├── app.py                              # Streamlit tabanlı etkileşimli PDF soru-cevap arayüzü[cite: 6]
+├── benchmark_2.py                      # Checkpoint korumalı Ragas 0.4.3 değerlendirme betiği[cite: 7]
+├── groq_utils.py                       # HTTP 429 hız sınırı için üstel geri çekilme (retry) yardımcıları[cite: 11]
+├── generate_detailed_pdf_manual.py     # Türkçe font destekli X-200 teknik kılavuz PDF üreticisi[cite: 10]
+├── .gitignore
+└── README.md
+
 ```
 
 ---
 
-## 🚀 Hızlı Başlangıç
+## ⚙️ Kurulum ve Yapılandırma
 
-### 1. Ön Gereksinimler
-
-Sistemi çalıştırmak için aşağıdakiler gerekir:
-
-- Python 3.10+
-- Git
-- Groq API key (`GROQ_API_KEY`)
-
-`naive_rag.py` yerel Ollama modeli kullandığından, temel RAG uygulamasını çalıştırmak için ayrıca Ollama gerekir.
-
----
-
-### 2. Projeyi Klonlama
+### 1. Depoyu Klonlayın ve Sanal Ortam Oluşturun
 
 ```bash
 git clone https://github.com/ssevvalyavuz/DocPrecision-RAG.git
 cd DocPrecision-RAG
+
+python -m venv .venv
+source .venv/bin/activate  # Windows: .venv\Scripts\activate
+
 ```
 
----
-
-### 3. Sanal Ortam Oluşturma
+### 2. Bağımlılıkları Yükleyin
 
 ```bash
-python3 -m venv .venv
+pip install streamlit ragas openai groq llama-index llama-index-llms-openai-like \
+           llama-index-embeddings-huggingface pdfplumber rank-bm25 reportlab \
+           python-dotenv numpy
+
 ```
 
-#### macOS / Linux
+### 3. Ortam Değişkenlerini Tanımlayın
 
-```bash
-source .venv/bin/activate
-```
+Proje kök dizininde `.env` dosyası oluşturun:
 
-#### Windows
-
-```powershell
-.venv\Scripts\activate
-```
-
----
-
-### 4. Bağımlılıkları Yükleme
-
-```bash
-pip install -r requirements.txt
-```
-
----
-
-### 5. Groq API yapılandırması
-
-Proje kökünde `.env` dosyası oluşturup Groq API anahtarınızı girin. İsteğe bağlı `GROQ_MODEL`, varsayılan model kimliğini değiştirmek için kullanılabilir.
-
-```bash
-GROQ_API_KEY=your_groq_api_key
-# İsteğe bağlı; varsayılan: openai/gpt-oss-20b
+```env
+GROQ_API_KEY=your_groq_api_key_here
 GROQ_MODEL=openai/gpt-oss-20b
+
 ```
+
+(Güvenlik Notu: `.env` dosyası `.gitignore` içinde tanımlıdır; API anahtarlarınızı repoya göndermeyin.)
 
 ---
 
-### 6. Gelişmiş RAG Pipeline'ını Çalıştırma
+## 🚀 Kullanım
+
+### 1. Streamlit Web Arayüzünü Başlatma (`app.py`)
+
+Teknik bir PDF dokümanı yüklemek, anlamsal parçalama sayısını görmek ve seçilen bağlam parçalarını RRF skorlarıyla birlikte incelemek için:
 
 ```bash
-python advanced_rag.py
+streamlit run app.py
+
 ```
 
-Pipeline çalıştırıldığında sistem sırasıyla:
+### 2. Ragas 0.4.3 Collections Benchmark Çalıştırma (`benchmark_2.py`)
 
-1. PDF dokümanını okur.
-2. Metni PyMuPDF ile çıkarır.
-3. Metni anlamsal olarak parçalara böler.
-4. BGE embedding'lerini oluşturur.
-5. BM25 ve Dense Retrieval indekslerini oluşturur.
-6. Kullanıcı sorgusunu iki farklı yöntemle arar.
-7. Sonuçları RRF ile birleştirir.
-8. Cross-Encoder ile yeniden sıralar.
-9. En alakalı içerikleri prompt içerisine yerleştirir.
-10. Prompt'u Groq Cloud LLM'ine gönderir.
-11. Nihai cevabı üretir.
+Her iki boru hattını LLM yanıt üretimi kapalı (`retrieval_only`) modda 30 soru üzerinden kıyaslamak için:
 
----
+```bash
+python benchmark_2.py
 
-## 📊 RAG Pipeline'ı
-
-DocPrecision-RAG aşağıdaki çok aşamalı mimariyi kullanır:
-
-```text
-PDF Dokümanı
-     │
-     ▼
-PyMuPDF ile Metin Çıkarma
-     │
-     ▼
-Semantic Chunking
-     │
-     ▼
-┌───────────────────────┐
-│                       │
-│    Hibrit Retrieval   │
-│                       │
-├───────────┬───────────┤
-│           │           │
-▼           ▼           │
-BM25      BGE Dense     │
-│           │           │
-└─────┬─────┘           │
-      ▼                 │
-     RRF ◄──────────────┘
-      │
-      ▼
-Birleşik Aday Havuzu
-      │
-      ▼
-Cross-Encoder Reranking
-      │
-      ▼
-En Alakalı Context
-      │
-      ▼
-Strict Prompt
-      │
-      ▼
-Yerel LLM
-      │
-      ▼
-Nihai Cevap
 ```
 
----
+* **Kesinti Korumalı Checkpoint:** Her sorunun sonucu `evaluation/ragas_collections_checkpoint.json` dosyasına atomik olarak yazılır; olası API limit kesintilerinde betik kaldığı sorudan devam eder.
 
-## 🧠 Semantic Chunking
+* **Nihai Çıktı:** Tüm sorular tamamlandığında özet ve detay skorlar `evaluation/ragas_collections_results.json` dosyasına kaydedilir.
 
-Semantic Chunking, dokümanı sabit karakter veya token sayısına göre bölmek yerine, metindeki anlamsal geçiş noktalarını tespit ederek parçalamayı amaçlar.
 
-### Naive Chunking
 
-Geleneksel yaklaşımda:
+### 3. Örnek Teknik Kılavuz PDF'ini Yeniden Üretme
 
-```text
-Her 500 karakter → Yeni Chunk
+`data/X200_Kapsamli_Teknik_Kilavuz.pdf` dosyasını sıfırdan üretmek için:
+
+```bash
+python generate_detailed_pdf_manual.py
+
 ```
 
-gibi sabit bir bölme yöntemi kullanılabilir.
+### GitHub'a Gönderme Komutu
 
-Bu yaklaşımda aynı konuya ait iki cümlenin farklı chunk'lara ayrılması veya farklı konuların aynı chunk içerisinde bulunması mümkündür.
+*(Eğer `benchmark_comparison.png` dosyasını `assets/` klasörüne koyduysan yukarıdaki 2 yerde `assets/benchmark_comparison.png` olarak güncellemen yeterlidir.)*
 
-### DocPrecision-RAG Yaklaşımı
+```bash
+git add benchmark_comparison.png README.md evaluation/questions.json evaluation/ragas_collections_results.json
+git commit -m "docs: add benchmark chart and updated README"
+git push
 
-Bu projede cümlelerin embedding'leri oluşturulur ve ardışık cümleler arasındaki cosine distance hesaplanır.
-
-```text
-Cümle
-  │
-  ▼
-Embedding
-  │
-  ▼
-Cosine Distance
-  │
-  ▼
-Mesafe Dağılımı
-  │
-  ▼
-%85 Percentile Eşik Değeri
-  │
-  ▼
-Anlamsal Geçiş Noktası
-  │
-  ▼
-Yeni Chunk
 ```
-
-Kullanılan embedding modeli:
-
-```text
-BAAI/bge-small-en-v1.5
-```
-
-Bu sayede chunk sınırları dokümanın anlamsal yapısına daha fazla uyum sağlar.
-
-### Semantic Chunking'in Avantajları
-
-- Konu bütünlüğünü daha iyi korur.
-- İlgili cümlelerin aynı chunk içerisinde kalmasını sağlar.
-- Anlamsal geçişlerde daha doğru sınırlar oluşturur.
-- Sabit chunk boyutuna olan bağımlılığı azaltır.
-- Retrieval kalitesinin artırılmasına yardımcı olur.
-
----
-
-## 🔎 Hybrid Search
-
-Hybrid Search, iki farklı retrieval yaklaşımını birlikte kullanır:
-
-1. **BM25 — Kelime tabanlı retrieval**
-2. **Dense Retrieval — Anlamsal retrieval**
-
-Bu iki yaklaşımın güçlü yönleri RRF ile birleştirilir.
-
----
-
-### 🔤 BM25 Retrieval
-
-BM25, sorgudaki kelimelerin dokümanlarda bulunmasına dayalı bir retrieval yöntemidir.
-
-Özellikle aşağıdaki sorgu tiplerinde avantajlıdır:
-
-- Model isimleri
-- Hata kodları
-- Ürün kodları
-- Teknik terimler
-- API isimleri
-- Değişken isimleri
-- Kesin anahtar kelimeler
-
-Örneğin:
-
-```text
-ERR_CONNECTION_REFUSED
-API_KEY
-SQLSTATE 42P01
-Model X100
-```
-
-gibi ifadelerde BM25 güçlü sonuçlar sağlayabilir.
-
----
-
-### 🧠 Dense Retrieval
-
-Dense Retrieval, metinleri embedding vektörlerine dönüştürerek anlamsal benzerlik üzerinden arama yapar.
-
-Kullanılan model:
-
-```text
-BAAI/bge-small-en-v1.5
-```
-
-Örneğin kullanıcı:
-
-```text
-Uygulama neden veritabanına bağlanamıyor?
-```
-
-diye sorduğunda, dokümanda tam olarak bu cümle bulunmasa bile bağlantı problemiyle ilgili anlamsal olarak benzer içerikler bulunabilir.
-
----
-
-### 🔗 Hibrit Retrieval Akışı
-
-```text
-                 Kullanıcı Sorgusu
-                        │
-              ┌─────────┴─────────┐
-              ▼                   ▼
-         BM25 Arama          BGE Dense Arama
-              │                   │
-              ▼                   ▼
-        Kelime Sıralaması    Anlamsal Sıralama
-              │                   │
-              └─────────┬─────────┘
-                        ▼
-                       RRF
-                        │
-                        ▼
-              Birleşik Sıralama
-```
-
----
-
-## 🔗 Reciprocal Rank Fusion (RRF)
-
-BM25 ve Dense Retrieval farklı skor sistemleri kullandığından, sonuçları doğrudan karşılaştırmak yerine sıralamalarını birleştirmek için **Reciprocal Rank Fusion** kullanılır.
-
-Genel formül:
-
-$$
-RRF(d) = \sum_{r \in R} \frac{1}{k + rank_r(d)}
-$$
-
-Burada:
-
-- $d$ = doküman
-- $R$ = retrieval sistemleri
-- $rank_r(d)$ = dokümanın ilgili retrieval sistemindeki sırası
-- $k$ = sıralama sabiti
-
-Bu projede:
-
-$$
-k = 60
-$$
-
-olarak kullanılmaktadır.
-
-RRF sayesinde BM25 ve Dense Retrieval sonuçları ortak bir sıralama altında birleştirilir.
-
----
-
-## 🎯 Cross-Encoder Reranking
-
-İlk retrieval aşaması yüksek recall elde etmeye odaklanırken, Cross-Encoder ikinci aşamada daha hassas bir relevance değerlendirmesi gerçekleştirir.
-
-Kullanılan model:
-
-```text
-BAAI/bge-reranker-base
-```
-
-Pipeline:
-
-```text
-Çok Sayıda Chunk
-       │
-       ▼
-İlk Retrieval
-       │
-       ▼
-Aday Chunk'lar
-       │
-       ▼
-Cross-Encoder
-       │
-       ▼
-Alaka Skorlaması
-       │
-       ▼
-En İlgili Chunk'lar
-       │
-       ▼
-LLM
-```
-
-Cross-Encoder, sorguyu ve doküman parçasını birlikte değerlendirerek daha hassas bir relevance skoru üretir.
-
-Böylece LLM'e gereksiz veya düşük alakalı içerik gönderilmesinin azaltılması amaçlanır.
-
----
-
-## 🛡️ Hallüsinasyon Önleme
-
-RAG sistemlerinde yalnızca doğru dokümanı getirmek yeterli değildir. LLM'in getirilen bağlam dışındaki bilgileri kullanarak cevap üretmesi de engellenmelidir.
-
-DocPrecision-RAG bu nedenle **Strict Prompt Engineering** yaklaşımı kullanır.
-
-Temel mantık:
-
-```text
-Retrieved Context
-       │
-       ▼
-Gerekli bilgi context içerisinde var mı?
-       │
-      ┌┴┐
-      │ │
-     EVET HAYIR
-      │ │
-      ▼ ▼
-    Cevap  Fallback
-    üret   üret
-```
-
-Context içerisinde yeterli bilgi bulunmuyorsa sistem açık bir fallback cevabı döndürür.
-
-Örneğin:
-
-```text
-Information not found in the provided context.
-```
-
-Bu yaklaşım, LLM'in desteklenmeyen bilgiler üretmesini azaltmayı amaçlar.
-
----
-
-## 🧩 Proje Yapısı
-
-```text
-DocPrecision-RAG/
-│
-├── data/
-│   └── manual.pdf
-│
-├── semantic_chunker.py
-│   └── Semantic Chunking motoru
-│
-├── hybrid_retriever.py
-│   └── BM25 + Dense Retrieval + RRF
-│
-├── reranker.py
-│   └── Cross-Encoder Reranking
-│
-├── advanced_rag.py
-│   └── Uçtan uca RAG pipeline
-│
-├── requirements.txt
-│   └── Python bağımlılıkları
-│
-└── README.md
-    └── Proje dokümantasyonu
-```
-
----
-
-## 🛠️ Kullanılan Teknolojiler
-
-| Teknoloji | Kullanım Amacı |
-|---|---|
-| Python | Ana geliştirme dili |
-| PyMuPDF | PDF metin çıkarma |
-| BAAI/bge-small-en-v1.5 | Dense embedding |
-| BM25 | Kelime tabanlı retrieval |
-| RRF | Retrieval sonuçlarını birleştirme |
-| BAAI/bge-reranker-base | Cross-Encoder reranking |
-| Groq Cloud | OpenAI uyumlu API üzerinden LLM çalıştırma |
-| Ollama | Naive RAG baseline için yerel LLM |
-
----
-
-## 🆚 Naive RAG ve Advanced RAG Karşılaştırması
-
-| Özellik | Naive RAG | DocPrecision-RAG |
-|---|---|---|
-| Doküman Okuma | PDF Reader | PyMuPDF |
-| Chunking | Sabit boyutlu | Semantic Chunking |
-| Embedding | Dense | BGE Dense Embedding |
-| Keyword Search | ❌ | ✅ BM25 |
-| Semantic Search | ✅ | ✅ |
-| Hybrid Search | ❌ | ✅ |
-| Rank Fusion | ❌ | ✅ RRF |
-| Reranking | ❌ | ✅ Cross-Encoder |
-| Hallüsinasyon Kontrolü | Temel | Strict Prompting |
-| LLM | Ollama | Groq Cloud API |
-| Mimari | Basit | Çok Aşamalı ve Modüler |
-
----
-
-## 🔬 Neden Advanced RAG?
-
-Naive RAG genellikle aşağıdaki yapıyı kullanır:
-
-```text
-PDF
- ↓
-Sabit Boyutlu Chunking
- ↓
-Vector Embedding
- ↓
-Vector Search
- ↓
-LLM
-```
-
-Bu yaklaşım basit ve hızlı olsa da aşağıdaki problemlere sahip olabilir:
-
-- Chunk sınırları anlamsal bütünlüğü bozabilir.
-- Kesin anahtar kelimeler semantic search tarafından kaçırılabilir.
-- Anlamsal olarak benzer ancak alakasız içerikler retrieval sonucuna girebilir.
-- Gereksiz context LLM'in cevap kalitesini düşürebilir.
-- Fazla context gürültü oluşturabilir.
-- Yetersiz retrieval durumunda LLM desteklenmeyen bilgiler üretebilir.
-
-DocPrecision-RAG ise retrieval sürecini birden fazla aşamaya ayırır:
-
-```text
-PDF
- ↓
-Semantic Chunking
- ↓
-┌──────────────────────┐
-│                      │
-│   Hybrid Retrieval   │
-│                      │
-├──────────┬───────────┤
-│          │           │
-▼          ▼           │
-BM25    Dense BGE      │
-│          │           │
-└────┬─────┘           │
-     ▼                 │
-    RRF                 │
-     │                  │
-     ▼                  │
-Cross-Encoder Reranker │
-     │                  │
-     ▼                  │
-Strict Prompt           │
-     │                  │
-     ▼                  │
-Local LLM               │
-```
-
----
-
-## 🔄 Uçtan Uca İş Akışı
-
-```text
-                    PDF
-                     │
-                     ▼
-              PyMuPDF Reader
-                     │
-                     ▼
-            Cümlelerin Çıkarılması
-                     │
-                     ▼
-             Semantic Chunking
-                     │
-                     ▼
-             ┌───────┴───────┐
-             ▼               ▼
-           BM25          BGE Embedding
-             │               │
-             ▼               ▼
-      Kelime Sıralaması  Dense Sıralama
-             │               │
-             └───────┬───────┘
-                     ▼
-                    RRF
-                     │
-                     ▼
-             Aday Chunk'lar
-                     │
-                     ▼
-          Cross-Encoder Reranker
-                     │
-                     ▼
-              En İlgili Context
-                     │
-                     ▼
-              Strict Prompt
-                     │
-                     ▼
-                Groq Cloud LLM
-                     │
-                     ▼
-              Nihai Cevap
-```
-
----
-
-## 🧪 Örnek Sorgu Akışı
-
-Kullanıcının şu soruyu sorduğunu düşünelim:
-
-```text
-Uygulama neden veritabanı bağlantı hatası veriyor?
-```
-
-### 1. BM25
-
-Sorgudaki anahtar kelimeler üzerinden arama yapılır:
-
-```text
-veritabanı
-bağlantı
-hata
-connection
-database
-timeout
-```
-
-### 2. Dense Retrieval
-
-Sorgunun anlamsal karşılığı aranır.
-
-Dokümanda tam olarak:
-
-```text
-Uygulama neden veritabanı bağlantı hatası veriyor?
-```
-
-ifadesi bulunmasa bile aynı problemi açıklayan içerikler bulunabilir.
-
-### 3. RRF
-
-BM25 ve Dense Retrieval sıralamaları birleştirilir.
-
-### 4. Cross-Encoder
-
-Aday chunk'lar sorguyla birlikte değerlendirilir.
-
-En alakalı içerikler üst sıralara taşınır.
-
-### 5. Strict Prompt
-
-Yalnızca seçilen context LLM'e gönderilir.
-
-### 6. LLM
-
-LLM, retrieved context'e dayanarak nihai cevabı oluşturur.
-
----
-
-## 📈 Retrieval Stratejisi
-
-DocPrecision-RAG retrieval sürecini iki aşamalı olarak ele alır:
-
-### Birinci Aşama — Candidate Retrieval
-
-Amaç mümkün olduğunca ilgili adayları yakalamaktır.
-
-```text
-BM25
-  +
-Dense Retrieval
-  ↓
-RRF
-  ↓
-Candidate Pool
-```
-
-### İkinci Aşama — Precision Reranking
-
-Amaç adaylar içerisinden gerçekten en alakalı içerikleri seçmektir.
-
-```text
-Candidate Pool
-      ↓
-Cross-Encoder
-      ↓
-Relevance Score
-      ↓
-Top Chunks
-```
-
-Bu yapı, hızlı retrieval ile daha hassas relevance değerlendirmesini bir araya getirir.
-
----
-
-## 📊 Değerlendirme Stratejisi
-
-Sistemin performansını değerlendirmek için Naive RAG ve Advanced RAG sonuçları karşılaştırılabilir.
-
-### Naive RAG
-
-```text
-Sabit Chunking
-      ↓
-Dense Retrieval
-      ↓
-LLM
-```
-
-### Advanced RAG
-
-```text
-Semantic Chunking
-      ↓
-BM25 + Dense Retrieval
-      ↓
-RRF
-      ↓
-Cross-Encoder Reranking
-      ↓
-Strict Prompt
-      ↓
-LLM
-```
-
-### Kullanılabilecek Metrikler
-
-- Retrieval Precision
-- Retrieval Recall
-- Precision@K
-- Recall@K
-- MRR
-- NDCG
-- Context Relevance
-- Answer Relevance
-- Answer Faithfulness
-- Hallüsinasyon Oranı
-- Retrieval Süresi
-- Toplam Yanıt Süresi
-
----
-
-
-
-## 🎓 Projede Gösterilen Temel Kavramlar
-
-Bu proje aşağıdaki modern RAG ve yapay zekâ kavramlarının pratik bir uygulamasını göstermektedir:
-
-- **Retrieval-Augmented Generation (RAG)**
-- **Semantic Chunking**
-- **Dense Vector Retrieval**
-- **Lexical Retrieval**
-- **BM25**
-- **Hybrid Search**
-- **Reciprocal Rank Fusion (RRF)**
-- **Cross-Encoder Reranking**
-- **Prompt Engineering**
-- **Hallüsinasyon Önleme**
-- **Local LLM**
-- **Groq Cloud**
-- **Çok Aşamalı Retrieval**
-- **Modüler RAG Mimarisi**
-
----
-
-## 👩‍💻 Geliştirici
-
-**Şevval Yavuz**
-
-Bilgisayar Mühendisliği
-
-GitHub: [@ssevvalyavuz](https://github.com/ssevvalyavuz)
-
----
-
-## 📄 Lisans
-
-Bu proje eğitim, araştırma ve portföy amaçlı geliştirilmiştir.
